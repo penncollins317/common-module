@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'top.mxzero'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+        }
+    }
+}

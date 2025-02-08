@@ -1,0 +1,61 @@
+buildscript {
+    apply from: 'dependencies.gradle'
+
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+    }
+}
+
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    sourceCompatibility = project_jdk
+    targetCompatibility = project_jdk
+
+    dependencies {
+        compileOnly libraries.'lombok'
+        annotationProcessor libraries.'lombok'
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://repo.spring.io/milestone/' }
+        maven { url 'https://repo.spring.io/snapshot' }
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
+
+project("common") {
+    dependencies {
+        api libraries.'spring-boot-starter-mail'
+        api libraries.'spring-boot-starter-validation'
+        api libraries.'jackson-annotations'
+        implementation libraries.'fastjson2'
+        implementation(libraries.'java-sms-sdk') {
+            exclude module: 'commons-logging'
+        }
+        implementation libraries.'spring-web'
+        implementation libraries.'spring-webmvc'
+        implementation libraries.'spring-core'
+        implementation libraries.'spring-aop'
+        implementation libraries.'jackson-databind'
+        implementation libraries.'spring-security-core'
+        implementation libraries.'jackson-dataformat-xml'
+        api(libraries.'easyexcel') {
+            exclude module: 'java-jaxb'
+            exclude module: 'jaxb-core'
+        }
+        api libraries.'jaxb-core'
+
+        implementation libraries.'jakarta.servlet-api'
+        implementation 'com.google.zxing:core:3.5.2'
+        implementation 'com.google.zxing:javase:3.5.2'
+        annotationProcessor libraries.'spring-boot-configuration-processor'
+    }
+}
