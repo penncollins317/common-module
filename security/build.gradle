@@ -9,11 +9,17 @@ version = '1.0.0'
 repositories {
     mavenCentral()
 }
+
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-
+            artifactId = 'security'
         }
+    }
+
+    repositories {
+        mavenLocal()
     }
 }

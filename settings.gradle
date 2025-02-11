@@ -1,4 +1,4 @@
 rootProject.name = 'mxzero-common-project'
 include 'common'
-include 'send-message'
+include 'security'
 

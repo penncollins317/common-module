@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>·
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <style>
+        /* 全局设置 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* 注册表单容器 */
+        .form-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* 输入框样式 */
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .input-field:focus {
+            border-color: #2575fc;
+            outline: none;
+        }
+
+        /* 错误信息 */
+        .error-message {
+            color: #ff4d4d;
+            background-color: #ffe6e6;
+            border: 1px solid #ffb3b3;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #2575fc;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #6a11cb;
+        }
+
+        .submit-btn:active {
+            background-color: #1d64d2;
+        }
+
+        /* 链接样式 */
+        .signup-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #2575fc;
+            text-decoration: none;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="form-container">
+    <h2>用户注册</h2>
+
+    <!-- 错误信息提示框 -->
+    <div id="error-message" class="error-message" th:text="${error}"></div>
+
+    <form onsubmit="return registerSubmit(event);" action="/register.action" method="post">
+        <input type="text" autocomplete="off" id="username" name="username" class="input-field" placeholder="用户名" required
+               maxlength="10" minlength="2">
+        <input type="password" maxlength="16" minlength="8" id="password" name="password"  class="input-field" placeholder="密码"
+               required>
+        <input type="password" maxlength="16" minlength="8" id="confirm-password" name="cfm_password" class="input-field"
+               placeholder="确认密码" required>
+
+        <button type="submit" class="submit-btn">注册</button>
+    </form>
+
+    <p>已经有账户？ <a href="#" class="signup-link">登录</a></p>
+</div>
+
+<script>
+    const errorMessage = document.getElementById('error-message');
+    function registerSubmit(e) {
+        // 获取表单元素
+        const form = e.target;
+
+        // 获取表单输入值
+        const username = form.username.value;
+        const password = form.password.value;
+        const confirmPassword = form['confirm-password'].value;
+
+        // 清空错误信息
+        errorMessage.style.display = 'none';
+        errorMessage.textContent = '';
+
+        // 检查密码和确认密码是否一致
+        if (password !== confirmPassword) {
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = '密码和确认密码不匹配。';
+            return false; // 返回 false 阻止表单提交
+        }
+
+        // 如果所有验证通过，可以提交表单
+        return true; // 返回 true 表单会提交
+    }
+</script>
+
+</body>
+
+</html>

@@ -40,6 +40,7 @@ project("common") {
         implementation(libraries.'java-sms-sdk') {
             exclude module: 'commons-logging'
         }
+
         implementation libraries.'spring-web'
         implementation libraries.'spring-webmvc'
         implementation libraries.'spring-core'
@@ -52,10 +53,25 @@ project("common") {
             exclude module: 'jaxb-core'
         }
         api libraries.'jaxb-core'
-
         implementation libraries.'jakarta.servlet-api'
         implementation 'com.google.zxing:core:3.5.2'
         implementation 'com.google.zxing:javase:3.5.2'
+        implementation libraries.'mybatis-plus'
         annotationProcessor libraries.'spring-boot-configuration-processor'
+    }
+}
+
+project("security") {
+    dependencies {
+        implementation 'com.nimbusds:nimbus-jose-jwt:10.0.1'
+        implementation 'org.springframework.security:spring-security-oauth2-resource-server:6.4.2'
+        implementation 'org.springframework.security:spring-security-oauth2-jose:6.4.2'
+        implementation libraries.'spring-boot-starter-security'
+        implementation libraries.'spring-boot-starter-validation'
+        implementation libraries.'spring-boot-starter-jdbc'
+        implementation libraries.'spring-boot-starter-thymeleaf'
+        implementation libraries.'spring-boot-starter-web'
+        implementation libraries.'mybatis-plus'
+        implementation libraries.'mybatis-spring'
     }
 }
