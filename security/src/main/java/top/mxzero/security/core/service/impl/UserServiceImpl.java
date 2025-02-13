@@ -10,6 +10,8 @@ import top.mxzero.security.core.entity.User;
 import top.mxzero.security.core.mapper.UserMapper;
 import top.mxzero.security.core.service.UserService;
 
+import java.util.List;
+
 /**
  * @author Peng
  * @since 2025/1/21
@@ -22,17 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserinfoDTO getUserinfo(Long userId) {
-        User user = this.userMapper.selectById(userId);
-        if (user == null) {
-            return null;
-        }
-        return UserinfoDTO.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .nickname(user.getNickname())
-                .avatarUrl(user.getAvatarUrl())
-                .version(0L)
-                .build();
+        return this.userMapper.findUserinfoById(userId);
+    }
+
+    @Override
+    public List<UserinfoDTO> getUserinfo(List<Long> userIds) {
+        return this.userMapper.findUserinfoByIds(userIds);
     }
 
     @Override

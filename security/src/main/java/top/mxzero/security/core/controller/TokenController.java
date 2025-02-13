@@ -8,7 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.web.bind.annotation.*;
+import top.mxzero.common.dto.RestData;
 import top.mxzero.security.core.dto.LoginRequestBody;
+import top.mxzero.security.core.dto.TokenDTO;
 import top.mxzero.security.core.service.LoginService;
 
 import java.util.Map;
@@ -20,9 +22,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/token")
 public class TokenController {
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private final JwtEncoder jwtEncoder;
-    private final JwtDecoder jwtDecoder;
     private final LoginService loginService;
 
 
@@ -33,17 +32,10 @@ public class TokenController {
      * @return jwt
      */
     @PostMapping("/create")
-    public Map<String, Object> createTokenApi(
-            @Valid @RequestBody LoginRequestBody args,
-            HttpServletResponse response
+    public RestData<TokenDTO> createTokenApi(
+            @Valid @RequestBody LoginRequestBody args
     ) {
-        try {
-            return OBJECT_MAPPER.convertValue(this.loginService.loginByUsername(args), new TypeReference<Map<String, Object>>() {
-            });
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return Map.of("error", e.getMessage());
-        }
+        return RestData.success(this.loginService.loginByUsername(args));
     }
 
 
@@ -54,13 +46,7 @@ public class TokenController {
      * @return jwt
      */
     @RequestMapping("/refresh")
-    public Map<String, Object> refreshTokenApi(@RequestParam("token") String token, HttpServletResponse response) {
-        try {
-            return OBJECT_MAPPER.convertValue(this.loginService.refresh(token), new TypeReference<Map<String, Object>>() {
-            });
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return Map.of("error", e.getMessage());
-        }
+    public RestData<TokenDTO> refreshTokenApi(@RequestParam("token") String token) {
+        return RestData.success(this.loginService.refresh(token));
     }
 }

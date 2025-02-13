@@ -5,9 +5,11 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -26,6 +28,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
+import top.mxzero.common.dto.RestData;
+import top.mxzero.common.utils.JsonUtils;
 import top.mxzero.security.core.authentication.AccessTokenAuthenticationConverter;
 
 import java.io.*;
@@ -44,6 +48,7 @@ import java.util.UUID;
 @EnableWebSecurity
 @Configuration
 @ComponentScan
+@EnableConfigurationProperties(JwtProps.class)
 @MapperScan("top.mxzero.security.core.mapper")
 public class SecurityCoreAutoConfig {
     private static final String PRIVATE_KEY_FILE = "D:" + File.separator + "key" + File.separator + "private.key";
@@ -148,31 +153,34 @@ public class SecurityCoreAutoConfig {
                     resource.authenticationEntryPoint(((request, response, authException) -> {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         try (PrintWriter writer = response.getWriter()) {
-                            writer.print("token invalid");
+                            writer.print(JsonUtils.stringify(RestData.error("UNAUTHORIZED")));
                         }
                     }));
                     resource.accessDeniedHandler(((request, response, accessDeniedException) -> {
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         try (PrintWriter writer = response.getWriter()) {
-                            writer.print("FORBIDDEN");
+                            writer.print(JsonUtils.stringify(RestData.error("FORBIDDEN")));
                         }
                     }));
                 })
                 .exceptionHandling(handler -> {
                     handler.accessDeniedHandler(((request, response, accessDeniedException) -> {
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         try (PrintWriter writer = response.getWriter()) {
-                            writer.print("FORBIDDEN");
+                            writer.print(JsonUtils.stringify(RestData.error("FORBIDDEN")));
                         }
                     }));
                     handler.authenticationEntryPoint(((request, response, authException) -> {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         try (PrintWriter writer = response.getWriter()) {
-                            writer.print("UNAUTHORIZED");
+                            writer.print(JsonUtils.stringify(RestData.error("UNAUTHORIZED")));
                         }
                     }));
                 })

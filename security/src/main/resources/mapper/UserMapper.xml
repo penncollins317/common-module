@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.mxzero.security.core.mapper.UserMapper">
+    <select id="findUserinfoById" resultType="top.mxzero.security.core.dto.UserinfoDTO">
+        SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE id = #{userId}
+    </select>
+
+    <select id="findUserinfoByIds" resultType="top.mxzero.security.core.dto.UserinfoDTO">
+        SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE id in
+        <foreach collection="userIds" item="userId" separator="," open="(" close=")">
+            #{userId}
+        </foreach>
+    </select>
+</mapper>

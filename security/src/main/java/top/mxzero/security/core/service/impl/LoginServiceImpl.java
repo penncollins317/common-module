@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.mxzero.security.core.JwtProps;
 import top.mxzero.security.core.dto.LoginRequestBody;
 import top.mxzero.security.core.dto.TokenDTO;
 import top.mxzero.security.core.entity.User;
@@ -36,6 +37,7 @@ public class LoginServiceImpl implements LoginService {
     private final JwtDecoder jwtDecoder;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
+    private final JwtProps jwtProps;
     private static final String ISSUER = "http://api.mxzero.top";
 
     @Override
@@ -58,7 +60,7 @@ public class LoginServiceImpl implements LoginService {
         JwtClaimsSet.Builder claimBuilder = JwtClaimsSet.builder()
                 .id(UUID.randomUUID().toString())
                 .subject(subject)
-                .issuer(ISSUER)
+                .issuer(jwtProps.getIssuer())
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(expireSeconds))
                 .claims(c -> c.putAll(claims));
@@ -71,11 +73,11 @@ public class LoginServiceImpl implements LoginService {
         claims.put("token_type", "access");
         claims.put("scope", scope);
         claims.put("version", version);
-        String accessToken = this.genaraJwt(subject, claims, 7200);
+        String accessToken = this.genaraJwt(subject, claims, jwtProps.getAccess());
 
         claims.put("token_type", "refresh");
-        String refreshToken = this.genaraJwt(subject, claims, 3600 * 24 * 7);
-        return TokenDTO.builder().accessToken(accessToken).refreshToken(refreshToken).expire(7200).build();
+        String refreshToken = this.genaraJwt(subject, claims, jwtProps.getRefresh());
+        return TokenDTO.builder().accessToken(accessToken).refreshToken(refreshToken).expire(jwtProps.getAccess()).build();
     }
 
 

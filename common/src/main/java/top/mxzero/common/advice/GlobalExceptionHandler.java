@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -43,11 +44,16 @@ public class GlobalExceptionHandler {
         return RestData.error("系统错误", 500);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadCredentialsException.class)
+    public RestData<?> handleAuthenticationException(BadCredentialsException e) {
+        return RestData.error(e.getMessage(), 400);
+    }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
     public RestData<?> handleAuthenticationException(AuthenticationException e) {
-        return RestData.error(e.getMessage(), 400);
+        return RestData.error(e.getMessage(), 401);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)

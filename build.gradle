@@ -63,15 +63,17 @@ project("common") {
 
 project("security") {
     dependencies {
-        implementation 'com.nimbusds:nimbus-jose-jwt:10.0.1'
-        implementation 'org.springframework.security:spring-security-oauth2-resource-server:6.4.2'
-        implementation 'org.springframework.security:spring-security-oauth2-jose:6.4.2'
-        implementation libraries.'spring-boot-starter-security'
+        api 'com.nimbusds:nimbus-jose-jwt:10.0.1'
+        api 'org.springframework.security:spring-security-oauth2-resource-server:6.4.2'
+        api 'org.springframework.security:spring-security-oauth2-jose:6.4.2'
+        api libraries.'spring-boot-starter-security'
+        api project(":common")
         implementation libraries.'spring-boot-starter-validation'
         implementation libraries.'spring-boot-starter-jdbc'
         implementation libraries.'spring-boot-starter-thymeleaf'
         implementation libraries.'spring-boot-starter-web'
         implementation libraries.'mybatis-plus'
         implementation libraries.'mybatis-spring'
+        annotationProcessor libraries.'spring-boot-configuration-processor'
     }
 }
