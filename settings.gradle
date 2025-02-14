@@ -1,4 +1,5 @@
 rootProject.name = 'mxzero-common-project'
 include 'common'
 include 'security'
+include 'oss'
 

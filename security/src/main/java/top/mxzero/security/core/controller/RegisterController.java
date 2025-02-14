@@ -5,14 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import top.mxzero.common.dto.RestData;
 import top.mxzero.security.core.dto.UsernamePasswordArgs;
 import top.mxzero.security.core.service.UserService;
 
 /**
+ * 注册接口
+ *
  * @author Peng
  * @since 2025/1/21
  */
@@ -40,5 +41,14 @@ public class RegisterController {
 
             return "redirect:/register?error=" + e.getMessage();
         }
+    }
+
+    /**
+     * 用户注册
+     */
+    @ResponseBody
+    @PostMapping("/public/register")
+    public RestData<String> registerApi(@Valid @RequestBody UsernamePasswordArgs args) {
+        return RestData.success(this.userService.addUser(args).toString());
     }
 }

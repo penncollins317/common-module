@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+<input type="file" id="fileInput" />
+<button id="uploadBtn">Upload</button>
+
+<script>
+        async function calculateFileHash(file) {
+            const buffer = await file.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const chunkSize = 5 * 1024 * 1024; // 5MB
+            const totalChunks = Math.ceil(file.size / chunkSize);
+            const fileId = Date.now(); // 生成唯一文件ID
+            const fileHash = await calculateFileHash(file); // 计算文件哈希
+
+            const uploadPromises = []; // 存储上传请求的 Promise
+
+            for (let i = 0; i < totalChunks; i++) {
+                const start = i * chunkSize;
+                const end = Math.min(start + chunkSize, file.size);
+                const chunk = file.slice(start, end);
+
+                const formData = new FormData();
+                formData.append('file', chunk);
+                formData.append('chunkIndex', i);
+                formData.append('fileId', fileId);
+                const xhrPromise = new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/upload/chunk', true);
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            resolve(xhr.responseText);
+                        } else {
+                            reject(new Error(`Error: ${xhr.status}`));
+                        }
+                    };
+                    xhr.onerror = () => reject(new Error('Upload failed'));
+                    xhr.send(formData);
+                });
+
+                uploadPromises.push(xhrPromise); // 添加 Promise 到数组
+            }
+
+            // 等待所有分片上传完毕
+            try {
+                await Promise.all(uploadPromises);
+                console.log("All chunks uploaded successfully");
+
+                // 合并分片
+                const completeFormData = new FormData();
+                completeFormData.append('fileId', fileId);
+                completeFormData.append('totalChunks', totalChunks);
+                completeFormData.append('originalFileName', file.name);
+                completeFormData.append('fileSize', file.size);
+                completeFormData.append('contentType', file.type);
+                completeFormData.append('fileHash', fileHash);
+
+                const completeXhr = new XMLHttpRequest();
+                completeXhr.open('POST', '/upload/complete', true);
+                completeXhr.onload = function () {
+                    console.log(completeXhr.responseText);
+                };
+                completeXhr.send(completeFormData);
+            } catch (error) {
+                console.error("Error uploading chunks:", error);
+            }
+        });
+    </script>
+</body>
+</html>

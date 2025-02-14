@@ -56,7 +56,8 @@ project("common") {
         implementation libraries.'jakarta.servlet-api'
         implementation 'com.google.zxing:core:3.5.2'
         implementation 'com.google.zxing:javase:3.5.2'
-        implementation libraries.'mybatis-plus'
+        api libraries.'mybatis-plus'
+        api libraries.'mybatis-spring'
         annotationProcessor libraries.'spring-boot-configuration-processor'
     }
 }
@@ -72,8 +73,21 @@ project("security") {
         implementation libraries.'spring-boot-starter-jdbc'
         implementation libraries.'spring-boot-starter-thymeleaf'
         implementation libraries.'spring-boot-starter-web'
-        implementation libraries.'mybatis-plus'
-        implementation libraries.'mybatis-spring'
         annotationProcessor libraries.'spring-boot-configuration-processor'
+    }
+}
+
+project("oss") {
+    dependencies {
+        api libraries.'aliyun-sdk-oss'
+        api libraries.'qiniu-java-sdk'
+        api libraries.'minio'
+        api libraries.'s3'
+        implementation libraries.'spring-boot-starter-thymeleaf'
+        implementation libraries.'spring-boot-starter-web'
+        implementation libraries.'spring-boot-starter-data-redis'
+        annotationProcessor libraries.'spring-boot-configuration-processor'
+        implementation project(":common")
+        implementation project(":security")
     }
 }

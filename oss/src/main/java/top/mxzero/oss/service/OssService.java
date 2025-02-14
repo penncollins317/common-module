@@ -1,0 +1,96 @@
+package top.mxzero.oss.service;
+
+import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
+import top.mxzero.oss.dto.OssUploadResult;
+
+import java.io.InputStream;
+import java.util.List;
+
+/**
+ * @author zero
+ * @email qianmeng6879@163.com
+ * @since 2023/8/19
+ */
+public interface OssService {
+    /**
+     * 字节上传
+     *
+     * @param data
+     * @param filename
+     * @param contentType
+     * @return
+     */
+    OssUploadResult upload(byte[] data, String filename, String contentType);
+
+    /**
+     * 输入流上传
+     *
+     * @param inputStream
+     * @param filename
+     * @param contentType
+     * @param size
+     * @return
+     */
+    OssUploadResult upload(InputStream inputStream, String filename, String contentType, long size);
+
+    /**
+     * 判单文件是否存在
+     *
+     * @param filename
+     * @return
+     */
+    boolean exists(String filename);
+
+    /**
+     * 删除文件
+     *
+     * @param filename
+     * @return
+     */
+    boolean remove(String filename);
+
+
+    /**
+     * 批量删除文件
+     *
+     * @param objectNames
+     * @return
+     */
+    default long removeBatch(@NotNull List<String> objectNames) {
+        List<Boolean> list = objectNames.stream().map(this::remove).toList();
+        return list.size();
+    }
+
+
+    /**
+     * 预上传签名
+     *
+     * @param name
+     * @return
+     */
+    String prepareSign(String name);
+
+    /**
+     * 获取文件URL前缀
+     *
+     * @return
+     */
+    default String prefixName() {
+        return "";
+    }
+
+    /**
+     * 合并文件
+     *
+     * @param targetName 新的文件
+     * @param chunkName  需要合并的文件名列表，需要排序
+     */
+    default void compose(String targetName, List<String> chunkName) throws Exception {
+
+    }
+
+    default void compose(String targetName, List<String> chunkNames, String contentType) throws Exception {
+        throw new NotImplementedException();
+    }
+}

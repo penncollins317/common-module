@@ -105,6 +105,7 @@ ext.libraries = [
         'spring-boot-starter-jdbc'           : "org.springframework.boot:spring-boot-starter-jdbc:${versions.springBoot}",
         'spring-boot-starter-aop'            : "org.springframework.boot:spring-boot-starter-aop:${versions.springBoot}",
         'spring-boot-starter-thymeleaf'      : "org.springframework.boot:spring-boot-starter-thymeleaf:${versions.springBoot}",
+        'spring-boot-starter-data-redis'     : "org.springframework.boot:spring-boot-starter-data-redis:${versions.springBoot}",
         'lombok'                             : "org.projectlombok:lombok:${versions.lombok}",
         'mybatis-plus'                       : "com.baomidou:mybatis-plus:${versions.mybatisPlus}",
         'spring-data-redis'                  : "org.springframework.data:spring-data-redis:${versions.springData}",

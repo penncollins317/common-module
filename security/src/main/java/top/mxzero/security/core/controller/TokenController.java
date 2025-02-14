@@ -1,19 +1,12 @@
 package top.mxzero.security.core.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.web.bind.annotation.*;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.security.core.dto.LoginRequestBody;
 import top.mxzero.security.core.dto.TokenDTO;
 import top.mxzero.security.core.service.LoginService;
-
-import java.util.Map;
 
 /**
  * 登录接口

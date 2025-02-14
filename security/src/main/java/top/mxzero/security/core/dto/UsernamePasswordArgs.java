@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @Data
 public class UsernamePasswordArgs {
     @NotBlank
-    @Length(max = 10, min = 2)
+    @Length(max = 12, min = 2)
     private String username;
 
     @NotBlank

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.security.core.dto.UserinfoDTO;
 import top.mxzero.security.core.dto.UsernamePasswordArgs;
 import top.mxzero.security.core.entity.User;
@@ -33,9 +35,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Long addUser(UsernamePasswordArgs args) {
         if (this.userMapper.exists(new QueryWrapper<User>().eq("username", args.getUsername()))) {
-            throw new RuntimeException("用户名【" + args.getUsername() + "】已存在");
+            throw new ServiceException("用户名【" + args.getUsername() + "】已存在");
         }
         User user = new User();
         user.setUsername(args.getUsername());
