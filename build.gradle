@@ -53,7 +53,7 @@ project("common") {
             exclude module: 'jaxb-core'
         }
         api libraries.'jaxb-core'
-        implementation libraries.'jakarta.servlet-api'
+        implementation libraries.'servlet-api'
         implementation 'com.google.zxing:core:3.5.2'
         implementation 'com.google.zxing:javase:3.5.2'
         api libraries.'mybatis-plus'
@@ -69,11 +69,19 @@ project("security") {
         api 'org.springframework.security:spring-security-oauth2-jose:6.4.2'
         api libraries.'spring-boot-starter-security'
         api project(":common")
-        implementation libraries.'spring-boot-starter-validation'
-        implementation libraries.'spring-boot-starter-jdbc'
+        api libraries.'spring-boot-starter-validation'
+        api libraries.'spring-boot-starter-jdbc'
+        api libraries.'spring-boot-starter-web'
         implementation libraries.'spring-boot-starter-thymeleaf'
-        implementation libraries.'spring-boot-starter-web'
         annotationProcessor libraries.'spring-boot-configuration-processor'
+    }
+}
+
+
+project("security-apikeys") {
+    dependencies {
+        api project(":security")
+        implementation libraries.'servlet-api'
     }
 }
 
@@ -89,5 +97,17 @@ project("oss") {
         annotationProcessor libraries.'spring-boot-configuration-processor'
         implementation project(":common")
         implementation project(":security")
+    }
+}
+
+project("starter") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":security")
+        implementation project(":security-apikeys")
+//        implementation project(":oss")
+        implementation libraries.'postgresql'
+        implementation libraries.'spring-boot-starter-web'
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter:3.5.9'
     }
 }

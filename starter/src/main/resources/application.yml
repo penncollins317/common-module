@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mxzero_common
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+mxzero:
+  jwt:
+    access: 72000
+    refresh: 864000
+    issuer: http://mxzero.top

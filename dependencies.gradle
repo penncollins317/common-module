@@ -51,7 +51,7 @@ ext.libraries = [
         'spring-ai-bom'                      : "org.springframework.ai:spring-ai-bom:${versions.springAi}",
         'spring-boot-admin-starter-server'   : "de.codecentric:spring-boot-admin-starter-server:${versions.springBootAdmin}",
         'spring-boot-admin-starter-client'   : "de.codecentric:spring-boot-admin-starter-client:${versions.springBootAdmin}",
-        'jakarta.servlet-api'                : "jakarta.servlet:jakarta.servlet-api:${versions.servlet}",
+        'servlet-api'                        : "jakarta.servlet:jakarta.servlet-api:${versions.servlet}",
         'nacos-client'                       : "com.alibaba.nacos:nacos-client:${versions.nacos}",
         'jjwt'                               : "io.jsonwebtoken:jjwt:${versions.jjwt}",
         'commons-codec'                      : "commons-codec:commons-codec:${versions.commonsCodec}",

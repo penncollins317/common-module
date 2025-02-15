@@ -2,7 +2,6 @@ package top.mxzero.security.core.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,8 @@ import java.security.Principal;
 import java.util.List;
 
 /**
+ * 用户信息接口
+ *
  * @author Peng
  * @since 2025/1/11
  */
@@ -24,11 +25,17 @@ import java.util.List;
 public class UserinfoController {
     private final UserService userService;
 
+    /**
+     * 当前用户信息
+     */
     @RequestMapping("/api/userinfo")
     public RestData<UserinfoDTO> userinfoApi(Principal principal) {
         return RestData.success(this.userService.getUserinfo(Long.valueOf(principal.getName())));
     }
 
+    /**
+     * 批量获取其他用户信息
+     */
     @PostMapping("/public/userinfo")
     public RestData<List<UserinfoDTO>> publicUserInfoApi(@Valid @RequestBody GetPublicUserinfoRequest requestDTO) {
         return RestData.success(this.userService.getUserinfo(requestDTO.getUserIds()));
