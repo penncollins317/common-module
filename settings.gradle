@@ -4,4 +4,5 @@ include 'security'
 include 'security-apikeys'
 include 'oss'
 include 'starter'
+include 'ai-chat'
 

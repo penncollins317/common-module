@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/ai_chat
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  ai:
+    apiKey: sk-63cf4d19af484f139ed1dcd9609bee41
+    baseUrl: https://api.deepseek.com
