@@ -6,6 +6,10 @@
         SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE id = #{userId}
     </select>
 
+    <select id="findUserinfoByUsername" resultType="top.mxzero.security.core.dto.UserinfoDTO">
+        SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE username = #{username} limit 1
+    </select>
+
     <select id="findUserinfoByIds" resultType="top.mxzero.security.core.dto.UserinfoDTO">
         SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE id in
         <foreach collection="userIds" item="userId" separator="," open="(" close=")">

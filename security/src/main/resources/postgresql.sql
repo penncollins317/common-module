@@ -2,7 +2,7 @@ CREATE TABLE t_user(
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(20) NOT NULL,
     password VARCHAR(255) NULL,
-    nickname VARCHAR(12) NOT NULL,
+    nickname VARCHAR(50) NOT NULL,
     avatar_url VARCHAR(255) NULL,
     email VARCHAR(100) NULL,
     phone VARCHAR(11) NULL,
@@ -35,3 +35,15 @@ CREATE TABLE t_user_role(
 );
 CREATE UNIQUE INDEX uk_user_role_id ON t_user_role(user_id, role_id);
 INSERT INTO t_user_role(user_id,role_id) VALUES (1,1);
+
+
+CREATE TABLE oauth2_user_related(
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    out_uid VARCHAR(50) NOT NULL,
+    provider VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX oauth2_user_related_userid ON oauth2_user_related(provider, out_uid);

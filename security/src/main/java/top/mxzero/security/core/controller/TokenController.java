@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.security.core.dto.LoginRequestBody;
+import top.mxzero.security.core.dto.RefreshTokenDTO;
 import top.mxzero.security.core.dto.TokenDTO;
 import top.mxzero.security.core.service.LoginService;
 
@@ -35,11 +36,11 @@ public class TokenController {
     /**
      * 刷新token接口
      *
-     * @param token refreshToken
+     * @param dto refreshToken
      * @return jwt
      */
-    @RequestMapping("/refresh")
-    public RestData<TokenDTO> refreshTokenApi(@RequestParam("token") String token) {
-        return RestData.success(this.loginService.refresh(token));
+    @PostMapping("/refresh")
+    public RestData<TokenDTO> refreshTokenApi(@Valid @RequestBody RefreshTokenDTO dto) {
+        return RestData.success(this.loginService.refresh(dto.getRefresh()));
     }
 }

@@ -99,6 +99,7 @@ ext.libraries = [
         'spring-core'                        : "org.springframework:spring-core:${versions.springVersion}",
         'spring-aop'                         : "org.springframework:spring-aop:${versions.springVersion}",
         'spring-security-core'               : "org.springframework.security:spring-security-core:${versions.springSecurity}",
+        'spring-boot-starter-test'           : "org.springframework.boot:spring-boot-starter-test:${versions.springBoot}",
         'spring-boot-starter-web'            : "org.springframework.boot:spring-boot-starter-web:${versions.springBoot}",
         'spring-boot-starter-websocket'      : "org.springframework.boot:spring-boot-starter-websocket:${versions.springBoot}",
         'spring-boot-starter-security'       : "org.springframework.boot:spring-boot-starter-security:${versions.springBoot}",
@@ -111,5 +112,5 @@ ext.libraries = [
         'mybatis-plus'                       : "com.baomidou:mybatis-plus:${versions.mybatisPlus}",
         'spring-data-redis'                  : "org.springframework.data:spring-data-redis:${versions.springData}",
         'mybatis-spring'                     : "org.mybatis:mybatis-spring:3.0.4",
-
+        'mybatis-plus-spring-boot3-starter'  : "com.baomidou:mybatis-plus-spring-boot3-starter:3.5.9",
 ]

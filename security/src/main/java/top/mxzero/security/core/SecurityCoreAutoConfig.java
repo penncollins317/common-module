@@ -3,21 +3,20 @@ package top.mxzero.security.core;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import jakarta.servlet.http.HttpServletResponse;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +30,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.common.utils.JsonUtils;
 import top.mxzero.security.core.authentication.AccessTokenAuthenticationConverter;
+import top.mxzero.security.core.authentication.InterUserOAuth2UserService;
+import top.mxzero.security.core.authentication.JsonAccessDeniedHandler;
+import top.mxzero.security.core.authentication.JsonAuthenticationEntryPoint;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -51,8 +53,8 @@ import java.util.UUID;
 @EnableConfigurationProperties(JwtProps.class)
 @MapperScan("top.mxzero.security.core.mapper")
 public class SecurityCoreAutoConfig {
-    private static final String PRIVATE_KEY_FILE = "D:" + File.separator + "key" + File.separator + "private.key";
-    private static final String PUBLIC_KEY_FILE = "D:" + File.separator + "key" + File.separator + "public.key";
+    private static final String PRIVATE_KEY_FILE = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "key" + File.separator + "private.key";
+    private static final String PUBLIC_KEY_FILE = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "key" + File.separator + "public.key";
 
     private static KeyPair generateRsaKey() {
         try {
@@ -114,10 +116,7 @@ public class SecurityCoreAutoConfig {
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        RSAKey rsaKey = new RSAKey.Builder((RSAPublicKey) KEY_PAIR.getPublic())
-                .privateKey(KEY_PAIR.getPrivate())
-                .keyID(UUID.randomUUID().toString())
-                .build();
+        RSAKey rsaKey = new RSAKey.Builder((RSAPublicKey) KEY_PAIR.getPublic()).privateKey(KEY_PAIR.getPrivate()).keyID(UUID.randomUUID().toString()).build();
         return new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(rsaKey)));
     }
 
@@ -134,15 +133,14 @@ public class SecurityCoreAutoConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
-    public SecurityFilterChain internalApiSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/api/**")
-                .authorizeHttpRequests(authorize -> {
-                    authorize.anyRequest().authenticated();
-                })
-                .oauth2ResourceServer(resource -> {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint();
+        JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler();
+        http.authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("/api/**").authenticated();
+                    authorize.anyRequest().permitAll();
+                }).oauth2ResourceServer(resource -> {
                     DefaultBearerTokenResolver tokenResolver = new DefaultBearerTokenResolver();
                     tokenResolver.setAllowUriQueryParameter(true);
                     resource.jwt(jwt -> {
@@ -150,43 +148,21 @@ public class SecurityCoreAutoConfig {
                         converter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthoritiesConverter());
                         jwt.jwtAuthenticationConverter(converter);
                     }).bearerTokenResolver(tokenResolver);
-                    resource.authenticationEntryPoint(((request, response, authException) -> {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                        try (PrintWriter writer = response.getWriter()) {
-                            writer.print(JsonUtils.stringify(RestData.error("UNAUTHORIZED")));
-                        }
-                    }));
-                    resource.accessDeniedHandler(((request, response, accessDeniedException) -> {
-                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                        try (PrintWriter writer = response.getWriter()) {
-                            writer.print(JsonUtils.stringify(RestData.error("FORBIDDEN")));
-                        }
-                    }));
+                    resource.accessDeniedHandler(accessDeniedHandler);
+                    resource.authenticationEntryPoint(authenticationEntryPoint);
                 })
                 .exceptionHandling(handler -> {
-                    handler.accessDeniedHandler(((request, response, accessDeniedException) -> {
-                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                        try (PrintWriter writer = response.getWriter()) {
-                            writer.print(JsonUtils.stringify(RestData.error("FORBIDDEN")));
-                        }
-                    }));
-                    handler.authenticationEntryPoint(((request, response, authException) -> {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                        try (PrintWriter writer = response.getWriter()) {
-                            writer.print(JsonUtils.stringify(RestData.error("UNAUTHORIZED")));
-                        }
-                    }));
+                    handler.accessDeniedHandler(accessDeniedHandler);
+                    handler.authenticationEntryPoint(authenticationEntryPoint);
+                })
+//                .oauth2Login(login -> {
+//                    login.userInfoEndpoint(endpoint -> endpoint.userService(interUserOAuth2UserService()));
+//                })
+                .sessionManagement(session -> {
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .logout(AbstractHttpConfigurer::disable)
-                .requestCache(AbstractHttpConfigurer::disable)
-                .sessionManagement(AbstractHttpConfigurer::disable)
+                .requestCache(RequestCacheConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable);
         return http.build();

@@ -1,6 +1,5 @@
 package top.mxzero.common.advice;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,8 +8,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import top.mxzero.common.dto.RestData;
@@ -37,7 +37,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class})
     public RestData<?> handleAllException(Exception e) {
         log.error(e.getMessage());
         e.printStackTrace();
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadCredentialsException.class)
-    public RestData<?> handleAuthenticationException(BadCredentialsException e) {
+    public RestData<?> handleBadCredentialsException(BadCredentialsException e) {
         return RestData.error(e.getMessage(), 400);
     }
 
@@ -68,9 +68,8 @@ public class GlobalExceptionHandler {
         return RestData.error("用户未登录", 401);
     }
 
-
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({NoHandlerFoundException.class, ServletException.class})
+    @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class, HttpMediaTypeNotAcceptableException.class})
     public RestData<?> handleNoHandlerFoundException() {
         String requestURI = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getRequestURI();
         return RestData.error(requestURI + " not found", HttpServletResponse.SC_NOT_FOUND);
@@ -99,15 +98,16 @@ public class GlobalExceptionHandler {
         return RestData.error(e.getMessage(), e.getCode() == 404 ? 404 : 400);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public RestData<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public RestData<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) {
         Map<String, Object> errors = new HashMap<>();
         for (FieldError error : e.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-        return RestData.ok(errors, 422);
+        response.setStatus(422);
+        return RestData.ok(errors, 422, "字段验证错误");
     }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)

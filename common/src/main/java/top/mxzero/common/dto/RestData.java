@@ -25,8 +25,13 @@ public class RestData<T> {
     }
 
     public static <T> RestData<T> ok(T data, int code) {
+        return ok(data, code, "success");
+    }
+
+    public static <T> RestData<T> ok(T data, int code, String message) {
         RestData<T> restData = ok(data);
         restData.code = code;
+        restData.message = message;
         return restData;
     }
 

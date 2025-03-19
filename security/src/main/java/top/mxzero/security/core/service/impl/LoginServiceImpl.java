@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.security.core.JwtProps;
 import top.mxzero.security.core.dto.LoginRequestBody;
 import top.mxzero.security.core.dto.TokenDTO;
@@ -55,6 +56,11 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    @Override
+    public TokenDTO getTokenByUserId(Long userId) {
+        return this.createToken(userId.toString(), "", "1");
+    }
+
 
     private String genaraJwt(String subject, Map<String, String> claims, long expireSeconds) {
         JwtClaimsSet.Builder claimBuilder = JwtClaimsSet.builder()
@@ -83,15 +89,17 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public TokenDTO refresh(String token) {
-        Jwt jwt = jwtDecoder.decode(token);
-        if (!"refresh".equals(jwt.getClaimAsString("token_type"))) {
-            throw new BadJwtException("Please use refresh token");
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+            if (!"refresh".equals(jwt.getClaimAsString("token_type"))) {
+                throw new ServiceException("Please use refresh token");
+            }
+            String scope = jwt.getClaimAsString("scope");
+            String version = jwt.getClaimAsString("version");
+            String subject = jwt.getSubject();
+            return this.createToken(subject, scope, version);
+        } catch (JwtException e) {
+            throw new ServiceException("Refresh token error.");
         }
-
-        String scope = jwt.getClaimAsString("scope");
-        String version = jwt.getClaimAsString("version");
-        String subject = jwt.getSubject();
-
-        return this.createToken(subject, scope, version);
     }
 }

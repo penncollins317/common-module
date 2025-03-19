@@ -12,6 +12,7 @@ import top.mxzero.common.dto.RestData;
 import top.mxzero.common.params.PageParam;
 import top.mxzero.common.utils.DeepBeanUtil;
 import top.mxzero.common.utils.MD5Util;
+import top.mxzero.common.utils.UUIDv7Generator;
 import top.mxzero.oss.OssProps;
 import top.mxzero.oss.dto.OssUploadResult;
 import top.mxzero.oss.dto.FileRecordDTO;
@@ -19,14 +20,11 @@ import top.mxzero.oss.entity.FileRecord;
 import top.mxzero.oss.service.OssService;
 import top.mxzero.oss.service.impl.FileRecordService;
 
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * @author Peng
@@ -63,7 +61,7 @@ public class OssUploadController {
         String datePath = now.format(formatter);
 
         // 生成UUID作为文件名的一部分
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        String uuid = UUIDv7Generator.generate().toString().replaceAll("-", "");
 
         // 获取文件扩展名
         String originalFilename = file.getOriginalFilename();
@@ -73,6 +71,7 @@ public class OssUploadController {
         String filename = String.format("%s/%s.%s", datePath, uuid, extension);
         // 上传文件
         OssUploadResult result = this.ossService.upload(file.getInputStream(), filename, file.getContentType(), file.getSize());
+        result.setHash(hash);
         return RestData.success(result);
     }
 }

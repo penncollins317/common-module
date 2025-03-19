@@ -1,6 +1,7 @@
 package top.mxzero.common.utils;
 
 import java.security.SecureRandom;
+import java.util.Date;
 
 public class RandomUsernameGenerator {
     private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -13,5 +14,9 @@ public class RandomUsernameGenerator {
             username.append(CHARACTERS.charAt(index));
         }
         return username.toString();
+    }
+
+    public static String generateRandomUsernameWithDate(int length) {
+        return DateUtil.formatDateNumber(new Date()) + generateRandomUsername(length);
     }
 }

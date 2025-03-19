@@ -1,23 +1,21 @@
-package top.mxzero.oss.autoconfigure;
+package top.mxzero.oss;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import top.mxzero.oss.OssProps;
 import top.mxzero.oss.controller.FileUploadController;
 import top.mxzero.oss.controller.OssPrepareUploadController;
-import top.mxzero.oss.controller.OssResourceController;
 import top.mxzero.oss.controller.OssUploadController;
 import top.mxzero.oss.service.OssService;
 import top.mxzero.oss.service.impl.*;
 
 @EnableConfigurationProperties(OssProps.class)
 @Configuration
-@Import(OssResourceController.class)
+@ComponentScan
 @MapperScan("top.mxzero.oss.mapper")
 public class OSSAutoConfiguration {
     @Bean

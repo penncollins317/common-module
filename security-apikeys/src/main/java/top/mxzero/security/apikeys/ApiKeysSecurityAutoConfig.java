@@ -1,7 +1,6 @@
 package top.mxzero.security.apikeys;
 
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import top.mxzero.security.apikeys.filter.ApiKeyAuthenticationFilter;
 import top.mxzero.security.apikeys.filter.SignatureAuthenticationFilter;
+import top.mxzero.security.apikeys.mapper.ApiKeyMapper;
 import top.mxzero.security.apikeys.mapper.OutAppMapper;
 
 /**
@@ -23,7 +24,7 @@ import top.mxzero.security.apikeys.mapper.OutAppMapper;
 public class ApiKeysSecurityAutoConfig {
 
     @Bean
-    public SecurityFilterChain openapiSecurityFilterChain(HttpSecurity http, OutAppMapper outAppMapper) throws Exception {
+    public SecurityFilterChain openapiSecurityFilterChain(HttpSecurity http, OutAppMapper outAppMapper, ApiKeyMapper apiKeyMapper) throws Exception {
         http
                 .securityMatcher("/openapi/**")
                 .authorizeHttpRequests(authorize -> {
@@ -42,7 +43,9 @@ public class ApiKeysSecurityAutoConfig {
                 .sessionManagement(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable)
-                .addFilterAt(new SignatureAuthenticationFilter(outAppMapper), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new ApiKeyAuthenticationFilter(apiKeyMapper), UsernamePasswordAuthenticationFilter.class)
+        ;
+//                .addFilterAfter(new SignatureAuthenticationFilter(outAppMapper), ApiKeyAuthenticationFilter.class);
         return http.build();
     }
 }

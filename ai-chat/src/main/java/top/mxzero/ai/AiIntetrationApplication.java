@@ -1,17 +1,21 @@
 package top.mxzero.ai;
 
 import lombok.AllArgsConstructor;
-import org.springframework.ai.chat.client.ChatClient;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.client.RestTemplate;
+import top.mxzero.security.core.annotations.EnableSecurityConfig;
+
 /**
  * @author Peng
  * @since 2024/11/27
  */
+@EnableSecurityConfig
+@MapperScan("top.mxzero.ai.mapper")
 @AllArgsConstructor
-@EnableWebSocket
 @SpringBootApplication
 public class AiIntetrationApplication {
     public static void main(String[] args) {
@@ -19,8 +23,9 @@ public class AiIntetrationApplication {
     }
 
     @Bean
-    public ChatClient chatClient(ChatClient.Builder builder) {
-        return builder.build();
+    @ConditionalOnMissingBean(RestTemplate.class)
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }

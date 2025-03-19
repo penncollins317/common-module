@@ -1,8 +1,6 @@
 package top.mxzero.ai.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +16,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class AssistMessage {
-    @Id
-    @GeneratedValue
+public class AiChatMessage {
+    @TableId
     private Long id;
     private String conversationId;
     private String content;
     private String role;
+    private Long timestamp;
     private Date createdAt;
 }

@@ -4,10 +4,41 @@ spring:
     url: jdbc:postgresql://localhost:5432/ai_chat
     username: postgres
     password: postgres
-  jpa:
-    hibernate:
-      ddl-auto: update
-
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8:00
   ai:
-    apiKey: sk-63cf4d19af484f139ed1dcd9609bee41
-    baseUrl: https://api.deepseek.com
+    openai:
+      api-key: sk-fdeb5cb9b141473ca196615ed8537df0
+      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      chat:
+        options:
+          model: qwen-plus
+          temperature: 1.3
+      #      api-key: sk-ohcxhhhilcpwowkrxzuzpzbjoqqdblgyhuhxbfthsckgnxvv
+      #      base-url: https://api.siliconflow.cn
+      #      chat:
+      #        options:
+      #          model: internlm/internlm2_5-7b-chat
+      #          temperature: 1.3
+      image:
+        options:
+          model: Kwai-Kolors/Kolors
+      audio:
+        speech:
+          options:
+            model: FunAudioLLM/CosyVoice2-0.5B
+            voice: ALLOY
+#  ai:
+#    openai:
+#      api-key: sk-9479dfbd72c0440ea0487fd0be015898
+#      base-url: https://api.deepseek.com
+#      chat:
+#        options:
+#          model: deepseek-chat
+
+mxzero:
+  jwt:
+    access: 259200
+    refresh: 1209600
+    issuer: http://api.mxzero.top

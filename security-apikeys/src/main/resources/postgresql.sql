@@ -13,3 +13,15 @@ CREATE TABLE out_app (
 );
 
 CREATE UNIQUE INDEX uk_out_app_name ON out_app(name);
+
+CREATE TABLE api_key(
+    id BIGSERIAL PRIMARY KEY,
+    app_id BIGINT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    code VARCHAR(64) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status INT NOT NULL
+);
+
+Create UNIQUE INDEX api_key_app_id_uk ON api_key(code);

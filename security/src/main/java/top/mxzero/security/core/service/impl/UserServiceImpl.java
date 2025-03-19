@@ -35,6 +35,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserinfoDTO getUserinfo(String username) {
+        return this.userMapper.findUserinfoByUsername(username);
+    }
+
+    @Override
     @Transactional
     public Long addUser(UsernamePasswordArgs args) {
         if (this.userMapper.exists(new QueryWrapper<User>().eq("username", args.getUsername()))) {

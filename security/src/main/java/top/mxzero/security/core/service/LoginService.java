@@ -19,7 +19,15 @@ public interface LoginService {
     TokenDTO loginByUsername(LoginRequestBody args);
 
     /**
+     * 通过用户ID获取token
+     * @param userId 用户ID
+     * @return jwt
+     */
+    TokenDTO getTokenByUserId(Long userId);
+
+    /**
      * 刷新token
+     *
      * @param token refreshToken
      * @return jwt
      */

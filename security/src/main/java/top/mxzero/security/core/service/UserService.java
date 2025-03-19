@@ -27,6 +27,8 @@ public interface UserService {
      */
     List<UserinfoDTO> getUserinfo(List<Long> userIds);
 
+    UserinfoDTO getUserinfo(String username);
+
     /**
      * 新增用户
      *

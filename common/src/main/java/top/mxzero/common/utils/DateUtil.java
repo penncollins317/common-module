@@ -20,6 +20,7 @@ import java.util.Date;
 public class DateUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter NUMBER_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+    private static final DateTimeFormatter DATE_NUMBER_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private DateUtil() {
@@ -52,6 +53,10 @@ public class DateUtil {
 
     public static String formatNumber(Date date) {
         return NUMBER_FORMATTER.format(date.toInstant().atZone(ZoneId.systemDefault()));
+    }
+
+    public static String formatDateNumber(Date date) {
+        return DATE_NUMBER_FORMATTER.format(date.toInstant().atZone(ZoneId.systemDefault()));
     }
 
     public static boolean isDate(String dateStr) {

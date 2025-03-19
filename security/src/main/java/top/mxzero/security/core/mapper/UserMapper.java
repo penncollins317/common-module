@@ -15,6 +15,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
     UserinfoDTO findUserinfoById(Long userId);
+    UserinfoDTO findUserinfoByUsername(String username);
 
     List<UserinfoDTO> findUserinfoByIds(@Param("userIds") List<Long> userIds);
 }
