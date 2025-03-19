@@ -54,12 +54,12 @@ public class AiConversationController {
     /**
      * 删除会话
      *
-     * @param id 会话ID
+     * @param conversationId 会话ID
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("{id}")
-    public void deleteConversationApi(@PathVariable("id") String id, Principal principal) {
-        boolean result = this.conversationService.deleteConversation(id, Long.valueOf(principal.getName()));
+    @DeleteMapping("{conversationId}")
+    public void deleteConversationApi(@PathVariable("conversationId") String conversationId, Principal principal) {
+        boolean result = this.conversationService.deleteConversation(conversationId, Long.valueOf(principal.getName()));
         if (!result) {
             throw new ServiceException(ServiceErrorCode.RESOURCE_NOT_FOUND);
         }

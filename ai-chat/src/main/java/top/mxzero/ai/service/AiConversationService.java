@@ -2,7 +2,10 @@ package top.mxzero.ai.service;
 
 
 import jakarta.annotation.Nullable;
+import org.springframework.ai.chat.messages.AbstractMessage;
+import org.springframework.ai.chat.messages.Message;
 import top.mxzero.ai.dto.request.CreateConversationDTO;
+import top.mxzero.ai.dto.response.AiChatMessageDTO;
 import top.mxzero.ai.dto.response.ConversationDTO;
 
 import java.util.List;
@@ -45,4 +48,19 @@ public interface AiConversationService {
      * @param userId         用户ID
      */
     boolean existsConversation(String conversationId, Long userId);
+
+    /**
+     * 获取会话消息数量
+     *
+     * @param conversationId 会话ID
+     */
+    long msgCnt(String conversationId);
+
+    /**
+     * 获取消息
+     * @param conversationId 会话ID
+     * @param lastMsgId 上一条消息ID
+     * @return Ai消息列表
+     */
+    List<AiChatMessageDTO> pullMsg(String conversationId, @Nullable Long lastMsgId);
 }

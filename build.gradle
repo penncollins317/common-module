@@ -64,10 +64,10 @@ project("common") {
 
 project("security") {
     dependencies {
-        api 'com.nimbusds:nimbus-jose-jwt:10.0.1'
-        api 'org.springframework.security:spring-security-oauth2-resource-server:6.4.2'
-        api 'org.springframework.security:spring-security-oauth2-jose:6.4.2'
-        api 'org.springframework.security:spring-security-oauth2-client:6.4.2'
+        api libraries.'nimbus-jose-jwt'
+        api libraries.'spring-security-oauth2-resource-server'
+        api libraries.'spring-security-oauth2-jose'
+        api libraries.'spring-security-oauth2-client'
         api libraries.'spring-boot-starter-security'
         api libraries.'spring-boot-starter-web'
         api libraries.'spring-boot-starter-jdbc'
@@ -93,6 +93,7 @@ project("ai-chat") {
         implementation project(":common")
         implementation libraries.'mybatis-plus-spring-boot3-starter'
         implementation libraries.'spring-boot-starter-web'
+        implementation libraries.'mybatis-plus-jsqlparser'
         implementation libraries.'postgresql'
         implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
         implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
@@ -122,6 +123,6 @@ project("starter") {
         implementation project(":oss")
         implementation libraries.'postgresql'
         implementation libraries.'spring-boot-starter-web'
-        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter:3.5.9'
+        implementation libraries.'mybatis-plus-spring-boot3-starter'
     }
 }

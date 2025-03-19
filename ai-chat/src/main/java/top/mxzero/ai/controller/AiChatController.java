@@ -5,22 +5,34 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import top.mxzero.ai.dto.request.ChatInputDTO;
+import top.mxzero.ai.dto.response.AiChatMessageDTO;
 import top.mxzero.ai.service.AiConversationService;
+import top.mxzero.ai.tools.DateTools;
+import top.mxzero.ai.tools.UserTools;
+import top.mxzero.common.dto.RestData;
+import top.mxzero.common.exceptions.ServiceErrorCode;
 import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.security.core.annotations.AuthenticatedRequired;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,10 +50,35 @@ public class AiChatController {
     private final AiConversationService conversationService;
     private static final String modelName = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B";
 
+    @Value("classpath:prompts/welcome.st")
+    private Resource resource;
+
     public AiChatController(ChatModel model, ChatMemory chatMemory, AiConversationService conversationService) {
         this.conversationService = conversationService;
         this.model = model;
-        this.client = ChatClient.builder(this.model).defaultAdvisors(new PromptChatMemoryAdvisor(chatMemory)).build();
+        this.client = ChatClient.builder(this.model)
+                .defaultAdvisors(new PromptChatMemoryAdvisor(chatMemory))
+                .build();
+    }
+
+    /**
+     * 同步调用
+     *
+     * @param inputDTO 用户输入数据
+     */
+    @RequestMapping("/call")
+    public String callChatApi(
+            ChatInputDTO inputDTO,
+            Principal principal) {
+        if (!this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
+            throw new ServiceException("会话不存在");
+        }
+
+        return this.client.prompt(new Prompt(new UserMessage(inputDTO.getContent())))
+                .tools(new DateTools(), new UserTools())
+                .advisors(advisorSpec -> {
+                    advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId());
+                }).call().content();
     }
 
     /**
@@ -49,16 +86,21 @@ public class AiChatController {
      *
      * @param inputDTO 用户输入内容
      */
-
     @PostMapping(value = "/stream")
     public Flux<ServerSentEvent<String>> defaultChatModelStreamApi(
             @Valid @RequestBody ChatInputDTO inputDTO,
             Principal principal
-    ) {
+    ) throws IOException {
         if (!this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
             throw new ServiceException("会话不存在");
         }
-        Flux<ServerSentEvent<String>> messageEvents = this.client.prompt(new Prompt(inputDTO.getContent()))
+        List<Message> messages = new ArrayList<>();
+        if (this.conversationService.msgCnt(inputDTO.getConversationId()) == 0) {
+            String systemPrompt = resource.getContentAsString(StandardCharsets.UTF_8);
+            messages.add(new SystemMessage(systemPrompt));
+        }
+        messages.add(new UserMessage(inputDTO.getContent()));
+        Flux<ServerSentEvent<String>> messageEvents = this.client.prompt(new Prompt(messages))
                 .advisors(advisorSpec -> {
                     advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId());
                 })
@@ -187,4 +229,17 @@ public class AiChatController {
                 ));
     }
 
+    /**
+     * 获取会话消息
+     *
+     * @param conversationId 会话ID
+     * @param lastMsgId      最后一条消息
+     */
+    @RequestMapping("{conversationId}/messages")
+    public RestData<List<AiChatMessageDTO>> pullAiChatMsgApi(@PathVariable("conversationId") String conversationId, @RequestParam(value = "lastMsgId", required = false) Long lastMsgId, Principal principal) {
+        if (!this.conversationService.existsConversation(conversationId, Long.valueOf(principal.getName()))) {
+            throw new ServiceException(ServiceErrorCode.RESOURCE_NOT_FOUND);
+        }
+        return RestData.success(this.conversationService.pullMsg(conversationId, lastMsgId));
+    }
 }
