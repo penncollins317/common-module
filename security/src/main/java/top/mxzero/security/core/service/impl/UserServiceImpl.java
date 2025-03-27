@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.mxzero.common.dto.PageDTO;
 import top.mxzero.common.exceptions.ServiceException;
+import top.mxzero.common.params.PageSearchParam;
 import top.mxzero.security.core.dto.UserinfoDTO;
 import top.mxzero.security.core.dto.UsernamePasswordArgs;
 import top.mxzero.security.core.entity.User;
@@ -13,6 +15,7 @@ import top.mxzero.security.core.mapper.UserMapper;
 import top.mxzero.security.core.service.UserService;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Peng
@@ -35,8 +38,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserinfoDTO getUserinfo(String username) {
-        return this.userMapper.findUserinfoByUsername(username);
+    public PageDTO<UserinfoDTO> search(PageSearchParam parma) {
+        parma.setFields(Set.of("id", "avatar_url", "username", "nickname", "pwd_version"));
+        return PageDTO.<User, UserinfoDTO>wrap(this.userMapper, User.class, parma, UserinfoDTO::new);
     }
 
     @Override

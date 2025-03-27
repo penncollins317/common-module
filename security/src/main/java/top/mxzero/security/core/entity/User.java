@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import top.mxzero.common.annotations.SearchField;
 
 import java.util.Date;
 
@@ -16,8 +17,10 @@ import java.util.Date;
 public class User {
     @TableId
     private Long id;
+    @SearchField
     private String username;
     private String password;
+    @SearchField
     private String nickname;
     private String phone;
     private String email;
@@ -25,7 +28,8 @@ public class User {
     private Date createdAt;
     private Date updatedAt;
     private Date lastLoginAt;
-    private Long pwdVersion;
+    @TableField("pwd_version")
+    private Long version;
     @TableField("is_active")
     private Boolean active;
 }

@@ -1,5 +1,7 @@
 package top.mxzero.security.core.service;
 
+import top.mxzero.common.dto.PageDTO;
+import top.mxzero.common.params.PageSearchParam;
 import top.mxzero.security.core.dto.UserinfoDTO;
 import top.mxzero.security.core.dto.UsernamePasswordArgs;
 
@@ -27,7 +29,12 @@ public interface UserService {
      */
     List<UserinfoDTO> getUserinfo(List<Long> userIds);
 
-    UserinfoDTO getUserinfo(String username);
+    /**
+     * 用户搜索
+     *
+     * @param param 查询参数
+     */
+    PageDTO<UserinfoDTO> search(PageSearchParam param);
 
     /**
      * 新增用户

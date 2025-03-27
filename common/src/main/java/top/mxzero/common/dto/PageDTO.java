@@ -207,13 +207,12 @@ public class PageDTO<T> implements Serializable {
         if (fieldSet == null || fieldSet.isEmpty()) {
             return new String[]{};
         }
-        return (String[]) fieldSet.stream().filter(field -> {
+        return fieldSet.stream().map(field -> {
             try {
-                target.getDeclaredField(field);
-                return true;
+                return target.getDeclaredField(field).getName();
             } catch (Exception ignored) {
-                return false;
+                return null;
             }
-        }).toArray();
+        }).filter(StringUtils::hasLength).toList().toArray(new String[]{});
     }
 }
