@@ -13,6 +13,10 @@ public class UUIDv7Generator {
     private static final long VERSION_MASK = 0xF000L;
     private static final long VARIANT_MASK = 0xC000_0000_0000_0000L;
 
+    public static String generateStr() {
+        return generate().toString();
+    }
+
     public static UUID generate() {
         // 获取当前时间戳（毫秒精度 + 子秒精度）
         Instant now = Instant.now();
@@ -35,6 +39,10 @@ public class UUIDv7Generator {
                 | rand;                                    // 54位随机数
 
         return new UUID(msb, lsb);
+    }
+
+    public static void validate(String uuidV7) {
+        validate(UUID.fromString(uuidV7));
     }
 
     // 验证方法（可选）
