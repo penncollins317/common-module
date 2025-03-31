@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import top.mxzero.common.dto.PageDTO;
 import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.common.params.PageSearchParam;
+import top.mxzero.common.utils.DeepBeanUtil;
 import top.mxzero.security.core.dto.UserinfoDTO;
+import top.mxzero.security.core.dto.UserinfoModifyDTO;
 import top.mxzero.security.core.dto.UsernamePasswordArgs;
 import top.mxzero.security.core.entity.User;
 import top.mxzero.security.core.mapper.UserMapper;
@@ -30,6 +32,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserinfoDTO getUserinfo(Long userId) {
         return this.userMapper.findUserinfoById(userId);
+    }
+
+    @Override
+    public UserinfoDTO getUserinfoByUsername(String username) {
+        return this.userMapper.findUserinfoByUsername(username);
     }
 
     @Override
@@ -56,5 +63,12 @@ public class UserServiceImpl implements UserService {
 
         this.userMapper.insert(user);
         return user.getId();
+    }
+
+    @Override
+    @Transactional
+    public boolean updateUserinfo(UserinfoModifyDTO dto) {
+        User user = DeepBeanUtil.copyProperties(dto, User::new);
+        return this.userMapper.updateById(user) > 0;
     }
 }

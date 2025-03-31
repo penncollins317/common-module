@@ -3,7 +3,6 @@ package top.mxzero.security.core.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import top.mxzero.security.core.enums.OAuth2Provider;
 
 import java.util.Date;
 
@@ -18,7 +17,7 @@ public class OAuth2UserRelated {
     private Long id;
     private Long userId;
     private String outUid;
-    private OAuth2Provider provider;
+    private String provider;
     private Date createdAt;
     private Date updatedAt;
 }

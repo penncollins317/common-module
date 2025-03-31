@@ -20,6 +20,7 @@ public interface LoginService {
 
     /**
      * 通过用户ID获取token
+     *
      * @param userId 用户ID
      * @return jwt
      */

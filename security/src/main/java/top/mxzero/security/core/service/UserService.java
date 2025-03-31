@@ -3,6 +3,7 @@ package top.mxzero.security.core.service;
 import top.mxzero.common.dto.PageDTO;
 import top.mxzero.common.params.PageSearchParam;
 import top.mxzero.security.core.dto.UserinfoDTO;
+import top.mxzero.security.core.dto.UserinfoModifyDTO;
 import top.mxzero.security.core.dto.UsernamePasswordArgs;
 
 import java.util.List;
@@ -21,6 +22,12 @@ public interface UserService {
      */
     UserinfoDTO getUserinfo(Long userId);
 
+    /**
+     * 通过用户名获取用户信息
+     * @param username 用户名
+     * @return 用户基础信息DTO
+     */
+    UserinfoDTO getUserinfoByUsername(String username);
     /**
      * 批量获取用户基础信息
      *
@@ -43,4 +50,9 @@ public interface UserService {
      * @return 用户ID
      */
     Long addUser(UsernamePasswordArgs args);
+
+    /**
+     * 需改用户昵称、头像
+     */
+    boolean updateUserinfo(UserinfoModifyDTO dto);
 }

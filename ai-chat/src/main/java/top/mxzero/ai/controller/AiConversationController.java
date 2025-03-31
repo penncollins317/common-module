@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 import top.mxzero.ai.dto.request.CreateConversationDTO;
 import top.mxzero.ai.dto.response.ConversationDTO;
 import top.mxzero.ai.service.AiConversationService;

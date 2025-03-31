@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -75,7 +74,7 @@ public class JsonUtils {
         return parseMap(jsonStr, String.class, Object.class);
     }
 
-    public static Map<String, T> parseMap(String jsonStr, Class<T> valueClass) {
+    public static <T> Map<String, T> parseMap(String jsonStr, Class<T> valueClass) {
         return parseMap(jsonStr, String.class, valueClass);
     }
 

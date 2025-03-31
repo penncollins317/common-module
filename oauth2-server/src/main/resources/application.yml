@@ -1,21 +1,26 @@
 server:
   port: 80
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/mxzero_common
+    url: jdbc:postgresql://localhost:5432/oauth2
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
-  jackson:
-    time-zone: GMT+8
-    date-format: yyyy-MM-dd HH:mm:ss
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.transaction.jta.platform: org.hibernate.service.jta.JtaPlatform
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
   security:
     oauth2:
       client:
         registration:
-          google:
-            clientId: 371132010531-g2fsovcnl9dglvqqo3qpuvq4bn6tedid.apps.googleusercontent.com
-            clientSecret: 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
           github:
             clientId: Ov23lilHVzypKogk2jSA
             clientSecret: d6339dde0fc517ec6edf73434d316e2513206bd0
@@ -31,33 +36,14 @@ spring:
             clientSecret: 0da8b21da070f8c5cad17e409691741e
             authorizationGrantType: authorization_code
             redirectUri: http://local.mxzero.top/login/oauth2/code/weibo
-
         provider:
           qq:
             authorizationUri: https://graph.qq.com/oauth2.0/authorize
-            tokenUri: https://graph.qq.com/oauth2.0/token
-            userInfoUri: https://graph.qq.com/oauth2.0/me
+            tokenUri: https://graph.qq.com/oauth2.0/token?fmt=json
+            userInfoUri: https://graph.qq.com/oauth2.0/me?fmt=json
             userNameAttribute: openid
           weibo:
             authorizationUri: https://api.weibo.com/oauth2/authorize
             tokenUri: https://api.weibo.com/oauth2/access_token
-            userInfoUri: https://api.weibo.com/2/users/show.json
-            userNameAttribute: id
-
-
-mxzero:
-  jwt:
-    access: 72000
-    refresh: 864000
-    issuer: http://mxzero.top
-  oss:
-    type: qiniu
-    access-key: JZC3y5EuQRx78LFmEeENRVdcEWNUCIzmgF8a7dTp
-    secret-key: nFIdeB9QWtY2CjgecW781S7VU54Zc-rOyC7r59dv
-    endpoint: image.zkodoo.cc
-    secret: true
-    bucket-name: zkodoo
-
-logging:
-  level:
-    org.springframework.security: DEBUG
+            userInfoUri: https://api.weibo.com/oauth2/get_token_info
+            userNameAttribute: uid

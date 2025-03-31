@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 public enum OAuth2Provider {
     GITHUB("github"),
+    GOOGLE("google"),
     WEIBO("weibo"),
     QQ("qq"),
     WECHAT("wechat"),

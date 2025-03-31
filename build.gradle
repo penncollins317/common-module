@@ -3,21 +3,31 @@ buildscript {
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public' }
     }
+
+    dependencies {
+        classpath libraries.'spring-boot-gradle-plugin'
+    }
 }
 
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
     sourceCompatibility = project_jdk
     targetCompatibility = project_jdk
 
     dependencies {
-        compileOnly libraries.'lombok'
-        annotationProcessor libraries.'lombok'
-        testImplementation libraries.'spring-boot-starter-test'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
-
+    dependencyManagement {
+        imports {
+            mavenBom libraries.'mybatis-plus-bom'
+        }
+    }
     repositories {
         mavenLocal()
         maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -33,47 +43,43 @@ subprojects {
 
 project("common") {
     dependencies {
-        api libraries.'spring-boot-starter-mail'
-        api libraries.'spring-boot-starter-validation'
-        api libraries.'jackson-annotations'
-        implementation libraries.'fastjson2'
+        api 'org.springframework.boot:spring-boot-starter-mail'
+        api 'org.springframework.boot:spring-boot-starter-validation'
+        api 'com.fasterxml.jackson.core:jackson-annotations'
         implementation(libraries.'java-sms-sdk') {
             exclude module: 'commons-logging'
         }
 
-        implementation libraries.'spring-web'
-        implementation libraries.'spring-webmvc'
-        implementation libraries.'spring-core'
-        implementation libraries.'spring-aop'
-        api libraries.'jackson-databind'
-        implementation libraries.'spring-security-core'
-        implementation libraries.'jackson-dataformat-xml'
-        api(libraries.'easyexcel') {
-            exclude module: 'java-jaxb'
-            exclude module: 'jaxb-core'
-        }
-        api libraries.'jaxb-core'
-        implementation libraries.'servlet-api'
+        implementation 'org.springframework:spring-web'
+        implementation 'org.springframework:spring-webmvc'
+        implementation 'org.springframework:spring-core'
+        implementation 'org.springframework:spring-aop'
+        api 'com.fasterxml.jackson.core:jackson-databind'
+        api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+        implementation 'org.springframework.security:spring-security-core'
+        implementation 'jakarta.servlet:jakarta.servlet-api'
         implementation 'com.google.zxing:core:3.5.2'
         implementation 'com.google.zxing:javase:3.5.2'
         api libraries.'mybatis-plus'
         api libraries.'mybatis-spring'
-        annotationProcessor libraries.'spring-boot-configuration-processor'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
 
 project("security") {
     dependencies {
-        api libraries.'nimbus-jose-jwt'
-        api libraries.'spring-security-oauth2-resource-server'
-        api libraries.'spring-security-oauth2-jose'
-        api libraries.'spring-security-oauth2-client'
-        api libraries.'spring-boot-starter-security'
-        api libraries.'spring-boot-starter-web'
-        api libraries.'spring-boot-starter-jdbc'
         implementation project(":common")
-        implementation libraries.'spring-boot-starter-thymeleaf'
-        annotationProcessor libraries.'spring-boot-configuration-processor'
+        api 'com.nimbusds:nimbus-jose-jwt'
+        implementation libraries.'spring-security-oauth2-authorization-server'
+        api 'org.springframework.security:spring-security-oauth2-resource-server'
+        api 'org.springframework.security:spring-security-oauth2-jose'
+        api 'org.springframework.security:spring-security-oauth2-client'
+        api 'org.springframework.boot:spring-boot-starter-security'
+        api 'org.springframework.boot:spring-boot-starter-web'
+        api 'org.springframework.boot:spring-boot-starter-jdbc'
+        api 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
 
@@ -91,27 +97,26 @@ project("ai-chat") {
     dependencies {
         implementation project(":security")
         implementation project(":common")
-        implementation libraries.'mybatis-plus-spring-boot3-starter'
-        implementation libraries.'spring-boot-starter-web'
-        implementation libraries.'mybatis-plus-jsqlparser'
-        implementation libraries.'postgresql'
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+        implementation 'com.baomidou:mybatis-plus-jsqlparser'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.postgresql:postgresql'
         implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
-        implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+        implementation 'org.springframework.ai:spring-ai-starter-model-openai'
     }
 }
 
 project("oss") {
     dependencies {
+        implementation project(":common")
+        implementation project(":security")
         api libraries.'aliyun-sdk-oss'
         api libraries.'qiniu-java-sdk'
         api libraries.'minio'
         api libraries.'s3'
-        implementation libraries.'spring-boot-starter-thymeleaf'
-        implementation libraries.'spring-boot-starter-web'
-        implementation libraries.'spring-boot-starter-data-redis'
-        annotationProcessor libraries.'spring-boot-configuration-processor'
-        implementation project(":common")
-        implementation project(":security")
+        api 'org.springframework.boot:spring-boot-starter-web'
+        api 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        api 'org.springframework.boot:spring-boot-starter-data-redis'
     }
 }
 
@@ -119,10 +124,22 @@ project("starter") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
-        implementation project(":security-apikeys")
-        implementation project(":oss")
-        implementation libraries.'postgresql'
-        implementation libraries.'spring-boot-starter-web'
-        implementation libraries.'mybatis-plus-spring-boot3-starter'
+//        implementation project(":security-apikeys")
+//        implementation project(":oss")
+        implementation 'org.postgresql:postgresql'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+    }
+}
+
+project("oauth2-server") {
+    dependencies {
+//        implementation project(":security")
+        implementation libraries.'spring-security-oauth2-authorization-server'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.postgresql:postgresql'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.security:spring-security-oauth2-client'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     }
 }

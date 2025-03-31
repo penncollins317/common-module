@@ -4,14 +4,15 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * UUID v7生成器
+ *
+ * @author Peng
+ * @email qianmeng6879@163.com
+ * @since 2025/3/19
+ */
 public class UUIDv7Generator {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
-
-    // 位掩码常量
-    private static final long SUBSEC_A_MASK = 0x0FFF_0000_0000_0000L;
-    private static final long SUBSEC_B_MASK = 0x0000_0000_0000_00FFL;
-    private static final long VERSION_MASK = 0xF000L;
-    private static final long VARIANT_MASK = 0xC000_0000_0000_0000L;
 
     public static String generateStr() {
         return generate().toString();
@@ -53,5 +54,33 @@ public class UUIDv7Generator {
         if (uuid.variant() != 2) {
             throw new IllegalArgumentException("Invalid RFC4122 variant");
         }
+    }
+
+    /**
+     * 从 UUIDv7 中提取秒级别的时间戳
+     * <p>
+     * 该方法只恢复存储在 UUID 高 48 位中的毫秒时间戳，
+     * 并将其转换为秒级别（忽略毫秒及子秒部分）。
+     *
+     * @param uuid UUIDv7 对象
+     * @return 时间戳的秒级值
+     */
+    public static long extractTimestampSeconds(UUID uuid) {
+        // 验证 UUID 是否为 UUIDv7
+        validate(uuid);
+
+        // 从 msb 的高 48 位恢复毫秒时间戳
+        long tsMillis = uuid.getMostSignificantBits() >>> 16;
+        return tsMillis / 1000;
+    }
+
+    /**
+     * 从 UUIDv7 字符串中提取秒级别的时间戳
+     *
+     * @param uuidV7 UUIDv7 的字符串表示
+     * @return 时间戳的秒级值
+     */
+    public static long extractTimestampSeconds(String uuidV7) {
+        return extractTimestampSeconds(UUID.fromString(uuidV7));
     }
 }
