@@ -1,5 +1,6 @@
 package top.mxzero.ai.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
@@ -27,7 +28,7 @@ import top.mxzero.ai.tools.UserTools;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.common.exceptions.ServiceErrorCode;
 import top.mxzero.common.exceptions.ServiceException;
-import top.mxzero.security.core.annotations.AuthenticatedRequired;
+import top.mxzero.common.utils.UUIDv7Generator;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -41,23 +42,28 @@ import java.util.List;
  * @author Peng
  * @since 2024/11/27
  */
-@AuthenticatedRequired
 @RestController
 @RequestMapping("/ai/chat")
 public class AiChatController {
-    private final ChatModel model;
+    private final ChatModel chatModel;
+    private final ChatMemory chatMemory;
     private final ChatClient client;
     private final AiConversationService conversationService;
     private static final String modelName = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B";
+    private static final String DEFAULT_AI_CHAT_CONVERSATION = "DEFAULT_AI_CHAT_CONVERSATION";
 
     @Value("classpath:prompts/welcome.st")
     private Resource resource;
 
-    public AiChatController(ChatModel model, ChatMemory chatMemory, AiConversationService conversationService) {
+    public AiChatController(ChatModel chatModel, ChatMemory chatMemory, AiConversationService conversationService) {
         this.conversationService = conversationService;
-        this.model = model;
-        this.client = ChatClient.builder(this.model)
-                .defaultAdvisors(new PromptChatMemoryAdvisor(chatMemory))
+        this.chatModel = chatModel;
+        this.chatMemory = chatMemory;
+        this.client = this.buildChatClient(this.chatModel);
+    }
+
+    private ChatClient buildChatClient(ChatModel chatModel) {
+        return ChatClient.builder(chatModel).defaultAdvisors(new PromptChatMemoryAdvisor(this.chatMemory))
                 .build();
     }
 
@@ -67,18 +73,29 @@ public class AiChatController {
      * @param inputDTO 用户输入数据
      */
     @RequestMapping("/call")
-    public String callChatApi(
-            ChatInputDTO inputDTO,
+    public RestData<Object> callChatApi(
+            @Valid ChatInputDTO inputDTO,
+            HttpSession session,
             Principal principal) {
-        if (!this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
+        if (StringUtils.hasLength(inputDTO.getConversationId()) && !this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
             throw new ServiceException("会话不存在");
         }
 
-        return this.client.prompt(new Prompt(new UserMessage(inputDTO.getContent())))
+        // 为传递conversationId，使用当前session
+        if (!StringUtils.hasLength(inputDTO.getConversationId())) {
+            String conversationId = (String) session.getAttribute(DEFAULT_AI_CHAT_CONVERSATION);
+            if (!StringUtils.hasLength(conversationId)) {
+                conversationId = UUIDv7Generator.generateStr();
+                session.setAttribute(DEFAULT_AI_CHAT_CONVERSATION, conversationId);
+            }
+            inputDTO.setConversationId(conversationId);
+        }
+        ChatResponse response =   this.client.prompt(new Prompt(new UserMessage(inputDTO.getContent())))
                 .tools(new DateTools(), new UserTools())
                 .advisors(advisorSpec -> {
                     advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId());
-                }).call().content();
+                }).call().chatResponse();
+        return RestData.success(response);
     }
 
     /**
@@ -86,14 +103,26 @@ public class AiChatController {
      *
      * @param inputDTO 用户输入内容
      */
-    @PostMapping(value = "/stream")
+    @RequestMapping("/stream")
     public Flux<ServerSentEvent<String>> defaultChatModelStreamApi(
             @Valid @RequestBody ChatInputDTO inputDTO,
+            HttpSession session,
             Principal principal
     ) throws IOException {
-        if (!this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
+        if (StringUtils.hasLength(inputDTO.getConversationId()) && !this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
             throw new ServiceException("会话不存在");
         }
+
+        // 为传递conversationId，使用当前session
+        if (!StringUtils.hasLength(inputDTO.getConversationId())) {
+            String conversationId = (String) session.getAttribute(DEFAULT_AI_CHAT_CONVERSATION);
+            if (!StringUtils.hasLength(conversationId)) {
+                conversationId = UUIDv7Generator.generateStr();
+                session.setAttribute(DEFAULT_AI_CHAT_CONVERSATION, conversationId);
+            }
+            inputDTO.setConversationId(conversationId);
+        }
+
         List<Message> messages = new ArrayList<>();
         if (this.conversationService.msgCnt(inputDTO.getConversationId()) == 0) {
             String systemPrompt = resource.getContentAsString(StandardCharsets.UTF_8);
@@ -105,9 +134,63 @@ public class AiChatController {
                     advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId());
                 })
                 .stream().chatResponse()
-                .filter(data -> StringUtils.hasLength(data.getResult().getOutput().getText()))
                 .map(data -> ServerSentEvent.<String>builder()
                         .event("message")
+                        .data(data.getResult().getOutput().getText())
+                        .build()
+                );
+        Mono<ServerSentEvent<String>> closeEvent = Mono.just(
+                ServerSentEvent.<String>builder().event("complete").data("").build()
+        );
+
+        return messageEvents
+                .startWith(ServerSentEvent.<String>builder()
+                        .event("chat_output")
+                        .data("")
+                        .build())
+                .concatWith(closeEvent)
+                .onErrorResume(e -> Flux.just(
+                        ServerSentEvent.<String>builder()
+                                .event("error")
+                                .data(e.getMessage())
+                                .build()
+                ).concatWith(closeEvent));
+    }
+
+    @RequestMapping(value = "stream/model")
+    public Flux<ServerSentEvent<String>> chatStreamWithModelApi(
+            @Valid ChatInputDTO inputDTO,
+            HttpSession session,
+            Principal principal,
+            @RequestParam(value = "model") String modelName) {
+        if (StringUtils.hasLength(inputDTO.getConversationId()) && !this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
+            throw new ServiceException("会话不存在");
+        }
+        // 为传递conversationId，使用当前session
+        if (!StringUtils.hasLength(inputDTO.getConversationId())) {
+            String conversationId = (String) session.getAttribute(DEFAULT_AI_CHAT_CONVERSATION);
+            if (!StringUtils.hasLength(conversationId)) {
+                conversationId = UUIDv7Generator.generateStr();
+                session.setAttribute(DEFAULT_AI_CHAT_CONVERSATION, conversationId);
+            }
+            inputDTO.setConversationId(conversationId);
+        }
+
+        OpenAiChatOptions options = OpenAiChatOptions.builder()
+                .model(modelName)
+                .temperature(this.chatModel.getDefaultOptions().getTemperature())
+                .build();
+
+        Prompt prompt = new Prompt(inputDTO.getContent(), options);
+
+        ChatClient.StreamResponseSpec openAiStream = this.client.prompt(prompt)
+                .advisors(advisorSpec -> {
+                    advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId());
+                }).stream();
+
+        Flux<ServerSentEvent<String>> messageEvents = openAiStream.chatResponse()
+                .map(data -> ServerSentEvent.<String>builder()
+                        .event("chat_output")
                         .data(data.getResult().getOutput().getText())
                         .build()
                 );
@@ -125,47 +208,34 @@ public class AiChatController {
                 ).concatWith(closeEvent));
     }
 
-    @RequestMapping(value = "stream/model")
-    public Flux<ServerSentEvent<String>> chatStreamWithModelApi(@RequestParam("msg") String content, @RequestParam(value = "model") String modelName, @RequestParam(value = "temperature", defaultValue = "1.0") Double temperature) {
-        OpenAiChatOptions options = OpenAiChatOptions.builder()
-                .model(modelName)
-                .temperature(temperature)
-                .build();
-
-        Prompt prompt = new Prompt(content, options);
-
-        Flux<ChatResponse> openAiStream = this.model.stream(prompt);
-        Flux<ServerSentEvent<String>> messageEvents = openAiStream
-                .map(data -> ServerSentEvent.<String>builder()
-                        .event("message")
-                        .data(data.getResult().getOutput().getText())
-                        .build()
-                );
-        Mono<ServerSentEvent<String>> closeEvent = Mono.just(
-                ServerSentEvent.<String>builder().event("close").data("").build()
-        );
-
-        return messageEvents
-                .concatWith(closeEvent)
-                .onErrorResume(e -> Flux.just(
-                        ServerSentEvent.<String>builder()
-                                .event("error")
-                                .data(e.getMessage())
-                                .build()
-                ).concatWith(closeEvent));
-    }
-
     @RequestMapping(value = "/reasoner")
-    public Flux<ServerSentEvent<String>> reasonerChatApi(@RequestParam("content") String content) {
+    public Flux<ServerSentEvent<String>> reasonerChatApi(
+            @Valid ChatInputDTO inputDTO,
+            HttpSession session,
+            Principal principal
+    ) {
+        if (StringUtils.hasLength(inputDTO.getConversationId()) && !this.conversationService.existsConversation(inputDTO.getConversationId(), Long.valueOf(principal.getName()))) {
+            throw new ServiceException("会话不存在");
+        }
+
+        // 为传递conversationId，使用当前session
+        if (!StringUtils.hasLength(inputDTO.getConversationId())) {
+            String conversationId = (String) session.getAttribute(DEFAULT_AI_CHAT_CONVERSATION);
+            if (!StringUtils.hasLength(conversationId)) {
+                conversationId = UUIDv7Generator.generateStr();
+                session.setAttribute(DEFAULT_AI_CHAT_CONVERSATION, conversationId);
+            }
+            inputDTO.setConversationId(conversationId);
+        }
+
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .model(modelName)
-                .temperature(this.model.getDefaultOptions().getTemperature())
+                .temperature(this.chatModel.getDefaultOptions().getTemperature())
                 .build();
 
         // ==================== 第一轮推理 ====================
         // 先将 ChatResponse 转换成 ServerSentEvent<String>
-        Flux<ServerSentEvent<String>> mappedFirstPhase = this.model.stream(new Prompt(new UserMessage(content), options))
-                .filter(data -> StringUtils.hasText(data.getResult().getOutput().getText()))
+        Flux<ServerSentEvent<String>> mappedFirstPhase = this.chatModel.stream(new Prompt(new UserMessage(inputDTO.getContent()), options))
                 .map(data -> ServerSentEvent.<String>builder()
                         .event("message")
                         .data(data.getResult().getOutput().getText())
@@ -192,23 +262,22 @@ public class AiChatController {
                 })
                 // 触发第二轮推理
                 .flatMapMany(firstPhaseResult ->
-                        this.model.stream(new Prompt(List.of(
+                        this.chatModel.stream(new Prompt(List.of(
                                         new AssistantMessage(firstPhaseResult.toString()),
-                                        new UserMessage(content)
+                                        new UserMessage(inputDTO.getContent())
                                 ), options))
                                 // 转换为 ServerSentEvent 流
-                                .filter(data -> StringUtils.hasText(data.getResult().getOutput().getText()))
                                 .map(data -> ServerSentEvent.<String>builder()
                                         .event("message")
                                         .data(data.getResult().getOutput().getText())
                                         .build())
                                 // 插入第二轮起始标记和结束标记
                                 .startWith(ServerSentEvent.<String>builder()
-                                        .event("second_chunk")
+                                        .event("chat_output")
                                         .data("")
                                         .build())
                                 .concatWith(Flux.just(ServerSentEvent.<String>builder()
-                                        .event("second_end")
+                                        .event("completed")
                                         .data("")
                                         .build()))
                 );

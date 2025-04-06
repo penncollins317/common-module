@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>申请开放平台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: #fff;
+            margin: auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .message {
+            text-align: center;
+            color: green;
+            margin-bottom: 15px;
+        }
+        .error {
+            text-align: center;
+            color: red;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>申请开放平台</h1>
+
+    <div th:if="${message}" class="message" th:text="${message}"></div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <form th:action="@{/client/register}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="logoPicture">上传 Logo：</label>
+            <input type="file" id="logoPicture" name="logoPicture" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label for="name">应用名称：</label>
+            <input type="text" id="name" name="name" th:value="${oauthClient.name}" required>
+        </div>
+        <div class="form-group">
+            <label for="callbackUrls">回调地址（多个地址请用分号分隔）：</label>
+            <input type="text" id="callbackUrls" name="callbackUrls" th:value="${oauthClient.callbackUrls}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">应用简介：</label>
+            <textarea id="description" name="description" rows="5" required
+                      th:text="${oauthClient.description}"></textarea>
+        </div>
+        <button type="submit">提交申请</button>
+    </form>
+</div>
+</body>
+</html>

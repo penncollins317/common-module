@@ -3,10 +3,8 @@ package top.mxzero.ai.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import groovyjarjarantlr4.v4.tool.ToolMessage;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
-import org.springframework.ai.chat.messages.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -38,7 +36,7 @@ public class AiConversationServiceImpl implements AiConversationService {
     public String create(CreateConversationDTO dto) {
         String conversationId = UUIDv7Generator.generate().toString();
         AiConversation conversation = new AiConversation();
-        conversation.setConversationId(UUIDv7Generator.generate().toString());
+        conversation.setConversationId(conversationId);
         conversation.setTitle(dto.getTitle());
         conversation.setUserId(dto.getUserId());
         this.conversationMapper.insert(conversation);
@@ -46,7 +44,7 @@ public class AiConversationServiceImpl implements AiConversationService {
     }
 
     @Override
-    public List<ConversationDTO> listConversation(Long userId, @Nullable String lastConversationId) {
+    public List<ConversationDTO> listConversation(Long  userId, @Nullable String lastConversationId) {
         QueryWrapper<AiConversation> queryWrapper = new QueryWrapper<AiConversation>().eq("user_id", userId).orderByDesc("conversation_id");
         if (StringUtils.hasLength(lastConversationId)) {
             queryWrapper.lt("conversation_id", lastConversationId);
@@ -56,7 +54,7 @@ public class AiConversationServiceImpl implements AiConversationService {
     }
 
     @Override
-    public boolean deleteConversation(String conversationId, Long userId) {
+    public boolean deleteConversation(String conversationId, Long  userId) {
         return this.conversationMapper.delete(new QueryWrapper<AiConversation>().eq("conversation_id", conversationId).eq("user_id", userId)) > 0;
     }
 

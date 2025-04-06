@@ -13,9 +13,9 @@ import top.mxzero.security.core.annotations.EnableSecurityConfig;
  * @author Peng
  * @since 2024/11/27
  */
-@EnableSecurityConfig
 @MapperScan("top.mxzero.ai.mapper")
 @AllArgsConstructor
+@EnableSecurityConfig
 @SpringBootApplication
 public class AiIntetrationApplication {
     public static void main(String[] args) {

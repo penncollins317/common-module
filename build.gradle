@@ -26,13 +26,18 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom libraries.'mybatis-plus-bom'
+            mavenBom libraries.'spring-boot-dependencies'
         }
     }
     repositories {
         mavenLocal()
         maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://repo.spring.io/milestone/' }
+        maven { url 'https://repo.spring.io/milestone' }
         maven { url 'https://repo.spring.io/snapshot' }
+        maven {
+            name = 'Central Portal Snapshots'
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
+        }
         mavenCentral()
     }
 
@@ -49,11 +54,8 @@ project("common") {
         implementation(libraries.'java-sms-sdk') {
             exclude module: 'commons-logging'
         }
-
-        implementation 'org.springframework:spring-web'
-        implementation 'org.springframework:spring-webmvc'
-        implementation 'org.springframework:spring-core'
-        implementation 'org.springframework:spring-aop'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
         api 'com.fasterxml.jackson.core:jackson-databind'
         api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
         implementation 'org.springframework.security:spring-security-core'
@@ -66,20 +68,45 @@ project("common") {
     }
 }
 
+
+project("user-service") {
+    dependencies {
+        implementation(project(":common")) {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+        }
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+    }
+}
+
 project("security") {
     dependencies {
-        implementation project(":common")
-        api 'com.nimbusds:nimbus-jose-jwt'
-        implementation libraries.'spring-security-oauth2-authorization-server'
-        api 'org.springframework.security:spring-security-oauth2-resource-server'
-        api 'org.springframework.security:spring-security-oauth2-jose'
-        api 'org.springframework.security:spring-security-oauth2-client'
+        api project(":common")
+        api project(":user-service")
+        api libraries.'nimbus-jose-jwt'
         api 'org.springframework.boot:spring-boot-starter-security'
+        api 'org.springframework.security:spring-security-oauth2-jose'
+        api 'org.springframework.security:spring-security-oauth2-resource-server'
         api 'org.springframework.boot:spring-boot-starter-web'
         api 'org.springframework.boot:spring-boot-starter-jdbc'
         api 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
+
+
+project("security-oauth2-server") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":user-service")
+        implementation libraries.'spring-security-oauth2-authorization-server'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-mail'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation 'org.springframework.security:spring-security-oauth2-client'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+        implementation 'org.postgresql:postgresql'
     }
 }
 
@@ -95,13 +122,14 @@ project("security-apikeys") {
 
 project("ai-chat") {
     dependencies {
-        implementation project(":security")
         implementation project(":common")
+        implementation project(":security")
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
         implementation 'com.baomidou:mybatis-plus-jsqlparser'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.postgresql:postgresql'
         implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
+        implementation 'org.springframework.ai:spring-ai-openai'
         implementation 'org.springframework.ai:spring-ai-starter-model-openai'
     }
 }

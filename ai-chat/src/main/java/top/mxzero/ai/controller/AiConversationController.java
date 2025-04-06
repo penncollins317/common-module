@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import top.mxzero.ai.dto.request.CreateConversationDTO;
+import top.mxzero.ai.dto.response.AiChatMessageDTO;
 import top.mxzero.ai.dto.response.ConversationDTO;
 import top.mxzero.ai.service.AiConversationService;
 import top.mxzero.common.dto.RestData;
@@ -62,5 +63,15 @@ public class AiConversationController {
         if (!result) {
             throw new ServiceException(ServiceErrorCode.RESOURCE_NOT_FOUND);
         }
+    }
+
+
+    /**
+     * 获取会话历史消息
+     * @param conversationId 会话ID
+     */
+    @RequestMapping("{conversationId}/msg")
+    public RestData<List<AiChatMessageDTO>> conversationMessageListApi(@PathVariable("conversationId") String conversationId){
+        return RestData.success(this.conversationService.pullMsg(conversationId, null));
     }
 }

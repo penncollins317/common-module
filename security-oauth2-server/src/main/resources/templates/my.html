@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息 - [[${user.username}]]</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background-color: #f5f6fa;
+        }
+
+        .profile-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .avatar-section {
+            background: var(--primary-color);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+        }
+
+        .info-section {
+            padding: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            flex: 0 0 120px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #2c3e50;
+            word-break: break-word;
+        }
+
+        .version-badge {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<div class="profile-card">
+    <div class="avatar-section">
+        <img th:src="${user.avatarUrl}"
+             alt="用户头像"
+             class="user-avatar">
+    </div>
+
+    <div class="info-section">
+        <div class="info-item">
+            <span class="info-label">用户ID</span>
+            <span class="info-value" th:text="${user.id}">-</span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">用户名</span>
+            <span class="info-value" th:text="${user.username}">-</span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">昵称</span>
+            <span class="info-value" th:text="${user.nickname ?: '未设置'}">-</span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">版本号</span>
+            <span class="version-badge" th:text="'v' + ${user.version}">-</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 头像加载失败处理
+    document.querySelectorAll('.user-avatar').forEach(img => {
+        img.onerror = function() {
+            this.src = '/avatar.png';
+        }
+    });
+</script>
+</body>
+</html>

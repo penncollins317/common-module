@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import top.mxzero.security.core.entity.Role;
-import top.mxzero.security.core.entity.User;
-import top.mxzero.security.core.mapper.RoleMapper;
-import top.mxzero.security.core.mapper.UserMapper;
+import top.mxzero.service.user.entity.Role;
+import top.mxzero.service.user.entity.User;
+import top.mxzero.service.user.mapper.RoleMapper;
+import top.mxzero.service.user.mapper.UserMapper;
 
 import java.util.List;
 

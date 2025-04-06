@@ -9,40 +9,6 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            clientId: 371132010531-g2fsovcnl9dglvqqo3qpuvq4bn6tedid.apps.googleusercontent.com
-            clientSecret: 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
-          github:
-            clientId: Ov23lilHVzypKogk2jSA
-            clientSecret: d6339dde0fc517ec6edf73434d316e2513206bd0
-          qq:
-            provider: qq
-            clientId: 102019868
-            clientSecret: GUWLwLYZP2RcbVDj
-            authorizationGrantType: authorization_code
-            redirectUri: http://local.mxzero.top/login/oauth2/code/qq
-          weibo:
-            provider: weibo
-            clientId: 2459617706
-            clientSecret: 0da8b21da070f8c5cad17e409691741e
-            authorizationGrantType: authorization_code
-            redirectUri: http://local.mxzero.top/login/oauth2/code/weibo
-
-        provider:
-          qq:
-            authorizationUri: https://graph.qq.com/oauth2.0/authorize
-            tokenUri: https://graph.qq.com/oauth2.0/token
-            userInfoUri: https://graph.qq.com/oauth2.0/me
-            userNameAttribute: openid
-          weibo:
-            authorizationUri: https://api.weibo.com/oauth2/authorize
-            tokenUri: https://api.weibo.com/oauth2/access_token
-            userInfoUri: https://api.weibo.com/2/users/show.json
-            userNameAttribute: id
 
 
 mxzero:

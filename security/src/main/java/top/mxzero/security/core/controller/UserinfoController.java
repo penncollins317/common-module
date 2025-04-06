@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.security.core.dto.GetPublicUserinfoRequest;
-import top.mxzero.security.core.dto.UserinfoDTO;
-import top.mxzero.security.core.dto.UserinfoModifyDTO;
-import top.mxzero.security.core.service.UserService;
+import top.mxzero.service.user.dto.UserinfoDTO;
+import top.mxzero.service.user.dto.UserinfoModifyDTO;
+import top.mxzero.service.user.service.UserService;
 
 import java.security.Principal;
 import java.util.List;

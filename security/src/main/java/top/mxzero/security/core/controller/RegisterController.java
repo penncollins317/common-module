@@ -8,8 +8,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import top.mxzero.common.dto.RestData;
-import top.mxzero.security.core.dto.UsernamePasswordArgs;
-import top.mxzero.security.core.service.UserService;
+import top.mxzero.service.user.dto.UsernamePasswordArgs;
+import top.mxzero.service.user.service.UserService;
 
 /**
  * 注册接口

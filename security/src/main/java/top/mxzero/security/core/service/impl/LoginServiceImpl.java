@@ -13,8 +13,8 @@ import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.security.core.JwtProps;
 import top.mxzero.security.core.dto.LoginRequestBody;
 import top.mxzero.security.core.dto.TokenDTO;
-import top.mxzero.security.core.entity.User;
-import top.mxzero.security.core.mapper.UserMapper;
+import top.mxzero.service.user.entity.User;
+import top.mxzero.service.user.mapper.UserMapper;
 import top.mxzero.security.core.service.LoginService;
 
 import java.time.Instant;
