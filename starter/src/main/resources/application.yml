@@ -1,5 +1,3 @@
-server:
-  port: 80
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/mxzero_common
@@ -13,9 +11,10 @@ spring:
 
 mxzero:
   jwt:
-    access: 72000
+    expire: 72000
     refresh: 864000
     issuer: http://mxzero.top
+    secret: jwt-dev
   oss:
     type: qiniu
     access-key: JZC3y5EuQRx78LFmEeENRVdcEWNUCIzmgF8a7dTp

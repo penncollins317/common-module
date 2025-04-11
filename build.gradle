@@ -82,12 +82,13 @@ project("security") {
     dependencies {
         api project(":common")
         api project(":user-service")
-        api libraries.'nimbus-jose-jwt'
+        api libraries.'jjwt'
+        implementation libraries.'jaxb-api'
+        implementation libraries.'jaxb-core'
+        implementation libraries.'jaxb-impl'
+        implementation libraries.'commons-codec'
         api 'org.springframework.boot:spring-boot-starter-security'
-        api 'org.springframework.security:spring-security-oauth2-jose'
-        api 'org.springframework.security:spring-security-oauth2-resource-server'
         api 'org.springframework.boot:spring-boot-starter-web'
-        api 'org.springframework.boot:spring-boot-starter-jdbc'
         api 'org.springframework.boot:spring-boot-starter-thymeleaf'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
@@ -116,6 +117,7 @@ project("security-apikeys") {
         implementation project(":common")
         api project(":security")
         implementation libraries.'servlet-api'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     }
 }
 

@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,8 +37,7 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
-import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
-import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -45,13 +45,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import top.mxzero.common.utils.MD5Util;
 import top.mxzero.security.oauth2.authentication.DeviceClientAuthenticationConverter;
 import top.mxzero.security.oauth2.authentication.DeviceClientAuthenticationProvider;
-import top.mxzero.security.oauth2.authentication.JsonAccessDeniedHandler;
-import top.mxzero.security.oauth2.authentication.JsonAuthenticationEntryPoint;
-import top.mxzero.security.oauth2.federation.DefaultOAuth2UserServiceDecoderAdaptor;
-import top.mxzero.security.oauth2.federation.OAuth2AccessTokenResponseClientDecoderAdaptor;
 import top.mxzero.security.oauth2.federation.OidcUserInfoExt;
-import top.mxzero.security.oauth2.mapper.OAuth2UserRelatedMapper;
-import top.mxzero.service.user.mapper.UserMapper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,6 +69,7 @@ import java.util.UUID;
 @Slf4j
 @EnableWebSecurity
 @EnableMethodSecurity
+@AllArgsConstructor
 @Configuration
 public class OAuth2Config {
     private static final String KEY_ID = "1190f087-ef78-47cf-bf20-1270fdea493c"; // 固定值
@@ -116,7 +111,7 @@ public class OAuth2Config {
             if (new File(PRIVATE_KEY_FILE).exists() && new File(PUBLIC_KEY_FILE).exists()) {
                 byte[] privateKeyBytes = loadKeyFromFile(PRIVATE_KEY_FILE);
                 byte[] publicKeyBytes = loadKeyFromFile(PUBLIC_KEY_FILE);
-                log.info("加载本地密钥.");
+                log.info("load local key.");
                 log.info("public key md5:{}", MD5Util.getMD5(publicKeyBytes));
                 log.info("private key md5:{}", MD5Util.getMD5(privateKeyBytes));
                 KeyFactory keyFactory = KeyFactory.getInstance("RSA");
@@ -140,25 +135,93 @@ public class OAuth2Config {
         KEY_PAIR = getKeyPair();
     }
 
+    private final UserDetailsService userDetailsService;
+
+    // http://localhost:9000/oauth2/authorize?client_id=oidc-client&redirect_uri=http://127.0.0.1:8080/login/oauth2/code/oidc-client&scope=openid profile&response_type=code
     @Bean
-    public JwtEncoder jwtEncoder() {
-        RSAKey rsaKey = new RSAKey.Builder((RSAPublicKey) KEY_PAIR.getPublic()).privateKey(KEY_PAIR.getPrivate()).keyID(KEY_ID).build();
-        return new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(rsaKey)));
+    @Order(1)
+    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
+            throws Exception {
+        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+                OAuth2AuthorizationServerConfigurer.authorizationServer();
+        DeviceClientAuthenticationConverter deviceClientAuthenticationConverter =
+                new DeviceClientAuthenticationConverter(
+                        this.authorizationServerSettings().getDeviceAuthorizationEndpoint());
+        DeviceClientAuthenticationProvider deviceClientAuthenticationProvider =
+                new DeviceClientAuthenticationProvider(this.registeredClientRepository());
+        http
+                .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
+                .with(authorizationServerConfigurer, (authorizationServer) -> {
+                    authorizationServer
+                            .authorizationEndpoint(
+                                    authorization -> {
+                                        authorization.authenticationProvider(new JwtAuthenticationProvider(this.jwtDecoder()));
+                                    }
+                            )
+                            .clientAuthentication(clientAuthentication ->
+                                    clientAuthentication
+                                            .authenticationConverter(deviceClientAuthenticationConverter)
+                                            .authenticationProvider(deviceClientAuthenticationProvider)
+                            )
+                            .oidc((oidc) -> oidc
+                                    .userInfoEndpoint((userInfo) -> userInfo
+                                            .userInfoMapper(new OidcUserInfoExt())
+                                    )
+                            );
+                })
+//                .addFilterBefore(new CustomJwtAuthorizationFilter(this.userDetailsService, this.jwtDecoder()), UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((authorize) ->
+                        authorize
+                                .anyRequest().authenticated()
+                )
+                .exceptionHandling((exceptions) -> exceptions
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/login"),
+                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                        )
+                );
+        return http.build();
     }
 
-
     @Bean
-    public JwtDecoder jwtDecoder() {
-        RSAPublicKey publicKey = (RSAPublicKey) KEY_PAIR.getPublic();
-        return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    @Order(2)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers(
+                            "/static/**", "/**.css", "/**.js", "/**.png", "/**.ico", "/login", "/logout").permitAll();
+                    authorize.anyRequest().authenticated();
+                })
+                .formLogin(Customizer.withDefaults())
+                .logout(logout -> {
+                    logout.logoutUrl("/logout").permitAll();
+                })
+//                .oauth2Login(
+//                        oauth -> {
+//                            oauth.loginPage("/login");
+//                            oauth.tokenEndpoint(token -> {
+//                                token.accessTokenResponseClient(new OAuth2AccessTokenResponseClientDecoderAdaptor());
+//                            });
+//                            oauth.userInfoEndpoint(userinfo -> {
+//                                userinfo.userService(new DefaultOAuth2UserServiceDecoderAdaptor(oAuth2UserRelatedMapper, userMapper));
+//                            });
+//                        }
+//                )
+//                .oauth2ResourceServer(resource -> {
+//                    DefaultBearerTokenResolver tokenResolver = new DefaultBearerTokenResolver();
+//                    tokenResolver.setAllowUriQueryParameter(true);
+//                    resource
+//                            .jwt(Customizer.withDefaults())
+//                            .bearerTokenResolver(tokenResolver);
+//                    resource.accessDeniedHandler(new JsonAccessDeniedHandler());
+//                    resource.authenticationEntryPoint(new JsonAuthenticationEntryPoint());
+//                })
+                .csrf(AbstractHttpConfigurer::disable)
+                .anonymous(AbstractHttpConfigurer::disable);
+
+        return http.build();
     }
 
-    @Bean
-    public HttpSessionEventPublisher sessionEventPublisher() {
-        return new HttpSessionEventPublisher();
-    }
-
-    // http://local.mxzero.top/oauth2/authorize?client_id=oidc-client&redirect_uri=http://127.0.0.1:8080/login/oauth2/code/oidc-client&scope=openid&response_type=code
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         TokenSettings tokenSettings = TokenSettings.builder()
@@ -170,6 +233,7 @@ public class OAuth2Config {
                 .clientId("oidc-client")
                 .clientSecret(this.passwordEncoder().encode("secret"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
@@ -177,7 +241,7 @@ public class OAuth2Config {
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .tokenSettings(tokenSettings)
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
                 .build();
 
         RegisteredClient openapiClient = RegisteredClient.withId(UUID.randomUUID().toString())
@@ -214,93 +278,30 @@ public class OAuth2Config {
     }
 
     @Bean
-    @Order(1)
-    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
-            throws Exception {
-        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-                OAuth2AuthorizationServerConfigurer.authorizationServer();
-        DeviceClientAuthenticationConverter deviceClientAuthenticationConverter =
-                new DeviceClientAuthenticationConverter(
-                        this.authorizationServerSettings().getDeviceAuthorizationEndpoint());
-        DeviceClientAuthenticationProvider deviceClientAuthenticationProvider =
-                new DeviceClientAuthenticationProvider(this.registeredClientRepository());
-
-
-        http
-                .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
-                .with(authorizationServerConfigurer, (authorizationServer) -> {
-                    authorizationServer
-                            .clientAuthentication(clientAuthentication ->
-                                    clientAuthentication
-                                            .authenticationConverter(deviceClientAuthenticationConverter)
-                                            .authenticationProvider(deviceClientAuthenticationProvider)
-                            )
-                            .oidc((oidc) -> oidc
-                                    .userInfoEndpoint((userInfo) -> userInfo
-                                            .userInfoMapper(new OidcUserInfoExt())
-                                    )
-                            );
-                })
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .anyRequest().authenticated()
-                )
-                .exceptionHandling((exceptions) -> exceptions
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/login"),
-                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                        )
-                );
-        return http.build();
-    }
-
-    @Bean
-    @Order(2)
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserRelatedMapper oAuth2UserRelatedMapper, UserMapper userMapper) throws Exception {
-
-        http.authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers(
-                            "/static/**", "/**.css", "/**.js", "/**.png", "/**.ico").permitAll();
-                    authorize.anyRequest().authenticated();
-                })
-                .formLogin(Customizer.withDefaults())
-                .oauth2Login(
-                        oauth -> {
-                            oauth.tokenEndpoint(token -> {
-                                token.accessTokenResponseClient(new OAuth2AccessTokenResponseClientDecoderAdaptor());
-                            });
-                            oauth.userInfoEndpoint(userinfo -> {
-                                userinfo.userService(new DefaultOAuth2UserServiceDecoderAdaptor(oAuth2UserRelatedMapper, userMapper));
-                            });
-                        }
-                )
-                .oauth2ResourceServer(resource -> {
-                    DefaultBearerTokenResolver tokenResolver = new DefaultBearerTokenResolver();
-                    tokenResolver.setAllowUriQueryParameter(true);
-                    resource
-                            .jwt(Customizer.withDefaults())
-                            .bearerTokenResolver(tokenResolver);
-                    resource.accessDeniedHandler(new JsonAccessDeniedHandler());
-                    resource.authenticationEntryPoint(new JsonAuthenticationEntryPoint());
-                })
-                .csrf(AbstractHttpConfigurer::disable)
-                .anonymous(AbstractHttpConfigurer::disable);
-
-        return http.build();
-    }
-
-    BearerTokenAuthenticationFilter filter;
-
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
+    public JwtEncoder jwtEncoder() {
+        RSAKey rsaKey = new RSAKey.Builder((RSAPublicKey) KEY_PAIR.getPublic()).privateKey(KEY_PAIR.getPrivate()).keyID(KEY_ID).build();
+        return new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(rsaKey)));
+    }
+
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        RSAPublicKey publicKey = (RSAPublicKey) KEY_PAIR.getPublic();
+        return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher sessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
+    @Bean
     public JWKSource<SecurityContext> jwkSource() {
-        // 直接使用静态 KEY_PAIR，而非重新生成
         RSAPublicKey publicKey = (RSAPublicKey) KEY_PAIR.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) KEY_PAIR.getPrivate();
         RSAKey rsaKey = new RSAKey.Builder(publicKey)

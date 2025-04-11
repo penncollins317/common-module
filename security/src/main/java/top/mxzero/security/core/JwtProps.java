@@ -10,7 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties("mxzero.jwt")
 public class JwtProps {
-    private long access;
-    private long refresh;
     private String issuer;
+    private String secret;
+    private long expire = 7200L;
+    private long refresh = 86400L;
 }

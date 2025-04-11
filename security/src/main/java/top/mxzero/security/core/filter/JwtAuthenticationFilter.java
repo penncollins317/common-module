@@ -1,0 +1,39 @@
+package top.mxzero.security.core.filter;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
+import top.mxzero.security.core.utils.JwtUtil;
+
+import java.io.IOException;
+import java.util.Collections;
+
+/**
+ * @author Peng
+ * @since 2025/4/11
+ */
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String token = JwtUtil.getToken(request);
+        if (StringUtils.hasLength(token)) {
+            try {
+                Jws<Claims> claimsJws = JwtUtil.parseToken(token);
+                Long userId = Long.valueOf(claimsJws.getBody().getSubject());
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } catch (JwtException ignored) {
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+}
+
