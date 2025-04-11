@@ -3,6 +3,7 @@ package top.mxzero.security.core.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import top.mxzero.service.user.service.UserService;
 @AllArgsConstructor
 public class RegisterController {
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @RequestMapping("/register")
     public ModelAndView registerPage(@RequestParam(value = "error", required = false) String error) {
@@ -35,6 +37,7 @@ public class RegisterController {
     @PostMapping("/register.action")
     public String registerAction(@Valid UsernamePasswordArgs args) {
         try {
+            args.setPassword(passwordEncoder.encode(args.getPassword()));
             Long userId = this.userService.addUser(args);
             return "redirect:/login?success=" + userId;
         } catch (Exception e) {
@@ -49,6 +52,7 @@ public class RegisterController {
     @ResponseBody
     @PostMapping("/public/register")
     public RestData<String> registerApi(@Valid @RequestBody UsernamePasswordArgs args) {
+        args.setPassword(passwordEncoder.encode(args.getPassword()));
         return RestData.success(this.userService.addUser(args).toString());
     }
 }

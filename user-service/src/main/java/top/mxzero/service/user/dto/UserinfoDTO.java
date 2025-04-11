@@ -20,5 +20,4 @@ public class UserinfoDTO {
     private String username;
     private String nickname;
     private String avatarUrl;
-    private long version;
 }

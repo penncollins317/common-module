@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import top.mxzero.common.dto.RestData;
+import top.mxzero.security.core.annotations.AuthenticatedRequired;
 import top.mxzero.security.core.dto.GetPublicUserinfoRequest;
 import top.mxzero.service.user.dto.UserinfoDTO;
 import top.mxzero.service.user.dto.UserinfoModifyDTO;
@@ -26,6 +27,7 @@ public class UserinfoController {
     /**
      * 获取用户信息
      */
+    @AuthenticatedRequired
     @RequestMapping("/api/userinfo")
     public RestData<UserinfoDTO> userinfoApi(Principal principal) {
         return RestData.success(this.userService.getUserinfo(Long.valueOf(principal.getName())));
@@ -34,6 +36,7 @@ public class UserinfoController {
     /**
      * 修改当前用户信息
      */
+    @AuthenticatedRequired
     @PutMapping("/api/userinfo")
     public RestData<Boolean> updateUserinfoApi(Principal principal, @Valid @RequestBody UserinfoModifyDTO dto) {
         dto.setId(Long.valueOf(principal.getName()));

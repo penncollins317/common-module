@@ -3,15 +3,15 @@
 
 <mapper namespace="top.mxzero.service.user.mapper.UserMapper">
     <select id="findUserinfoById" resultType="top.mxzero.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE id = #{userId}
+        SELECT id, username, nickname, avatar_url FROM t_user WHERE id = #{userId}
     </select>
 
     <select id="findUserinfoByUsername" resultType="top.mxzero.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE username = #{username} limit 1
+        SELECT id, username, nickname, avatar_url FROM t_user WHERE username = #{username} limit 1
     </select>
 
     <select id="findUserinfoByIds" resultType="top.mxzero.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url, pwd_version version FROM t_user WHERE id in
+        SELECT id, username, nickname, avatar_url FROM t_user WHERE id in
         <foreach collection="userIds" item="userId" separator="," open="(" close=")">
             #{userId}
         </foreach>
