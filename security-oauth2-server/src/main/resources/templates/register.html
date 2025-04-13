@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户登录</title>
+    <title>用户注册</title>
     <style>
         * {
           margin: 0;
@@ -18,7 +18,7 @@
           justify-content: center;
           min-height: 100vh;
         }
-        .login-container {
+        .register-container {
           background: #fff;
           padding: 30px;
           width: 100%;
@@ -26,29 +26,13 @@
           border-radius: 8px;
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-        .login-header {
+        .register-header {
           text-align: center;
           margin-bottom: 20px;
         }
-        .login-header h2 {
+        .register-header h2 {
           font-size: 24px;
           color: #333;
-        }
-        .message {
-          margin-bottom: 20px;
-          padding: 10px;
-          border-radius: 4px;
-          font-size: 14px;
-        }
-        .error-message {
-          background-color: #ffe5e5;
-          color: #d60000;
-          border: 1px solid #d60000;
-        }
-        .logout-message {
-          background-color: #e6ffed;
-          color: #007b1e;
-          border: 1px solid #007b1e;
         }
         form .form-group {
           margin-bottom: 20px;
@@ -65,13 +49,12 @@
           border: 1px solid #ddd;
           border-radius: 4px;
           font-size: 14px;
-          transition: border-color 0.3s ease;
         }
         form .form-group input:focus {
           border-color: #007BFF;
           outline: none;
         }
-        .btn-login {
+        .btn-register {
           width: 100%;
           background: #007BFF;
           color: #fff;
@@ -82,8 +65,19 @@
           cursor: pointer;
           transition: background 0.3s ease;
         }
-        .btn-login:hover {
-          background: #0056b3;
+        .btn-register:hover {
+         background: #0056b3;
+        }
+        message {
+          margin-bottom: 20px;
+          padding: 10px;
+          border-radius: 4px;
+          font-size: 14px;
+        }
+        .error-message {
+          background-color: #ffe5e5;
+          color: #d60000;
+          border: 1px solid #d60000;
         }
         .footer {
           text-align: center;
@@ -94,31 +88,27 @@
     </style>
 </head>
 <body>
-<div class="login-container">
-    <div class="login-header">
-        <h2>登录</h2>
+<div class="register-container">
+    <div class="register-header">
+        <h2>用户注册</h2>
     </div>
-
-    <!-- 登录失败提示 -->
-    <div th:if="${param.error}" class="message error-message">
-        用户名或密码错误，请重试。
-    </div>
-
     <!-- 注销成功提示 -->
-    <div th:if="${param.logout}" class="message logout-message">
-        您已成功注销。
+    <div th:if="${serviceError}" class="message error-message" th:text="${serviceError}">
     </div>
-
-    <form method="post" th:action="@{/login}">
+    <form th:action="@{/register}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="email" autocomplete="off" maxlength="100" id="email" name="email" required>
+        </div>
         <div class="form-group">
             <label for="username">用户名</label>
-            <input id="username" name="username" maxlength="20" autocomplete="off" type="text" required autofocus>
+            <input type="text" autocomplete="off" maxlength="20" id="username" name="username" required>
         </div>
         <div class="form-group">
             <label for="password">密码</label>
-            <input id="password" name="password" type="password" maxlength="16" required>
+            <input type="password" minlength="6" maxlength="30" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn-login">登录</button>
+        <button type="submit" class="btn-register">注册</button>
         <div class="footer">
             &copy; 2025 Your Company Name
         </div>

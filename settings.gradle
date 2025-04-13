@@ -7,4 +7,5 @@ include 'starter'
 include 'ai-chat'
 include 'security-oauth2-server'
 include 'user-service'
+include 'security-oauth2-message-resource'
 

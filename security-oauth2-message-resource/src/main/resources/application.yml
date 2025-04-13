@@ -1,0 +1,19 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+      client:
+        registration:
+          client-app:
+            client-id: oidc-client
+            client-secret: secret
+            scope: openid,message.read,message.write
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:8080/login/oauth2/code/oidc-client
+            provider: auth-server
+            client-name: 认证中心
+        provider:
+          auth-server:
+            issuer-uri: http://localhost:9000

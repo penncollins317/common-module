@@ -1,7 +1,6 @@
-package top.mxzero.security.oauth2.service;
+package top.mxzero.security.oauth2.service.impl;
 
 import jakarta.mail.internet.MimeMessage;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -11,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+import top.mxzero.security.oauth2.service.EmailService;
 
 import java.util.concurrent.TimeUnit;
 

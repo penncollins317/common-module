@@ -1,5 +1,6 @@
 package top.mxzero.service.user.service;
 
+import jakarta.annotation.Nullable;
 import top.mxzero.common.dto.PageDTO;
 import top.mxzero.common.params.PageSearchParam;
 import top.mxzero.service.user.dto.UserinfoDTO;
@@ -20,14 +21,18 @@ public interface UserService {
      * @param userId 用户ID
      * @return 用户基础信息DTO
      */
+    @Nullable
     UserinfoDTO getUserinfo(Long userId);
 
     /**
      * 通过用户名获取用户信息
+     *
      * @param username 用户名
      * @return 用户基础信息DTO
      */
+    @Nullable
     UserinfoDTO getUserinfoByUsername(String username);
+
     /**
      * 批量获取用户基础信息
      *

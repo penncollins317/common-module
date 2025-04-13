@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,7 +37,6 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -46,6 +45,7 @@ import top.mxzero.common.utils.MD5Util;
 import top.mxzero.security.oauth2.authentication.DeviceClientAuthenticationConverter;
 import top.mxzero.security.oauth2.authentication.DeviceClientAuthenticationProvider;
 import top.mxzero.security.oauth2.federation.OidcUserInfoExt;
+import top.mxzero.service.user.service.UserService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -135,13 +135,15 @@ public class OAuth2Config {
         KEY_PAIR = getKeyPair();
     }
 
-    private final UserDetailsService userDetailsService;
-
-    // http://localhost:9000/oauth2/authorize?client_id=oidc-client&redirect_uri=http://127.0.0.1:8080/login/oauth2/code/oidc-client&scope=openid profile&response_type=code
+    // http://localhost:9000/oauth2/authorize?client_id=oidc-client&redirect_uri=http://127.0.0.1:8080/login/oauth2/code/oidc-client&scope=openid profile message.read message.write&response_type=code
     @Bean
     @Order(1)
-    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
+    public SecurityFilterChain authorizationServerSecurityFilterChain(
+            HttpSecurity http, UserService userService
+    )
             throws Exception {
+
+
         OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
                 OAuth2AuthorizationServerConfigurer.authorizationServer();
         DeviceClientAuthenticationConverter deviceClientAuthenticationConverter =
@@ -153,11 +155,13 @@ public class OAuth2Config {
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
                 .with(authorizationServerConfigurer, (authorizationServer) -> {
                     authorizationServer
-                            .authorizationEndpoint(
-                                    authorization -> {
-                                        authorization.authenticationProvider(new JwtAuthenticationProvider(this.jwtDecoder()));
+                            .authorizationEndpoint(authorization -> {
+                                authorization.authenticationProviders(providers -> {
+                                    for (AuthenticationProvider provider : providers) {
+                                        log.info("provider:{}, class:{}", provider, provider.getClass().getName());
                                     }
-                            )
+                                });
+                            })
                             .clientAuthentication(clientAuthentication ->
                                     clientAuthentication
                                             .authenticationConverter(deviceClientAuthenticationConverter)
@@ -165,16 +169,15 @@ public class OAuth2Config {
                             )
                             .oidc((oidc) -> oidc
                                     .userInfoEndpoint((userInfo) -> userInfo
-                                            .userInfoMapper(new OidcUserInfoExt())
+                                            .userInfoMapper(new OidcUserInfoExt(userService))
                                     )
                             );
                 })
-//                .addFilterBefore(new CustomJwtAuthorizationFilter(this.userDetailsService, this.jwtDecoder()), UsernamePasswordAuthenticationFilter.class)
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .anyRequest().authenticated()
+                        authorize.anyRequest().authenticated()
                 )
+                .csrf(AbstractHttpConfigurer::disable)
+                .anonymous(AbstractHttpConfigurer::disable)
                 .exceptionHandling((exceptions) -> exceptions
                         .defaultAuthenticationEntryPointFor(
                                 new LoginUrlAuthenticationEntryPoint("/login"),
@@ -186,15 +189,14 @@ public class OAuth2Config {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+
         http.authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers(
-                            "/static/**", "/**.css", "/**.js", "/**.png", "/**.ico", "/login", "/logout").permitAll();
+                    authorize.requestMatchers("/**.css", "/**.js", "/**.png", "/**.ico", "/error/**", "/login", "/logout", "/register/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
-                .formLogin(Customizer.withDefaults())
-                .logout(logout -> {
-                    logout.logoutUrl("/logout").permitAll();
+                .formLogin(login -> {
+                    login.loginPage("/login");
                 })
 //                .oauth2Login(
 //                        oauth -> {
@@ -207,15 +209,6 @@ public class OAuth2Config {
 //                            });
 //                        }
 //                )
-//                .oauth2ResourceServer(resource -> {
-//                    DefaultBearerTokenResolver tokenResolver = new DefaultBearerTokenResolver();
-//                    tokenResolver.setAllowUriQueryParameter(true);
-//                    resource
-//                            .jwt(Customizer.withDefaults())
-//                            .bearerTokenResolver(tokenResolver);
-//                    resource.accessDeniedHandler(new JsonAccessDeniedHandler());
-//                    resource.authenticationEntryPoint(new JsonAuthenticationEntryPoint());
-//                })
                 .csrf(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable);
 
@@ -240,8 +233,10 @@ public class OAuth2Config {
                 .postLogoutRedirectUri("http://127.0.0.1:8080/")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
+                .scope("message.read")
+                .scope("message.write")
                 .tokenSettings(tokenSettings)
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
 
         RegisteredClient openapiClient = RegisteredClient.withId(UUID.randomUUID().toString())
@@ -269,6 +264,7 @@ public class OAuth2Config {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:3000/login/oauth2/callback")
+                .redirectUri("http://localhost:3000/login")
                 .postLogoutRedirectUri("http://loclhost:3000/login")
                 .scope(OidcScopes.OPENID)
                 .tokenSettings(tokenSettings)

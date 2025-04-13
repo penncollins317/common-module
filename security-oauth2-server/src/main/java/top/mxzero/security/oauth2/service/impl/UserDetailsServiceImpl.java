@@ -1,4 +1,4 @@
-package top.mxzero.security.oauth2.service;
+package top.mxzero.security.oauth2.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
