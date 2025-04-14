@@ -22,9 +22,6 @@
                     </div>
 
                     <form method="post">
-                        <!-- 如果有fallback参数，保留在表单中 -->
-                        <input th:if="${fallback}" type="hidden" name="fallback" th:value="${fallback}">
-
                         <div class="mb-3">
                             <label for="username" class="form-label">用户名</label>
                             <input type="text" class="form-control" id="username" name="username" required autofocus>

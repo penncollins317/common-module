@@ -2,6 +2,7 @@ package top.mxzero.security.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<Role> roles = this.roleMapper.findByUserId(user.getId());
         List<SimpleGrantedAuthority> authorityList = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
         return new org.springframework.security.core.userdetails.User(
-                String.valueOf(user.getId()), user.getPassword(), true, true, StringUtils.hasLength(user.getPassword()), user.getActive(), authorityList
+                String.valueOf(user.getId()), user.getPassword(), user.getActive(), true, StringUtils.hasLength(user.getPassword()), user.getActive(), authorityList
         );
     }
 }

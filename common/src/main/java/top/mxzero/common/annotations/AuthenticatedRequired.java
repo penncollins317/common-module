@@ -1,4 +1,4 @@
-package top.mxzero.security.core.annotations;
+package top.mxzero.common.annotations;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 

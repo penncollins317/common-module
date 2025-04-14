@@ -35,3 +35,16 @@ CREATE TABLE t_user_role(
 );
 CREATE UNIQUE INDEX uk_user_role_id ON t_user_role(user_id, role_id);
 INSERT INTO t_user_role(user_id,role_id) VALUES (1,1);
+
+
+CREATE TABLE user_account(
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    account_type VARCHAR(5) NOT NULL,
+    account_value VARCHAR(100) NOT NULL,
+    validated BOOL NOT NULL DEFAULT false,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX uk_user_account ON user_account(account_type, account_value);
+CREATE UNIQUE INDEX uk_user_account_user_id ON user_account(user_id);

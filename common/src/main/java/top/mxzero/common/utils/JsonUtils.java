@@ -1,5 +1,6 @@
 package top.mxzero.common.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -26,8 +27,7 @@ public class JsonUtils {
         OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
         // 设置默认日期格式
-        OBJECT_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
+        OBJECT_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ssXXX"));
         // 设置时区为 GMT+8
         OBJECT_MAPPER.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     }

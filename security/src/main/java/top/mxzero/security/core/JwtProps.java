@@ -13,5 +13,5 @@ public class JwtProps {
     private String issuer;
     private String secret;
     private long expire = 7200L;
-    private long refresh = 86400L;
+    private int refreshRate = 3;
 }

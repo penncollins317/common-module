@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/ai_chat
+    url: jdbc:postgresql://localhost:5432/mxzero_common
     username: postgres
     password: postgres
   jackson:
@@ -39,6 +39,7 @@ spring:
 
 mxzero:
   jwt:
-    access: 259200
-    refresh: 1209600
-    issuer: http://api.mxzero.top
+    expire: 7200
+    refresh-rate: 3
+    secret: dev
+    issuer: http://open.mxzero.top

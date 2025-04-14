@@ -32,15 +32,9 @@ public class JwtUtil implements ApplicationContextAware {
         return new SecretKeySpec(encodeKey, 0, encodeKey.length, "AES");
     }
 
-    public static String createToken(String tokenId, String subject, TokenType tokenType) {
+    public static String createToken(String tokenId, String subject,long expireSeconds) {
         Date currentDate = new Date();
-        Date expireDate;
-
-        if (tokenType == TokenType.ACCESS_TOKEN) {
-            expireDate = new Date(currentDate.getTime() + JWT_CONFIG_PROPS.getExpire() * 1000);
-        } else {
-            expireDate = new Date(currentDate.getTime() + JWT_CONFIG_PROPS.getRefresh() * 1000);
-        }
+        Date expireDate = new Date(currentDate.getTime() + expireSeconds * 1000);
         JwtBuilder jwtBuilder;
         jwtBuilder = Jwts.builder()
                 .setId(tokenId)

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author Peng
  * @since 2025/2/5
@@ -19,4 +21,11 @@ public class TokenDTO {
     private String refreshToken;
     @JsonProperty("expire_in")
     private long expire;
+    @JsonProperty("expire_time")
+    private Date expireTime;
+
+    @JsonProperty("refresh_expire_in")
+    private Long refreshExpireIn;
+    @JsonProperty("refresh_expire_time")
+    private Date refreshExpireTime;
 }

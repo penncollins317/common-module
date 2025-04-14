@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   datasource:
     url: jdbc:postgresql://localhost:5432/mxzero_common
     driver-class-name: org.postgresql.Driver
@@ -6,13 +10,25 @@ spring:
     password: postgres
   jackson:
     time-zone: GMT+8
-    date-format: yyyy-MM-dd HH:mm:ss
-
+    date-format: yyyy-MM-dd HH:mm:ssXXX
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: qingfeng1222@qq.com
+    password: umecwglltuufbaeb
+    default-encoding: UTF-8
+    properties:
+      company:
+        name: Your Company
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
 
 mxzero:
   jwt:
-    expire: 72000
-    refresh: 864000
+    expire: 7200
     issuer: http://mxzero.top
     secret: jwt-dev
   oss:

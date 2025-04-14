@@ -2,6 +2,7 @@ package top.mxzero.common.utils;
 
 import org.springframework.beans.BeanUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -48,7 +49,6 @@ public class DeepBeanUtil extends BeanUtils {
         BeanUtils.copyProperties(source, instance);
         return instance;
     }
-
 
     /**
      * 单个对象属性拷贝

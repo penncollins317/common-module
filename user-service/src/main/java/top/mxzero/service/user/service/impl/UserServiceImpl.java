@@ -1,6 +1,7 @@
 package top.mxzero.service.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,13 +9,14 @@ import top.mxzero.common.dto.PageDTO;
 import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.common.params.PageSearchParam;
 import top.mxzero.common.utils.DeepBeanUtil;
-import top.mxzero.service.user.dto.UserinfoDTO;
-import top.mxzero.service.user.dto.UserinfoModifyDTO;
-import top.mxzero.service.user.dto.UsernamePasswordArgs;
+import top.mxzero.service.user.dto.*;
 import top.mxzero.service.user.entity.User;
+import top.mxzero.service.user.entity.UserAccount;
+import top.mxzero.service.user.mapper.UserAccountMapper;
 import top.mxzero.service.user.mapper.UserMapper;
 import top.mxzero.service.user.service.UserService;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +28,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
+    private final UserAccountMapper accountMapper;
 
     @Override
     public UserinfoDTO getUserinfo(Long userId) {
@@ -35,6 +38,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserinfoDTO getUserinfoByUsername(String username) {
         return this.userMapper.findUserinfoByUsername(username);
+    }
+
+    @Nullable
+    @Override
+    public UserDetailInfoDTO getUserDetailInfo(Long userId) {
+        User user = this.userMapper.selectById(userId);
+        UserDetailInfoDTO userDetailInfoDTO = DeepBeanUtil.copyProperties(user, UserDetailInfoDTO.class);
+        List<UserAccount> accountList = this.accountMapper.selectList(new QueryWrapper<UserAccount>().eq("user_id", user.getId()));
+        userDetailInfoDTO.setAccountList(accountList);
+        return userDetailInfoDTO;
     }
 
     @Override
@@ -68,5 +81,22 @@ public class UserServiceImpl implements UserService {
     public boolean updateUserinfo(UserinfoModifyDTO dto) {
         User user = DeepBeanUtil.copyProperties(dto, User::new);
         return this.userMapper.updateById(user) > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean BindAccountDTO(BindAccountDTO dto) {
+        UserAccount account = this.accountMapper.selectOne(new QueryWrapper<UserAccount>().eq("account_type", dto.getAccountType()).eq("account_value", dto.getAccountValue()));
+        if (account != null) {
+            if (account.getUserId().equals(dto.getUserId())) {
+                throw new ServiceException("用户已绑定该账号");
+            } else {
+                throw new ServiceException("该账号已被其他用户绑定");
+            }
+        }
+
+        account = DeepBeanUtil.copyProperties(dto, UserAccount::new);
+        account.setValidated(false);
+        return this.accountMapper.insert(account) > 0;
     }
 }

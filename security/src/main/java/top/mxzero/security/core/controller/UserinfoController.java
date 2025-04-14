@@ -4,8 +4,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import top.mxzero.common.dto.RestData;
-import top.mxzero.security.core.annotations.AuthenticatedRequired;
+import top.mxzero.common.annotations.AuthenticatedRequired;
 import top.mxzero.security.core.dto.GetPublicUserinfoRequest;
+import top.mxzero.service.user.dto.UserDetailInfoDTO;
 import top.mxzero.service.user.dto.UserinfoDTO;
 import top.mxzero.service.user.dto.UserinfoModifyDTO;
 import top.mxzero.service.user.service.UserService;
@@ -31,6 +32,15 @@ public class UserinfoController {
     @RequestMapping("/api/userinfo")
     public RestData<UserinfoDTO> userinfoApi(Principal principal) {
         return RestData.success(this.userService.getUserinfo(Long.valueOf(principal.getName())));
+    }
+
+    /**
+     * 获取用户详细信息
+     */
+    @AuthenticatedRequired
+    @RequestMapping("/api/userinfo/details")
+    public RestData<UserDetailInfoDTO> userDetailInfoApi(Principal principal) {
+        return RestData.success(this.userService.getUserDetailInfo(Long.valueOf(principal.getName())));
     }
 
     /**

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import top.mxzero.common.dto.RestData;
+import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.common.params.PageParam;
 import top.mxzero.common.utils.DeepBeanUtil;
 import top.mxzero.common.utils.MD5Util;
@@ -27,6 +28,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
+ * OSS服务接口
+ *
  * @author Peng
  * @since 2024/9/25
  */
@@ -50,6 +53,13 @@ public class OssUploadController {
         return RestData.success(record != null && contentType.equals(record.getContentType()));
     }
 
+    /**
+     * 单个文件上传接口
+     *
+     * @param file 文件对象
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/upload")
     public RestData<OssUploadResult> uploadApi(
             @RequestParam(value = "file") MultipartFile file) throws IOException {
