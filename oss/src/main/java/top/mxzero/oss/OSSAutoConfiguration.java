@@ -7,22 +7,18 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import top.mxzero.oss.controller.FileUploadController;
 import top.mxzero.oss.controller.OssPrepareUploadController;
 import top.mxzero.oss.controller.OssUploadController;
 import top.mxzero.oss.service.OssService;
-import top.mxzero.oss.service.impl.*;
+import top.mxzero.oss.service.impl.AliCloudOssService;
+import top.mxzero.oss.service.impl.MinioOssService;
+import top.mxzero.oss.service.impl.QiNiuYunOssService;
 
 @EnableConfigurationProperties(OssProps.class)
 @Configuration
 @ComponentScan
 @MapperScan("top.mxzero.oss.mapper")
 public class OSSAutoConfiguration {
-    @Bean
-    @ConditionalOnProperty(name = "mxzero.oss.type", havingValue = "s3")
-    public OssService s3OssClient(OssProps props) {
-        return new S3OssService(props);
-    }
 
     @Bean
     @ConditionalOnProperty(name = "mxzero.oss.type", havingValue = "minio")
@@ -43,19 +39,9 @@ public class OSSAutoConfiguration {
     }
 
     @Bean
-    public FileRecordService fileRecordService() {
-        return new FileRecordService();
-    }
-
-    @Bean
-    @ConditionalOnBean({OssService.class, FileRecordService.class})
+    @ConditionalOnBean({OssService.class})
     public OssUploadController ossUploadController() {
         return new OssUploadController();
-    }
-
-    @Bean
-    public FileUploadController fileUploadController() {
-        return new FileUploadController();
     }
 
     @Bean
