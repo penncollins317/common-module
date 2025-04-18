@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.mxzero.common.annotations.HasScope;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.common.annotations.AuthenticatedRequired;
 
@@ -16,6 +17,7 @@ import java.security.Principal;
 @RestController
 public class OutAppTestAccessController {
 
+    @HasScope("openapi")
     @PostMapping("/openapi/test")
     public RestData<?> testOpenapiAccessApi(@Autowired Principal principal) {
         return RestData.success(principal.getName());

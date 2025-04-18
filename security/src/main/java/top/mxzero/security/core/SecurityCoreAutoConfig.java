@@ -1,6 +1,7 @@
 package top.mxzero.security.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -40,26 +41,38 @@ public class SecurityCoreAutoConfig {
     private static final String DEFAULT_LOGIN_URl = "/login";
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginService loginService) throws Exception {
+    public SecurityConfigAggregator securityConfigAggregator(@Autowired List<SecurityConfigProvider> securityConfigProviders) {
+        return new SecurityConfigAggregator(securityConfigProviders);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginService loginService, SecurityConfigAggregator aggregator) throws Exception {
         AuthenticationSuccessHandler successHandler = new CustomAuthenticationSuccessHandler(loginService);
         AuthenticationFailureHandler failureHandler = new CustomAuthenticationFailHandler(DEFAULT_LOGIN_URl);
         JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(DEFAULT_LOGIN_URl));
         JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(new AccessDeniedHandlerImpl());
         http.authorizeHttpRequests(authorize -> {
+                    if (aggregator.getAuthorizationUrls().length > 0) {
+                        authorize.requestMatchers(aggregator.getAuthorizationUrls()).authenticated();
+                    }
+                    if (!aggregator.getRoleBasedUrls().isEmpty()) {
+                        aggregator.getRoleBasedUrls().forEach(((role, urls) -> {
+                            authorize.requestMatchers(urls.toArray(new String[0])).hasRole(role);
+                        }));
+                    }
                     authorize.requestMatchers("/token/**", "/error", "/public/**").permitAll();
-                    authorize.anyRequest().authenticated();
+                    authorize.anyRequest().permitAll();
                 })
                 .formLogin(login -> {
                     login.loginPage(DEFAULT_LOGIN_URl).permitAll()
                             .successHandler(successHandler)
                             .failureHandler(failureHandler);
                 })
-                .oneTimeTokenLogin(oneTime -> {
-                    oneTime.authenticationSuccessHandler(successHandler)
-                            .authenticationFailureHandler(failureHandler)
-                    ;
-//                            .tokenGenerationSuccessHandler();
-                })
+//                .oneTimeTokenLogin(oneTime -> {
+//                    oneTime.authenticationSuccessHandler(successHandler)
+//                            .authenticationFailureHandler(failureHandler)
+//                    ;
+//                })
                 .exceptionHandling(handler -> {
                     handler.accessDeniedHandler(accessDeniedHandler);
                     handler.authenticationEntryPoint(authenticationEntryPoint);

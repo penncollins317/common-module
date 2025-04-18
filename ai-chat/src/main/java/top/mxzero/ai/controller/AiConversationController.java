@@ -8,6 +8,7 @@ import top.mxzero.ai.dto.request.CreateConversationDTO;
 import top.mxzero.ai.dto.response.AiChatMessageDTO;
 import top.mxzero.ai.dto.response.ConversationDTO;
 import top.mxzero.ai.service.AiConversationService;
+import top.mxzero.common.annotations.AuthenticatedRequired;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.common.exceptions.ServiceErrorCode;
 import top.mxzero.common.exceptions.ServiceException;
@@ -21,9 +22,10 @@ import java.util.List;
  * @author Peng
  * @since 2025/3/18
  */
+@AuthenticatedRequired
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/ai/conversations")
+@RequestMapping("/ai/conversations")
 public class AiConversationController {
     private final AiConversationService conversationService;
 

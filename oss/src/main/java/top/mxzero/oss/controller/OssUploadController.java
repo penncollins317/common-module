@@ -26,8 +26,8 @@ public class OssUploadController {
      * @param file 文件对象
      */
     @PostMapping("/upload")
-    public RestData<FileMetaDTO> uploadApi(@RequestParam(value = "file") MultipartFile file) throws IOException {
-        return RestData.success(this.uploadService.upload(file));
+    public RestData<FileMetaDTO> uploadApi(@RequestParam(value = "file") MultipartFile file, boolean force) throws IOException {
+        return RestData.success(this.uploadService.upload(file, force));
     }
 
     /**

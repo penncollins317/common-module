@@ -2,7 +2,6 @@ package top.mxzero.ai.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.hibernate.validator.constraints.UUID;
 
 /**
  * @author Peng
@@ -12,5 +11,10 @@ import org.hibernate.validator.constraints.UUID;
 public class ChatInputDTO {
     @NotBlank
     private String content;
+    @NotBlank
     private String conversationId;
+
+    private String model;
+    private boolean thinkingEnabled;
+    private boolean searchEnabled;
 }

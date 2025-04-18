@@ -49,7 +49,7 @@ public class AiConversationServiceImpl implements AiConversationService {
         if (StringUtils.hasLength(lastConversationId)) {
             queryWrapper.lt("conversation_id", lastConversationId);
         }
-        Page<AiConversation> page = this.conversationMapper.selectPage(new Page<>(1, 10), queryWrapper);
+        Page<AiConversation> page = this.conversationMapper.selectPage(new Page<>(1, 30), queryWrapper);
         return DeepBeanUtil.copyProperties(page.getRecords(), ConversationDTO::new);
     }
 

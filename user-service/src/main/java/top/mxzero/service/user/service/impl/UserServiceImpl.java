@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         User user = this.userMapper.selectById(userId);
         UserDetailInfoDTO userDetailInfoDTO = DeepBeanUtil.copyProperties(user, UserDetailInfoDTO.class);
         List<UserAccount> accountList = this.accountMapper.selectList(new QueryWrapper<UserAccount>().eq("user_id", user.getId()));
-        userDetailInfoDTO.setAccountList(accountList);
+        userDetailInfoDTO.setLoginAccountList(accountList);
         return userDetailInfoDTO;
     }
 

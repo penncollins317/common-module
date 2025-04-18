@@ -19,5 +19,5 @@ public class UserDetailInfoDTO extends UserinfoDTO {
     private Date createdAt;
     private Date updatedAt;
     private Boolean active;
-    private List<UserAccount> accountList;
+    private List<UserAccount> loginAccountList;
 }

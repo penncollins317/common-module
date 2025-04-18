@@ -56,7 +56,7 @@ public class FileUploadService {
      * @param file 文件对象
      */
     @Transactional
-    public FileMetaDTO upload(MultipartFile file) throws IOException {
+    public FileMetaDTO upload(MultipartFile file, boolean force) throws IOException {
         if (file.getOriginalFilename() == null) {
             throw new ServiceException("缺少文件名称");
         }
@@ -66,10 +66,12 @@ public class FileUploadService {
         byte[] data = file.getBytes();
         String sha256 = HashUtils.sha256(data);
 
-        String fileExistsId = this.existFile(sha256);
-        if (fileExistsId != null) {
-            FileMeta fileMeta = this.metaMapper.selectById(Long.valueOf(fileExistsId));
-            return DeepBeanUtil.copyProperties(fileMeta, FileMetaDTO::new);
+        if (!force) {
+            String fileExistsId = this.existFile(sha256);
+            if (fileExistsId != null) {
+                FileMeta fileMeta = this.metaMapper.selectById(Long.valueOf(fileExistsId));
+                return DeepBeanUtil.copyProperties(fileMeta, FileMetaDTO::new);
+            }
         }
 
         FileMeta meta = new FileMeta();

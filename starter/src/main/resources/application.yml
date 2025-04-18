@@ -25,20 +25,40 @@ spring:
           ssl:
             enable: true
           auth: true
-
+  ai:
+    openai:
+      api-key: sk-fdeb5cb9b141473ca196615ed8537df0
+      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      chat:
+        options:
+          model: qwen-plus
+          temperature: 1.3
+      image:
+        options:
+          model: Kwai-Kolors/Kolors
+      audio:
+        speech:
+          options:
+            model: FunAudioLLM/CosyVoice2-0.5B
+            voice: ALLOY
 mxzero:
   jwt:
-    expire: 7200
+    expire: 2592000
     issuer: http://mxzero.top
     secret: jwt-dev
   oss:
     type: qiniu
+#    access-key: JZC3y5EuQRx78LFmEeENRVdcEWNUCIzmgF8a7dTp
+#    secret-key: nFIdeB9QWtY2CjgecW781S7VU54Zc-rOyC7r59dv
+#    endpoint: image.zkodoo.cc
+#    secret: true
+#    bucket-name: zkodoo
+
     access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
     secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3
     endpoint: store.mxzero.top
     secret: false
     bucket-name: mxzero-store
-
 logging:
   level:
     org.springframework.security: DEBUG

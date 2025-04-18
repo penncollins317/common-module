@@ -35,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AI聊天
@@ -90,12 +91,11 @@ public class AiChatController {
             }
             inputDTO.setConversationId(conversationId);
         }
-        ChatResponse response =   this.client.prompt(new Prompt(new UserMessage(inputDTO.getContent())))
+        ChatResponse response = this.client.prompt(new Prompt(new UserMessage(inputDTO.getContent())))
                 .tools(new DateTools(), new UserTools())
-                .advisors(advisorSpec -> {
-                    advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId());
-                }).call().chatResponse();
-        return RestData.success(response);
+                .advisors(advisorSpec -> advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId()))
+                .call().chatResponse();
+        return RestData.success(response.getResult().getOutput());
     }
 
     /**
@@ -104,8 +104,8 @@ public class AiChatController {
      * @param inputDTO 用户输入内容
      */
     @RequestMapping("/stream")
-    public Flux<ServerSentEvent<String>> defaultChatModelStreamApi(
-            @Valid @RequestBody ChatInputDTO inputDTO,
+    public Flux<ServerSentEvent<Object>> defaultChatModelStreamApi(
+            @Valid ChatInputDTO inputDTO,
             HttpSession session,
             Principal principal
     ) throws IOException {
@@ -129,32 +129,32 @@ public class AiChatController {
             messages.add(new SystemMessage(systemPrompt));
         }
         messages.add(new UserMessage(inputDTO.getContent()));
-        Flux<ServerSentEvent<String>> messageEvents = this.client.prompt(new Prompt(messages))
+        Flux<ServerSentEvent<Object>> messageEvents = this.client.prompt(new Prompt(messages))
                 .advisors(advisorSpec -> {
                     advisorSpec.param("chat_memory_conversation_id", inputDTO.getConversationId());
                 })
                 .stream().chatResponse()
-                .map(data -> ServerSentEvent.<String>builder()
+                .map(data -> ServerSentEvent.<Object>builder()
                         .event("message")
-                        .data(data.getResult().getOutput().getText())
+                        .data(data.getResult().getOutput())
                         .build()
                 );
         Mono<ServerSentEvent<String>> closeEvent = Mono.just(
                 ServerSentEvent.<String>builder().event("complete").data("").build()
         );
-
-        return messageEvents
-                .startWith(ServerSentEvent.<String>builder()
-                        .event("chat_output")
-                        .data("")
-                        .build())
-                .concatWith(closeEvent)
-                .onErrorResume(e -> Flux.just(
-                        ServerSentEvent.<String>builder()
-                                .event("error")
-                                .data(e.getMessage())
-                                .build()
-                ).concatWith(closeEvent));
+        return messageEvents;
+//        return messageEvents
+//                .startWith(ServerSentEvent.<String>builder()
+//                        .event("chat_output")
+//                        .data("")
+//                        .build())
+//                .concatWith(closeEvent)
+//                .onErrorResume(e -> Flux.just(
+//                        ServerSentEvent.<String>builder()
+//                                .event("error")
+//                                .data(e.getMessage())
+//                                .build()
+//                ).concatWith(closeEvent));
     }
 
     @RequestMapping(value = "stream/model")
@@ -208,8 +208,11 @@ public class AiChatController {
                 ).concatWith(closeEvent));
     }
 
+    /**
+     * 推理对话
+     */
     @RequestMapping(value = "/reasoner")
-    public Flux<ServerSentEvent<String>> reasonerChatApi(
+    public Flux<ServerSentEvent<Object>> reasonerChatApi(
             @Valid ChatInputDTO inputDTO,
             HttpSession session,
             Principal principal
@@ -235,25 +238,25 @@ public class AiChatController {
 
         // ==================== 第一轮推理 ====================
         // 先将 ChatResponse 转换成 ServerSentEvent<String>
-        Flux<ServerSentEvent<String>> mappedFirstPhase = this.chatModel.stream(new Prompt(new UserMessage(inputDTO.getContent()), options))
-                .map(data -> ServerSentEvent.<String>builder()
+        Flux<ServerSentEvent<Object>> mappedFirstPhase = this.chatModel.stream(new Prompt(new UserMessage(inputDTO.getContent()), options))
+                .map(data -> ServerSentEvent.<Object>builder()
                         .event("message")
                         .data(data.getResult().getOutput().getText())
                         .build());
 
         // 在转换后的流前插入起始标记，后追加结束标记
-        Flux<ServerSentEvent<String>> firstPhase = mappedFirstPhase
-                .startWith(ServerSentEvent.<String>builder()
+        Flux<ServerSentEvent<Object>> firstPhase = mappedFirstPhase
+                .startWith(ServerSentEvent.<Object>builder()
                         .event("first_chunk")
                         .data("")
                         .build())
-                .concatWith(Flux.just(ServerSentEvent.<String>builder()
+                .concatWith(Flux.just(ServerSentEvent.<Object>builder()
                         .event("first_end")
                         .data("")
                         .build()));
 
         // ==================== 第二轮推理 ====================
-        Flux<ServerSentEvent<String>> secondPhase = firstPhase
+        Flux<ServerSentEvent<Object>> secondPhase = firstPhase
                 // 收集第一轮完整结果
                 .collect(StringBuilder::new, (sb, event) -> {
                     if ("message".equals(event.event())) {
@@ -267,16 +270,16 @@ public class AiChatController {
                                         new UserMessage(inputDTO.getContent())
                                 ), options))
                                 // 转换为 ServerSentEvent 流
-                                .map(data -> ServerSentEvent.<String>builder()
+                                .map(data -> ServerSentEvent.<Object>builder()
                                         .event("message")
                                         .data(data.getResult().getOutput().getText())
                                         .build())
                                 // 插入第二轮起始标记和结束标记
-                                .startWith(ServerSentEvent.<String>builder()
+                                .startWith(ServerSentEvent.<Object>builder()
                                         .event("chat_output")
                                         .data("")
                                         .build())
-                                .concatWith(Flux.just(ServerSentEvent.<String>builder()
+                                .concatWith(Flux.just(ServerSentEvent.<Object>builder()
                                         .event("completed")
                                         .data("")
                                         .build()))
@@ -285,13 +288,13 @@ public class AiChatController {
         // ==================== 合并流并处理结束 ====================
         return Flux.concat(firstPhase, secondPhase)
                 // 发送全局完成标记
-                .concatWith(Flux.just(ServerSentEvent.<String>builder()
+                .concatWith(Flux.just(ServerSentEvent.<Object>builder()
                         .event("complete")
                         .data("")
                         .build()))
                 // 错误处理
                 .onErrorResume(e -> Flux.just(
-                        ServerSentEvent.<String>builder()
+                        ServerSentEvent.<Object>builder()
                                 .event("error")
                                 .data(e.getMessage())
                                 .build()
