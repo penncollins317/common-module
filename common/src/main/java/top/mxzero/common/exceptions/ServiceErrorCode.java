@@ -27,7 +27,7 @@ public enum ServiceErrorCode {
     RESOURCE_NOT_FOUND(404, "访问的资源不存在"),
 
     SYSTEM_ERROR(999, "系统错误");
-    private int code;
-    private String message;
+    private final int code;
+    private final String message;
 }
 

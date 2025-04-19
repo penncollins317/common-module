@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import top.mxzero.ai.dto.request.CreateConversationDTO;
 import top.mxzero.ai.dto.response.AiChatMessageDTO;
 import top.mxzero.ai.dto.response.ConversationDTO;
+import top.mxzero.ai.service.AiChatService;
 import top.mxzero.ai.service.AiConversationService;
 import top.mxzero.common.annotations.AuthenticatedRequired;
 import top.mxzero.common.dto.RestData;
-import top.mxzero.common.exceptions.ServiceErrorCode;
-import top.mxzero.common.exceptions.ServiceException;
+import top.mxzero.common.params.PageParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -28,18 +28,19 @@ import java.util.List;
 @RequestMapping("/ai/conversations")
 public class AiConversationController {
     private final AiConversationService conversationService;
+    private final AiChatService aiChatService;
 
     /**
      * 会话列表
      *
-     * @param lastConversationId 上一条会话ID
+     * @param param 分页参数
      */
     @GetMapping
     public RestData<List<ConversationDTO>> listConversationApi(
-            @RequestParam(value = "last", required = false) String lastConversationId,
+            PageParam param,
             Principal principal
     ) {
-        return RestData.success(this.conversationService.listConversation(Long.valueOf(principal.getName()), lastConversationId));
+        return RestData.success(this.aiChatService.listConversations(Long.valueOf(principal.getName()), param));
     }
 
     /**
@@ -48,9 +49,21 @@ public class AiConversationController {
      * @param dto 会话数据
      */
     @PostMapping
-    public RestData<String> createConversationApi(@Valid @RequestBody CreateConversationDTO dto, Principal principal) {
+    public RestData<ConversationDTO> createConversationApi(@Valid @RequestBody CreateConversationDTO dto, Principal principal) {
         dto.setUserId(Long.valueOf(principal.getName()));
-        return RestData.success(this.conversationService.create(dto));
+        return RestData.success(this.aiChatService.createConversation(Long.valueOf(principal.getName()), dto.getTitle()));
+    }
+
+    /**
+     * 修改会话信息
+     *
+     * @param conversationId 会话ID
+     * @param dto            会话数据
+     */
+    @PutMapping("{conversationId}")
+    public RestData<Boolean> updateConversationTitleApi(@PathVariable("conversationId") String conversationId, @Valid @RequestBody CreateConversationDTO dto, Principal principal) {
+        dto.setUserId(Long.valueOf(principal.getName()));
+        return RestData.success(this.aiChatService.renameConversation(conversationId, Long.valueOf(principal.getName()), dto.getTitle()));
     }
 
     /**
@@ -61,19 +74,21 @@ public class AiConversationController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{conversationId}")
     public void deleteConversationApi(@PathVariable("conversationId") String conversationId, Principal principal) {
-        boolean result = this.conversationService.deleteConversation(conversationId, Long.valueOf(principal.getName()));
-        if (!result) {
-            throw new ServiceException(ServiceErrorCode.RESOURCE_NOT_FOUND);
-        }
+        this.aiChatService.deleteConversation(conversationId, Long.valueOf(principal.getName()));
     }
 
 
     /**
      * 获取会话历史消息
+     *
      * @param conversationId 会话ID
      */
     @RequestMapping("{conversationId}/msg")
-    public RestData<List<AiChatMessageDTO>> conversationMessageListApi(@PathVariable("conversationId") String conversationId){
-        return RestData.success(this.conversationService.pullMsg(conversationId, null));
+    public RestData<List<AiChatMessageDTO>> conversationMessageListApi(
+            @PathVariable("conversationId") String conversationId,
+            Principal principal,
+            PageParam param
+    ) {
+        return RestData.success(this.aiChatService.getConversationMessages(conversationId, Long.valueOf(principal.getName()), param));
     }
 }

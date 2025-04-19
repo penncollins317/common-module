@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -44,7 +46,7 @@ public class AiConversationServiceImpl implements AiConversationService {
     }
 
     @Override
-    public List<ConversationDTO> listConversation(Long  userId, @Nullable String lastConversationId) {
+    public List<ConversationDTO> listConversation(Long userId, @Nullable String lastConversationId) {
         QueryWrapper<AiConversation> queryWrapper = new QueryWrapper<AiConversation>().eq("user_id", userId).orderByDesc("conversation_id");
         if (StringUtils.hasLength(lastConversationId)) {
             queryWrapper.lt("conversation_id", lastConversationId);
@@ -54,7 +56,7 @@ public class AiConversationServiceImpl implements AiConversationService {
     }
 
     @Override
-    public boolean deleteConversation(String conversationId, Long  userId) {
+    public boolean deleteConversation(String conversationId, Long userId) {
         return this.conversationMapper.delete(new QueryWrapper<AiConversation>().eq("conversation_id", conversationId).eq("user_id", userId)) > 0;
     }
 
@@ -76,5 +78,11 @@ public class AiConversationServiceImpl implements AiConversationService {
         }
         IPage<AiChatMessage> page = this.chatMessageMapper.selectPage(new Page<>(1, 10), queryWrapper);
         return page.getRecords().stream().map(msg -> DeepBeanUtil.copyProperties(msg, AiChatMessageDTO::new)).toList();
+    }
+
+    @Override
+    public ConversationDTO getById(String conversationId) {
+        AiConversation aiConversation = this.conversationMapper.selectById(conversationId);
+        return DeepBeanUtil.copyProperties(aiConversation, ConversationDTO.class);
     }
 }

@@ -1,7 +1,10 @@
 package top.mxzero.ai.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import groovy.transform.Field;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,7 +19,9 @@ public class AiConversation {
     private String conversationId;
     private String title;
     private Long userId;
+    @TableField(fill = FieldFill.INSERT)
     private Date createdAt;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedAt;
     @TableLogic
     private Boolean deleted;
