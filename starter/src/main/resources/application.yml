@@ -26,6 +26,10 @@ spring:
             enable: true
           auth: true
   ai:
+    mcp:
+      server:
+        name: mxzero-common-mcp
+        version: 0.0.1
     openai:
       api-key: sk-fdeb5cb9b141473ca196615ed8537df0
       base-url: https://dashscope.aliyuncs.com/compatible-mode
@@ -48,11 +52,11 @@ mxzero:
     secret: jwt-dev
   oss:
     type: qiniu
-#    access-key: JZC3y5EuQRx78LFmEeENRVdcEWNUCIzmgF8a7dTp
-#    secret-key: nFIdeB9QWtY2CjgecW781S7VU54Zc-rOyC7r59dv
-#    endpoint: image.zkodoo.cc
-#    secret: true
-#    bucket-name: zkodoo
+    #    access-key: JZC3y5EuQRx78LFmEeENRVdcEWNUCIzmgF8a7dTp
+    #    secret-key: nFIdeB9QWtY2CjgecW781S7VU54Zc-rOyC7r59dv
+    #    endpoint: image.zkodoo.cc
+    #    secret: true
+    #    bucket-name: zkodoo
 
     access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
     secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3

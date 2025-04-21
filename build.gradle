@@ -138,11 +138,22 @@ project("ai-chat") {
         implementation project(":common")
         implementation project(":security")
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
-
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        api platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
-        api 'org.springframework.ai:spring-ai-openai'
-        api 'org.springframework.ai:spring-ai-starter-model-openai'
+        implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
+        implementation 'org.springframework.ai:spring-ai-openai'
+        implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+    }
+}
+
+project("mcp-weather") {
+    dependencies {
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
+        implementation 'org.postgresql:postgresql'
+        implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
+        implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
 
