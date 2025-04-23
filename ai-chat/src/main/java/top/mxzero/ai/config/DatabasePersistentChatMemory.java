@@ -30,7 +30,6 @@ public class DatabasePersistentChatMemory implements ChatMemory {
     public void add(String conversationId, List<Message> messages) {
         long currentTimestamp = System.currentTimeMillis();
         messages.forEach(msg -> {
-            log.info("conversationId:{}, role:{}:{}", conversationId, msg.getMessageType().name(), msg.getText());
             AiChatMessage assistMessage = AiChatMessage.builder()
                     .conversationId(conversationId)
                     .content(msg.getText())

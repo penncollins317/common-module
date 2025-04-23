@@ -4,19 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.mxzero.common.dto.RestData;
+import top.mxzero.common.utils.FileUtils;
 import top.mxzero.oss.dto.FileMetaDTO;
 import top.mxzero.oss.service.FileUploadService;
 
 import java.io.IOException;
 
 /**
- * OSS服务接口
+ * 文件上传服务
  *
  * @author Peng
  * @since 2024/9/25
  */
 @RestController
-public class OssUploadController {
+public class FileUploadController {
     @Autowired
     private FileUploadService uploadService;
 
@@ -24,9 +25,11 @@ public class OssUploadController {
      * 单文件上传接口
      *
      * @param file 文件对象
+     * @param force 是否强制上传，不判断文件是否存在
      */
     @PostMapping("/upload")
     public RestData<FileMetaDTO> uploadApi(@RequestParam(value = "file") MultipartFile file, boolean force) throws IOException {
+        FileUtils.checkFile(file);
         return RestData.success(this.uploadService.upload(file, force));
     }
 

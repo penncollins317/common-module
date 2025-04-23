@@ -1,8 +1,10 @@
 package top.mxzero.common.advice;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -16,9 +18,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import top.mxzero.common.dto.RestData;
@@ -39,9 +40,15 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public RestData<?> handleAllException(Exception e) {
-        log.error(e.getMessage());
-        e.printStackTrace();
+        log.error("{}:{}", e.getClass().getName(), e.getMessage());
         return RestData.error("系统错误", 500);
+    }
+
+    @ExceptionHandler({MaxUploadSizeExceededException.class})
+    public RestData<?> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e, HttpServletResponse response) {
+        HttpStatusCode statusCode = e.getStatusCode();
+        response.setStatus(statusCode.value());
+        return RestData.error(e.getMessage(), statusCode.value());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -70,9 +77,8 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class, HttpMediaTypeNotAcceptableException.class})
-    public RestData<?> handleNoHandlerFoundException() {
-        String requestURI = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getRequestURI();
-        return RestData.error(requestURI + " not found", HttpServletResponse.SC_NOT_FOUND);
+    public RestData<?> handleNoHandlerFoundException(HttpServletRequest request) {
+        return RestData.error(request.getRequestURI() + " not found", HttpServletResponse.SC_NOT_FOUND);
     }
 
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
@@ -105,7 +111,7 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         }
         response.setStatus(422);
-        return RestData.ok(errors, 422, "字段验证错误");
+        return RestData.ok(errors, 422, "参数验证错误");
     }
 
 

@@ -1,14 +1,11 @@
 package top.mxzero.oss;
 
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import top.mxzero.oss.controller.OssPrepareUploadController;
-import top.mxzero.oss.controller.OssUploadController;
 import top.mxzero.oss.service.OssService;
 import top.mxzero.oss.service.impl.AliCloudOssService;
 import top.mxzero.oss.service.impl.MinioOssService;
@@ -36,16 +33,5 @@ public class OSSAutoConfiguration {
     @ConditionalOnProperty(name = "mxzero.oss.type", havingValue = "ali")
     public OssService aliCloudOssService(OssProps props) {
         return new AliCloudOssService(props);
-    }
-
-    @Bean
-    @ConditionalOnBean({OssService.class})
-    public OssUploadController ossUploadController() {
-        return new OssUploadController();
-    }
-
-    @Bean
-    public OssPrepareUploadController ossPrepareUploadController() {
-        return new OssPrepareUploadController();
     }
 }

@@ -1,9 +1,7 @@
 package top.mxzero.oss.service.impl;
 
-import com.qiniu.storage.BucketManager;
-import com.qiniu.storage.Configuration;
-import com.qiniu.storage.Region;
-import com.qiniu.storage.UploadManager;
+import com.aliyun.oss.model.MultipartUpload;
+import com.qiniu.storage.*;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
 import top.mxzero.oss.OssClientType;
@@ -25,7 +23,7 @@ public class QiNiuYunOssService implements OssService {
     private final Auth AUTH;
     private final UploadManager UPLOAD_MANAGER;
     private final BucketManager BUCKET_MANAGER;
-
+    private final String prefix;
 
     public QiNiuYunOssService(OssProps props) {
         AUTH = Auth.create(props.getAccessKey(), props.getSecretKey());
@@ -34,6 +32,7 @@ public class QiNiuYunOssService implements OssService {
         UPLOAD_MANAGER = new UploadManager(CFG);
         BUCKET_MANAGER = new BucketManager(AUTH, CFG);
         PROPS = props;
+        this.prefix = (this.PROPS.isSecret() ? "https://" : "http://") + this.PROPS.getEndpoint() + "/";
     }
 
     private String getToken(String filename) {
@@ -93,11 +92,11 @@ public class QiNiuYunOssService implements OssService {
 
     @Override
     public String prepareSign(String name) {
-        return AUTH.uploadToken(this.PROPS.getBucketName(), name);
+        return AUTH.uploadToken(this.PROPS.getBucketName(), name, 300, null);
     }
 
     @Override
     public String prefixName() {
-        return (this.PROPS.isSecret() ? "https://" : "http://") + this.PROPS.getEndpoint() + "/";
+        return prefix;
     }
 }

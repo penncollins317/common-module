@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.common.utils.DeepBeanUtil;
 import top.mxzero.common.utils.HashUtils;
 import top.mxzero.oss.dto.FileMetaDTO;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -57,15 +57,8 @@ public class FileUploadService {
      */
     @Transactional
     public FileMetaDTO upload(MultipartFile file, boolean force) throws IOException {
-        if (file.getOriginalFilename() == null) {
-            throw new ServiceException("缺少文件名称");
-        }
-        if (file.getOriginalFilename().length() > 255) {
-            throw new ServiceException("文件名超过255个字符");
-        }
         byte[] data = file.getBytes();
         String sha256 = HashUtils.sha256(data);
-
         if (!force) {
             String fileExistsId = this.existFile(sha256);
             if (fileExistsId != null) {
@@ -77,7 +70,7 @@ public class FileUploadService {
         FileMeta meta = new FileMeta();
         meta.setSha256(sha256);
         meta.setMd5(HashUtils.md5(data));
-        String randomFilename = randomFilename(file.getOriginalFilename());
+        String randomFilename = randomFilename(Objects.requireNonNull(file.getOriginalFilename()));
         meta.setStorePath(DATE_TIME_FORMATTER.format(LocalDateTime.now()));
         meta.setName(file.getOriginalFilename());
         meta.setContentType(file.getContentType());

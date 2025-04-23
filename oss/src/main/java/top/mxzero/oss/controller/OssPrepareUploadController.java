@@ -1,11 +1,11 @@
 package top.mxzero.oss.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.mxzero.common.dto.RestData;
-import top.mxzero.oss.OssProps;
+import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.oss.service.OssService;
 
 import java.time.LocalDate;
@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
+ * OSS上传签名
+ *
  * @author Peng
  * @since 2024/10/20
  */
@@ -20,12 +22,17 @@ import java.util.UUID;
 public class OssPrepareUploadController {
     @Autowired
     private OssService ossService;
-    @Autowired
-    private OssProps props;
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-    @GetMapping("/upload/prepare/oss")
-    public RestData<String> ossUploadPrepareApi(@RequestParam("name") String name) {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yy/MM/dd");
+
+    /**
+     * 上传签名
+     *
+     * @param name 文件名称
+     * @return 签名信息
+     */
+    @RequestMapping("/upload/prepare/sign")
+    public RestData<UploadSignRecord> ossUploadPrepareApi(@RequestParam("name") String name) {
         // 预生成文件路径
         String datePath = LocalDate.now().format(DATE_TIME_FORMATTER);
 
@@ -34,8 +41,17 @@ public class OssPrepareUploadController {
 
         String extension = name.substring(name.lastIndexOf(".") + 1);
 
+        if (extension.equals(name)) {
+            throw new ServiceException("文件名缺少后缀");
+        }
         // 构建文件名，包含扩展名
-        String filePath = String.format("%s/%s.%s", datePath, fileId, extension);
-        return RestData.success(ossService.prepareSign(filePath));
+        String key = String.format("%s/%s.%s", datePath, fileId, extension);
+        String token = ossService.prepareSign(key);
+        return RestData.success(new UploadSignRecord(name, key, token, ossService.prefixName() + key));
     }
+
+    public record UploadSignRecord(String filename, String key, String token, String accessUrl) {
+    }
+
+
 }
