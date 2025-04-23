@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public RestData<?> handleAllException(Exception e) {
+        e.printStackTrace();
         log.error("{}:{}", e.getClass().getName(), e.getMessage());
         return RestData.error("系统错误", 500);
     }

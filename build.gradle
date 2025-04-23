@@ -83,11 +83,9 @@ project("security") {
     dependencies {
         api project(":common")
         api project(":user-service")
-        api libraries.'jjwt'
-        implementation libraries.'jaxb-api'
-        implementation libraries.'jaxb-core'
-        implementation libraries.'jaxb-impl'
-        implementation libraries.'commons-codec'
+        api libraries.'jjwt-api'
+        api libraries.'jjwt-impl'
+        api libraries.'jjwt-jackson'
         api 'org.springframework.boot:spring-boot-starter-security'
         api 'org.springframework.boot:spring-boot-starter-web'
         api 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -168,12 +166,17 @@ project("oss") {
         api 'org.springframework.boot:spring-boot-starter-web'
         api 'org.springframework.boot:spring-boot-starter-thymeleaf'
         api 'org.springframework.boot:spring-boot-starter-data-redis'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
 
 project("mxzero-tts") {
     dependencies {
-        implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+        implementation libraries.'okhttp'
+        implementation project(":common")
+        implementation project(":security")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
 
@@ -182,6 +185,7 @@ project("starter") {
         implementation project(":common")
         implementation project(":security")
         implementation project(":ai-chat")
+        implementation project(":mxzero-tts")
 //        implementation project(":security-apikeys")
         implementation project(":oss")
         implementation 'org.postgresql:postgresql'

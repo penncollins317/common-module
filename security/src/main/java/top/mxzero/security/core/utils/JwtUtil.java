@@ -1,9 +1,13 @@
 package top.mxzero.security.core.utils;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.security.HmacAesAeadAlgorithm;
+import io.jsonwebtoken.security.AeadAlgorithm;
+import io.jsonwebtoken.security.KeyAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.Password;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -14,7 +18,11 @@ import top.mxzero.security.core.enums.TokenType;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author Peng
@@ -25,34 +33,31 @@ import java.util.*;
 @Component
 public class JwtUtil implements ApplicationContextAware {
     private static JwtProps JWT_CONFIG_PROPS;
-    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
+    private static final String SECRET = UUID.randomUUID().toString();
+
 
     private static SecretKey generaKey() {
-        byte[] encodeKey = Base64.decodeBase64(Base64.encodeBase64(JWT_CONFIG_PROPS.getSecret().getBytes()));
-        return new SecretKeySpec(encodeKey, 0, encodeKey.length, "AES");
+        return Keys.hmacShaKeyFor(JWT_CONFIG_PROPS.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
-    public static String createToken(String tokenId, String subject,long expireSeconds) {
+    public static String createToken(String tokenId, String subject, long expireSeconds) {
         Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + expireSeconds * 1000);
-        JwtBuilder jwtBuilder;
-        jwtBuilder = Jwts.builder()
-                .setId(tokenId)
-                .setIssuedAt(currentDate)
-                .setIssuer(JWT_CONFIG_PROPS.getIssuer())
-                .setSubject(subject)
-                .signWith(SIGNATURE_ALGORITHM, generaKey())
-                .setExpiration(expireDate);
-        return jwtBuilder.compact();
+        return Jwts.builder().signWith(generaKey(), Jwts.SIG.HS256)
+                .subject(subject)
+                .issuer(JWT_CONFIG_PROPS.getIssuer())
+                .expiration(new Date(currentDate.getTime() + expireSeconds * 1000))
+                .id(tokenId)
+                .issuedAt(currentDate)
+                .compact();
     }
 
     public static Jws<Claims> parseToken(String token) {
-        return Jwts.parser().setSigningKey(generaKey()).parseClaimsJws(token);
+        return Jwts.parser().verifyWith(generaKey()).build().parseSignedClaims(token);
     }
 
     public static boolean verifyToken(String token) {
         try {
-            Jwts.parser().setSigningKey(generaKey()).parseClaimsJws(token);
+            Jwts.parser().verifyWith(generaKey()).build().parse(token);
             return true;
         } catch (Exception e) {
             return false;

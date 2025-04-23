@@ -49,20 +49,17 @@ mxzero:
   jwt:
     expire: 2592000
     issuer: http://mxzero.top
-    secret: jwt-dev
+    secret: ed8f07de-b628-49d5-a423-062d20e19907
   oss:
     type: qiniu
-    #    access-key: JZC3y5EuQRx78LFmEeENRVdcEWNUCIzmgF8a7dTp
-    #    secret-key: nFIdeB9QWtY2CjgecW781S7VU54Zc-rOyC7r59dv
-    #    endpoint: image.zkodoo.cc
-    #    secret: true
-    #    bucket-name: zkodoo
-
     access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
     secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3
     endpoint: store.mxzero.top
     secret: false
     bucket-name: mxzero-store
+  tts:
+    app-key: 496600955eb048d1
+    app-secret: NkaR8fhbGy4063s9BYk3n4CZgAU651Hi
 logging:
   level:
     org.springframework.security: DEBUG
