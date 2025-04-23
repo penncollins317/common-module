@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasLength(token)) {
             try {
                 Jws<Claims> claimsJws = JwtUtil.parseToken(token);
-                Long userId = Long.valueOf(claimsJws.getBody().getSubject());
+                Long userId = Long.valueOf(claimsJws.getPayload().getSubject());
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } catch (JwtException e) {

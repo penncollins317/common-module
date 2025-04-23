@@ -19,7 +19,6 @@ import top.mxzero.security.core.utils.JwtUtil;
 import top.mxzero.service.user.entity.User;
 import top.mxzero.service.user.mapper.UserMapper;
 
-import java.awt.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -76,12 +75,12 @@ public class LoginServiceImpl implements LoginService {
         try {
 
             Jws<Claims> claimsJws = JwtUtil.parseToken(token);
-            char[] charArray = claimsJws.getBody().getId().toCharArray();
+            char[] charArray = claimsJws.getPayload().getId().toCharArray();
             char c = charArray[charArray.length - 1];
             if (c != REFRESH_FLAG) {
                 throw new ServiceException("refresh token type error.");
             }
-            String subject = claimsJws.getBody().getSubject();
+            String subject = claimsJws.getPayload().getSubject();
             return this.createToken(subject);
         } catch (JwtException e) {
             throw new ServiceException("Refresh token error.");
