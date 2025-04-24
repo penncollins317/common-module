@@ -1,13 +1,9 @@
 package top.mxzero.oss.service.impl;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.*;
 import com.aliyun.oss.common.auth.DefaultCredentialProvider;
-import com.aliyun.oss.model.ObjectMetadata;
-import com.aliyun.oss.model.PutObjectRequest;
-import com.aliyun.oss.model.VoidResult;
+import com.aliyun.oss.model.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.NotImplementedException;
 import top.mxzero.oss.OssClientType;
 import top.mxzero.oss.OssProps;
 import top.mxzero.oss.dto.OssUploadResult;
@@ -16,6 +12,7 @@ import top.mxzero.oss.service.OssService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 /**
  * @author Peng
@@ -45,7 +42,8 @@ public class AliCloudOssService implements OssService {
         metadata.setContentType(contentType);
         try {
             byte[] buffer = inputStream.readAllBytes();
-            this.client.putObject(new PutObjectRequest(this.props.getBucketName(), filename, new ByteArrayInputStream(buffer), metadata));
+            PutObjectResult putObjectResult = this.client.putObject(new PutObjectRequest(this.props.getBucketName(), filename, new ByteArrayInputStream(buffer), metadata));
+            log.info("{}", putObjectResult);
             return OssUploadResult.builder()
                     .type(OssClientType.ALI)
                     .key(filename)
@@ -72,11 +70,30 @@ public class AliCloudOssService implements OssService {
 
     @Override
     public String prepareSign(String name) {
-        throw new NotImplementedException();
+        try {
+            Date expiration = new Date(new Date().getTime() + 3600 * 1000L);
+            GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(this.props.getBucketName(), name, HttpMethod.PUT);
+            request.setExpiration(expiration);
+            return this.client.generatePresignedUrl(request).toString();
+        } catch (OSSException oe) {
+            log.error("Caught an OSSException, which means your request made it to OSS, "
+                    + "but was rejected with an error response for some reason.");
+            log.error("Error Message:{}", oe.getErrorMessage());
+            log.error("Error Code:{}", oe.getErrorCode());
+            log.error("Request ID:{}", oe.getRequestId());
+            log.error("Host ID:{}", oe.getHostId());
+        } catch (ClientException ce) {
+            log.error("Caught an ClientException, which means the client encountered "
+                    + "a serious internal problem while trying to communicate with OSS, "
+                    + "such as not being able to access the network.");
+            log.error("Error Message:{}", ce.getMessage());
+        }
+        return null;
     }
+
 
     @Override
     public String prefixName() {
-        return (this.props.isSecret() ? "https://" : "http://") + this.props.getEndpoint() + "/";
+        return (this.props.isSecret() ? "https://" : "http://") + this.props.getBucketName() + "." + this.props.getEndpoint() + "/";
     }
 }

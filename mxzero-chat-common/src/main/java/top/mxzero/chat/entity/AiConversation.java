@@ -1,10 +1,9 @@
-package top.mxzero.ai.entity;
+package top.mxzero.chat.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import groovy.transform.Field;
 import lombok.Data;
 
 import java.util.Date;

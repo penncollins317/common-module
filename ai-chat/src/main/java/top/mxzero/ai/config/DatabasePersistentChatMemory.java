@@ -8,8 +8,8 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.*;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import top.mxzero.ai.entity.AiChatMessage;
-import top.mxzero.ai.mapper.AiChatMessageMapper;
+import top.mxzero.chat.entity.AiChatMessage;
+import top.mxzero.chat.mapper.AiChatMessageMapper;
 
 import java.util.Date;
 import java.util.List;

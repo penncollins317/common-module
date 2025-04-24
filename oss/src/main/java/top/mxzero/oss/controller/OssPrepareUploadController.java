@@ -53,5 +53,14 @@ public class OssPrepareUploadController {
     public record UploadSignRecord(String filename, String key, String token, String accessUrl) {
     }
 
+    /**
+     * 获取私有文件访问链接
+     *
+     * @param key 文件key
+     */
+    @RequestMapping("/oss/private/access")
+    public RestData<String> privateAccessUrl(@RequestParam String key) {
+        return RestData.success(ossService.privateAccessUrl(key));
+    }
 
 }

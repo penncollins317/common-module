@@ -109,22 +109,6 @@ public class MinioOssService implements OssService {
 
     @Override
     public String prefixName() {
-        return (this.props.isSecret() ? "https://" : "http://" )+ this.props.getEndpoint() + "/" + props.getBucketName() + "/";
-    }
-
-    @Override
-    public void compose(String targetName, List<String> chunkNames, String contentType) throws Exception {
-        client.composeObject(ComposeObjectArgs.builder()
-                .bucket(this.props.getBucketName())
-                .object(targetName)
-                .headers(Map.of("Content-Type", contentType)) // 设置 contentType
-                .sources(chunkNames.stream()
-                        .map(chunk -> ComposeSource.builder()
-                                .bucket(this.props.getBucketName())
-                                .object(chunk)
-                                .build())
-                        .collect(Collectors.toList()))
-                .build());
-
+        return (this.props.isSecret() ? "https://" : "http://") + this.props.getEndpoint() + "/" + props.getBucketName() + "/";
     }
 }

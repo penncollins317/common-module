@@ -1,6 +1,5 @@
 package top.mxzero.oss.service;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import top.mxzero.oss.dto.OssUploadResult;
 
@@ -72,25 +71,21 @@ public interface OssService {
     String prepareSign(String name);
 
     /**
+     * 生成私有访问链接
+     *
+     * @param key 文件key
+     * @return
+     */
+    default String privateAccessUrl(String key) {
+        return null;
+    }
+
+    /**
      * 获取文件URL前缀
      *
      * @return
      */
     default String prefixName() {
         return "";
-    }
-
-    /**
-     * 合并文件
-     *
-     * @param targetName 新的文件
-     * @param chunkName  需要合并的文件名列表，需要排序
-     */
-    default void compose(String targetName, List<String> chunkName) throws Exception {
-
-    }
-
-    default void compose(String targetName, List<String> chunkNames, String contentType) throws Exception {
-        throw new NotImplementedException();
     }
 }

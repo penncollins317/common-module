@@ -1,8 +1,8 @@
-package top.mxzero.ai.mapper;
+package top.mxzero.chat.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.mybatis.spring.annotation.MapperScan;
-import top.mxzero.ai.entity.AiChatMessage;
+import top.mxzero.chat.entity.AiChatMessage;
 
 /**
  * @author Peng

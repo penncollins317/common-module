@@ -92,7 +92,12 @@ public class QiNiuYunOssService implements OssService {
 
     @Override
     public String prepareSign(String name) {
-        return AUTH.uploadToken(this.PROPS.getBucketName(), name, 300, null);
+        return AUTH.uploadToken(this.PROPS.getBucketName(), name, 1800, null);
+    }
+
+    @Override
+    public String privateAccessUrl(String key) {
+        return AUTH.privateDownloadUrl(key, 3600 * 1000);
     }
 
     @Override

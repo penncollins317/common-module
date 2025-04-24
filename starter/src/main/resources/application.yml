@@ -51,6 +51,12 @@ mxzero:
     issuer: http://mxzero.top
     secret: ed8f07de-b628-49d5-a423-062d20e19907
   oss:
+#      type: ali
+#      access-key: LTAI5tCb2roFbwLHjjt5h4o2
+#      secret-key: Nc4xdBIYSSOvYJaYDNu07v38wJxoQH
+#      endpoint: oss-cn-hangzhou.aliyuncs.com
+#      secret: true
+#      bucket-name: odoo-filestore
     type: qiniu
     access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
     secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3

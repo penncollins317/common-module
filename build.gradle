@@ -130,9 +130,17 @@ project("security-apikeys") {
     }
 }
 
+project("mxzero-chat-common") {
+    dependencies {
+        api libraries.'mybatis-plus'
+        api libraries.'mybatis-spring'
+        implementation 'org.springframework.boot:spring-boot-starter'
+    }
+}
 
 project("ai-chat") {
     dependencies {
+        implementation project(":mxzero-chat-common")
         implementation project(":common")
         implementation project(":security")
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
@@ -191,5 +199,19 @@ project("starter") {
         implementation 'org.postgresql:postgresql'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+    }
+}
+
+
+project("langchain4j-samples") {
+    dependencies {
+        implementation project(":common")
+        implementation libraries.'langchain4j'
+        implementation libraries.'langchain4j-open-ai'
+        implementation libraries.'langchain4j-web-search-engine-google-custom'
+//        implementation project(":mxzero-chat-common")
+//        implementation 'org.postgresql:postgresql'
+//        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+//        implementation 'org.springframework.boot:spring-boot-starter'
     }
 }

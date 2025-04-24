@@ -1,4 +1,4 @@
-package top.mxzero.ai.entity;
+package top.mxzero.chat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
