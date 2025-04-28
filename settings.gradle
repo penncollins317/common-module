@@ -12,4 +12,5 @@ include 'mcp-weather'
 include 'mxzero-tts'
 include 'langchain4j-samples'
 include 'mxzero-chat-common'
+include 'multi-db-samples'
 
