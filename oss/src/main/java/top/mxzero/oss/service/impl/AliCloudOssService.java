@@ -22,6 +22,7 @@ import java.util.Date;
 public class AliCloudOssService implements OssService {
     private final OssProps props;
     private final OSS client;
+    private final String prefix;
 
     public AliCloudOssService(OssProps props) {
         this.props = props;
@@ -29,6 +30,7 @@ public class AliCloudOssService implements OssService {
                 .endpoint(props.getEndpoint())
                 .credentialsProvider(new DefaultCredentialProvider(props.getAccessKey(), props.getSecretKey()))
                 .build();
+        this.prefix = (this.props.isSecret() ? "https://" : "http://") + this.props.getBucketName() + "." + this.props.getEndpoint() + "/";
     }
 
     @Override
@@ -94,6 +96,6 @@ public class AliCloudOssService implements OssService {
 
     @Override
     public String prefixName() {
-        return (this.props.isSecret() ? "https://" : "http://") + this.props.getBucketName() + "." + this.props.getEndpoint() + "/";
+        return prefix;
     }
 }
