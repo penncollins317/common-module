@@ -10,18 +10,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.mxzero.common.api.IpQueryApi;
+import top.mxzero.common.config.props.IpQueryProp;
 import top.mxzero.common.config.props.YunTongXunSmsProps;
 import top.mxzero.common.service.EmailSender;
-import top.mxzero.common.config.props.IpQueryProp;
 import top.mxzero.common.service.SmsSender;
 import top.mxzero.common.service.impl.ConsoleSmsSender;
 import top.mxzero.common.service.impl.YunTongXinSmsSender;
@@ -41,17 +38,17 @@ import java.util.concurrent.Executors;
 @Configuration
 @EnableAsync
 @ComponentScan
-public class CommonAutoConfig implements WebMvcConfigurer {
+public class CommonAutoConfig  {
 
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer
-                .favorParameter(true)
-                .parameterName("format")
-                .mediaType("json", MediaType.APPLICATION_JSON)
-                .mediaType("xml", MediaType.APPLICATION_XML)
-                .defaultContentType(MediaType.APPLICATION_JSON);
-    }
+//    @Override
+//    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+//        configurer
+//                .favorParameter(true)
+//                .parameterName("format")
+//                .mediaType("json", MediaType.APPLICATION_JSON)
+//                .mediaType("xml", MediaType.APPLICATION_XML)
+//                .defaultContentType(MediaType.APPLICATION_JSON);
+//    }
 
 
     @Bean

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+        .upload-container {
+          background: white;
+          padding: 2rem 3rem;
+          border-radius: 12px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          text-align: center;
+          width: 400px;
+        }
+        .upload-container h2 {
+          margin-bottom: 1rem;
+        }
+        input[type="file"] {
+          margin: 1rem 0;
+        }
+        button {
+          background-color: #007BFF;
+          border: none;
+          color: white;
+          padding: 0.6rem 1.2rem;
+          border-radius: 6px;
+          font-size: 1rem;
+          cursor: pointer;
+          margin: 0.5rem;
+        }
+        button:hover {
+          background-color: #0056b3;
+        }
+        .progress {
+          width: 100%;
+          background-color: #eee;
+          border-radius: 8px;
+          overflow: hidden;
+          height: 20px;
+          margin-top: 1rem;
+        }
+        .progress-bar {
+          height: 100%;
+          background-color: #28a745;
+          width: 0;
+          transition: width 0.2s ease;
+        }
+        .message {
+          margin-top: 1rem;
+          font-size: 1.1rem;
+          font-weight: bold;
+          color: #333;
+        }
+        .success {
+          color: #28a745;
+        }
+        .error {
+          color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="upload-container">
+    <h2>选择文件上传</h2>
+    <input type="file" id="fileInput">
+    <br>
+    <button onclick="uploadFile()">上传</button>
+    <button onclick="cancelUpload()">取消</button>
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="message" id="uploadMessage"></div>
+</div>
+
+<script>
+    const CHUNK_SIZE = 4 * 1024 * 1024; // 4MB
+    let controller = null; // AbortController
+
+    async function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const progressBar = document.getElementById('progressBar');
+      const message = document.getElementById('uploadMessage');
+      if (!fileInput.files.length) return alert('请选择文件');
+      const file = fileInput.files[0];
+      controller = new AbortController();
+      progressBar.style.width = '0%';
+      progressBar.style.backgroundColor = '#28a745'; // Reset progress bar color to green
+      message.textContent = ''; // Clear previous messages
+
+      try {
+        if (file.size <= CHUNK_SIZE) {
+          await simpleUpload(file);
+        } else {
+          await chunkedUpload(file);
+        }
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          message.textContent = '上传已取消';
+          message.className = 'message error';
+          progressBar.style.backgroundColor = '#dc3545'; // Red on cancel
+        } else {
+          console.error(e);
+          message.textContent = '上传失败';
+          message.className = 'message error';
+        }
+      }
+    }
+
+    function cancelUpload() {
+      if (controller) {
+        controller.abort();
+        const progressBar = document.getElementById('progressBar');
+        document.getElementById('uploadMessage').textContent = '上传已取消';
+        document.getElementById('uploadMessage').className = 'message error';
+        progressBar.style.backgroundColor = '#dc3545'; // Red on cancel
+        progressBar.style.width = '0%'; // Reset progress bar to 0% on cancel
+      }
+    }
+
+    async function simpleUpload(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      await fetch('/upload/simple', {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal
+      }).then(res => res.text()).then(response => {
+        document.getElementById('uploadMessage').textContent = '上传成功';
+        document.getElementById('uploadMessage').className = 'message success';
+        document.getElementById('progressBar').style.width = '100%';
+      }).catch(err => {
+        console.error(err);
+        document.getElementById('uploadMessage').textContent = '上传失败';
+        document.getElementById('uploadMessage').className = 'message error';
+      });
+    }
+
+    async function chunkedUpload(file) {
+      const progressBar = document.getElementById('progressBar');
+      const fileId = await calculateHash(file);
+      const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+      const uploaded = await fetch(`/upload/uploaded-chunks?fileId=${fileId}`)
+        .then(res => res.json())
+        .catch(() => []);
+
+      for (let i = 0; i < totalChunks; i++) {
+        if (uploaded.includes(i)) continue;
+        const chunk = file.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
+        const formData = new FormData();
+        formData.append('fileId', fileId);
+        formData.append('chunkIndex', i);
+        formData.append('totalChunks', totalChunks);
+        formData.append('file', chunk);
+
+        await fetch('/upload/chunk', {
+          method: 'POST',
+          body: formData,
+          signal: controller.signal
+        });
+
+        progressBar.style.width = `${Math.floor(((i + 1) / totalChunks) * 100)}%`;
+      }
+
+      const mergeForm = new URLSearchParams();
+      mergeForm.append('fileId', fileId);
+      mergeForm.append('filename', file.name);
+      mergeForm.append('totalChunks', totalChunks);
+
+      await fetch('/upload/merge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: mergeForm,
+        signal: controller.signal
+      }).then(res => res.text()).then(response => {
+        document.getElementById('uploadMessage').textContent = '上传成功';
+        document.getElementById('uploadMessage').className = 'message success';
+        progressBar.style.width = '100%';
+      }).catch(err => {
+        console.error(err);
+        document.getElementById('uploadMessage').textContent = '上传失败';
+        document.getElementById('uploadMessage').className = 'message error';
+      });
+    }
+
+    async function calculateHash(file) {
+      const buffer = await file.slice(0, 10 * 1024 * 1024).arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+</script>
+</body>
+</html>

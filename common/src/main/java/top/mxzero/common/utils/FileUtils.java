@@ -31,4 +31,23 @@ public class FileUtils {
             throw new ServiceException("The file is missing \"content_type\".");
         }
     }
+
+    /**
+     * 获取文件扩展名
+     *
+     * @param filename 文件原始名称
+     * @return 扩展名
+     */
+    public static String getExtendName(String filename) {
+        if (filename == null || filename.trim().isEmpty()) {
+            return "";
+        }
+
+        int lastDotIndex = filename.lastIndexOf('.');
+        if (lastDotIndex == -1 || lastDotIndex == 0 || lastDotIndex == filename.length() - 1) {
+            return "";
+        }
+
+        return filename.substring(lastDotIndex + 1);
+    }
 }

@@ -26,6 +26,7 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom libraries.'mybatis-plus-bom'
+            mavenBom libraries.'spring-ai-bom'
             mavenBom libraries.'spring-boot-dependencies'
         }
     }
@@ -57,7 +58,7 @@ project("common") {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-aop'
         api 'com.fasterxml.jackson.core:jackson-databind'
-        api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+//        api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
         implementation 'org.springframework.security:spring-security-core'
         implementation 'jakarta.servlet:jakarta.servlet-api'
         implementation 'com.google.zxing:core:3.5.2'
@@ -145,7 +146,6 @@ project("ai-chat") {
         implementation project(":security")
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
         implementation 'org.springframework.ai:spring-ai-openai'
         implementation 'org.springframework.ai:spring-ai-starter-model-openai'
     }
@@ -153,12 +153,11 @@ project("ai-chat") {
 
 project("mcp-weather") {
     dependencies {
+        implementation 'org.postgresql:postgresql'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
-        implementation 'org.postgresql:postgresql'
-        implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
-        implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+//        implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
+//        implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
@@ -175,6 +174,16 @@ project("oss") {
         api 'org.springframework.boot:spring-boot-starter-thymeleaf'
         api 'org.springframework.boot:spring-boot-starter-data-redis'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
+
+
+project("mxzero-filestore") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":security")
+        implementation project(":oss")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 }
 
@@ -196,6 +205,7 @@ project("starter") {
         implementation project(":mxzero-tts")
 //        implementation project(":security-apikeys")
         implementation project(":oss")
+        implementation project(":mxzero-filestore")
         implementation 'org.postgresql:postgresql'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'

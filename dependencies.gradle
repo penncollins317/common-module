@@ -4,7 +4,7 @@ ext.versions = [
         springCloud       : '2022.0.4',
         springCloudAlibaba: '2022.0.0.0',
         springDoc         : '2.2.0',
-        springAi          : '1.0.0-SNAPSHOT',
+        springAi          : '1.0.0-M7',
         springBootAdmin   : '3.1.8',
         springData        : '3.4.2',
         oauthServer       : '1.4.2',

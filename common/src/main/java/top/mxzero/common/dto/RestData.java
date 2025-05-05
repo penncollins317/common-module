@@ -1,6 +1,5 @@
 package top.mxzero.common.dto;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;
 import top.mxzero.common.exceptions.ServiceException;
 
@@ -10,7 +9,6 @@ import top.mxzero.common.exceptions.ServiceException;
  * @since 2023/9/1
  */
 @Data
-@JacksonXmlRootElement(localName = "xml")
 public class RestData<T> {
     public static final int DEFAULT_ERROR_CODE = 999;
     public static final int DEFAULT_SUCCESS_CODE = 0;
