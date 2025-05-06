@@ -1,7 +1,7 @@
 package top.mxzero.security.core.service;
 
 import top.mxzero.security.core.dto.LoginRequestBody;
-import top.mxzero.security.core.dto.TokenDTO;
+import top.mxzero.security.jwt.dto.TokenDTO;
 
 /**
  * 登录业务

@@ -1,4 +1,4 @@
-package top.mxzero.security.core;
+package top.mxzero.security.jwt;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

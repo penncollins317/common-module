@@ -1,4 +1,4 @@
-package top.mxzero.security.core.dto;
+package top.mxzero.security.jwt.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

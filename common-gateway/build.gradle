@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+}
+
+group = project_group
+version = project_version
+
+repositories {
+    mavenCentral()
+}

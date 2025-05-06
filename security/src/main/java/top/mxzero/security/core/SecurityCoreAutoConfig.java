@@ -2,7 +2,6 @@ package top.mxzero.security.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +27,6 @@ import top.mxzero.security.core.authentication.JsonAccessDeniedHandler;
 import top.mxzero.security.core.authentication.JsonAuthenticationEntryPoint;
 import top.mxzero.security.core.filter.JwtAuthenticationFilter;
 import top.mxzero.security.core.service.LoginService;
-
 import java.util.List;
 
 @Slf4j
@@ -36,7 +34,6 @@ import java.util.List;
 @EnableWebSecurity
 @Configuration
 @ComponentScan
-@EnableConfigurationProperties(JwtProps.class)
 public class SecurityCoreAutoConfig {
     private static final String DEFAULT_LOGIN_URl = "/login";
 

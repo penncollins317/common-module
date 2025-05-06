@@ -15,4 +15,6 @@ include 'mxzero-chat-common'
 include 'multi-db-samples'
 include 'mxzero-filestore'
 include 'order-service'
+include 'common-gateway'
+include 'security-jwt'
 

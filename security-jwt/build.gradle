@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = project_group
+version = project_version
+repositories {
+    mavenCentral()
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'security-jwt'
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}

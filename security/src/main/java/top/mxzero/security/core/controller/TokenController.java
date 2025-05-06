@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.security.core.dto.LoginRequestBody;
 import top.mxzero.security.core.dto.RefreshTokenDTO;
-import top.mxzero.security.core.dto.TokenDTO;
+import top.mxzero.security.jwt.dto.TokenDTO;
 import top.mxzero.security.core.service.LoginService;
 
 /**

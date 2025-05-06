@@ -1,0 +1,20 @@
+server:
+  port: 9800
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: odoo
+          uri: https://store.zkodoo.cc
+          predicates:
+            - Path=/**
+
+mxzero:
+  jwt:
+    expire: 2592000
+    issuer: http://mxzero.top
+    secret: ed8f07de-b628-49d5-a423-062d20e19907
+  gateway:
+    auth:
+      whitelist: /public/**,/auth/**

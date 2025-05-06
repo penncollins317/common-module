@@ -28,6 +28,7 @@ subprojects {
             mavenBom libraries.'mybatis-plus-bom'
             mavenBom libraries.'spring-ai-bom'
             mavenBom libraries.'spring-boot-dependencies'
+            mavenBom libraries.'spring-cloud-dependencies'
         }
     }
     repositories {
@@ -80,13 +81,21 @@ project("user-service") {
     }
 }
 
+project('security-jwt') {
+    dependencies {
+        api libraries.'jjwt-api'
+        api libraries.'jjwt-impl'
+        api libraries.'jjwt-jackson'
+        implementation 'org.springframework.boot:spring-boot-starter'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
+
 project("security") {
     dependencies {
         api project(":common")
         api project(":user-service")
-        api libraries.'jjwt-api'
-        api libraries.'jjwt-impl'
-        api libraries.'jjwt-jackson'
+        api project(":security-jwt")
         api 'org.springframework.boot:spring-boot-starter-security'
         api 'org.springframework.boot:spring-boot-starter-web'
         api 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -238,5 +247,12 @@ project("multi-db-samples") {
         implementation 'org.springframework.boot:spring-boot-starter'
         implementation 'com.baomidou:mybatis-plus-jsqlparser'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+    }
+}
+
+project("common-gateway") {
+    dependencies {
+        implementation project(":security-jwt")
+        implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     }
 }

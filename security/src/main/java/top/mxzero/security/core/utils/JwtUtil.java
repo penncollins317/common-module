@@ -1,11 +1,9 @@
 package top.mxzero.security.core.utils;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.security.HmacAesAeadAlgorithm;
-import io.jsonwebtoken.security.AeadAlgorithm;
-import io.jsonwebtoken.security.KeyAlgorithm;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.Password;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -13,16 +11,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import top.mxzero.security.core.JwtProps;
 import top.mxzero.security.core.enums.TokenType;
+import top.mxzero.security.jwt.JwtProps;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * @author Peng
@@ -33,7 +27,6 @@ import java.util.UUID;
 @Component
 public class JwtUtil implements ApplicationContextAware {
     private static JwtProps JWT_CONFIG_PROPS;
-    private static final String SECRET = UUID.randomUUID().toString();
 
 
     private static SecretKey generaKey() {
