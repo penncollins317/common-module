@@ -14,7 +14,7 @@ public enum ServiceErrorCode {
 
     TOKEN_EXPIRE(6, "Token过期"),
     USER_LOCKED(7, "用户被锁定"),
-    USER_NO_AUTH(8, "用户未认证"),
+    USER_NO_AUTH(401, "用户未认证"),
 
     PASSWORD_ERROR(9, "密码错误"),
 

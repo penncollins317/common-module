@@ -48,3 +48,23 @@ CREATE TABLE user_account(
 
 CREATE UNIQUE INDEX uk_user_account ON user_account(account_type, account_value);
 CREATE UNIQUE INDEX uk_user_account_user_id ON user_account(user_id);
+
+
+CREATE TABLE user_address (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,               -- 用户ID，外键可选
+    name VARCHAR(10) NOT NULL,             -- 收件人姓名
+    phone VARCHAR(11) NOT NULL,            -- 收件人电话
+    province VARCHAR(50),                  -- 省
+    city VARCHAR(50),                      -- 市
+    district VARCHAR(50),                  -- 区
+    detail VARCHAR(255) NOT NULL,          -- 详细地址
+    street VARCHAR(100),                   -- 门牌号（如 XX街道XX号）
+    latitude DECIMAL(10, 6),               -- 纬度（例如：23.129163）
+    longitude DECIMAL(10, 6),              -- 经度（例如：113.264435）
+    is_default BOOLEAN DEFAULT FALSE,      -- 是否为默认地址
+    created_at TIMESTAMP DEFAULT now(),    -- 创建时间
+    updated_at TIMESTAMP DEFAULT now()     -- 更新时间
+);
+
+CREATE INDEX user_address_user_idx ON user_address(user_id, is_default);

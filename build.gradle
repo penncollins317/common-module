@@ -73,9 +73,9 @@ project("common") {
 
 project("user-service") {
     dependencies {
-        implementation(project(":common")) {
-            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
-        }
+        implementation project(":common")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.security:spring-security-core'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
     }
 }
@@ -197,6 +197,15 @@ project("mxzero-tts") {
     }
 }
 
+project("order-service") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":user-service")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
+
 project("starter") {
     dependencies {
         implementation project(":common")
@@ -206,6 +215,7 @@ project("starter") {
 //        implementation project(":security-apikeys")
         implementation project(":oss")
         implementation project(":mxzero-filestore")
+        implementation project(":order-service")
         implementation 'org.postgresql:postgresql'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
