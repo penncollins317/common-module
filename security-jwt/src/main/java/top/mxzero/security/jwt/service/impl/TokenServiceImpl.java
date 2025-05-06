@@ -47,7 +47,7 @@ public class TokenServiceImpl implements TokenService {
     public TokenDTO createFullToken(String subject) {
         long current = System.currentTimeMillis();
         String access = this.createToken(UUID.randomUUID().toString(), subject, jwtProps.getExpire(), Map.of("type", "access"));
-        String refresh = this.createToken(UUID.randomUUID().toString(), subject, jwtProps.getExpire() * jwtProps.getRefreshRate(), Map.of("type", "access"));
+        String refresh = this.createToken(UUID.randomUUID().toString(), subject, jwtProps.getExpire() * jwtProps.getRefreshRate(), Map.of("type", "refresh"));
         return TokenDTO.builder().accessToken(access).refreshToken(refresh)
                 .expire(jwtProps.getExpire())
                 .expireTime(new Date(current + jwtProps.getExpire() * 1000))

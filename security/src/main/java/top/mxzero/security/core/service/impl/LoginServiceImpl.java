@@ -11,15 +11,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import top.mxzero.common.exceptions.ServiceException;
-import top.mxzero.security.jwt.JwtProps;
 import top.mxzero.security.core.dto.LoginRequestBody;
-import top.mxzero.security.jwt.dto.TokenDTO;
 import top.mxzero.security.core.service.LoginService;
-import top.mxzero.security.core.utils.JwtUtil;
+import top.mxzero.security.jwt.JwtProps;
+import top.mxzero.security.jwt.dto.TokenDTO;
+import top.mxzero.security.jwt.service.TokenService;
 import top.mxzero.service.user.entity.User;
 import top.mxzero.service.user.mapper.UserMapper;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -29,6 +30,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class LoginServiceImpl implements LoginService {
+    private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final JwtProps jwtProps;
@@ -55,33 +57,35 @@ public class LoginServiceImpl implements LoginService {
     }
 
     private TokenDTO createToken(String subject) {
-        char[] accessTokenId = UUID.randomUUID().toString().toCharArray();
-        accessTokenId[accessTokenId.length - 1] = ACCESS_FLAG;
-        char[] refreshTokenId = UUID.randomUUID().toString().toCharArray();
-        refreshTokenId[refreshTokenId.length - 1] = REFRESH_FLAG;
-        long current = System.currentTimeMillis();
-        String access = JwtUtil.createToken(new String(accessTokenId), subject, jwtProps.getExpire());
-        String refresh = JwtUtil.createToken(new String(refreshTokenId), subject, jwtProps.getExpire() * jwtProps.getRefreshRate());
-        return TokenDTO.builder().accessToken(access).refreshToken(refresh)
-                .expire(jwtProps.getExpire())
-                .expireTime(new Date(current + jwtProps.getExpire() * 1000))
-                .refreshExpireIn(jwtProps.getExpire() * jwtProps.getRefreshRate())
-                .refreshExpireTime(new Date(current + jwtProps.getExpire() * jwtProps.getRefreshRate() * 1000))
-                .build();
+        return tokenService.createFullToken(subject);
     }
 
     @Override
     public TokenDTO refresh(String token) {
         try {
-
-            Jws<Claims> claimsJws = JwtUtil.parseToken(token);
-            char[] charArray = claimsJws.getPayload().getId().toCharArray();
-            char c = charArray[charArray.length - 1];
-            if (c != REFRESH_FLAG) {
+            Jws<Claims> claimsJws = tokenService.parseToken(token);
+            String type = (String) claimsJws.getPayload().get("type");
+            if (!"refresh".equalsIgnoreCase(type)) {
                 throw new ServiceException("refresh token type error.");
             }
+
             String subject = claimsJws.getPayload().getSubject();
-            return this.createToken(subject);
+
+            long time = claimsJws.getPayload().getExpiration().getTime();
+            // refresh token有效期小于access token时，返回新的refresh token
+            if (System.currentTimeMillis() + jwtProps.getExpire() * 1000 > time) {
+                return this.createToken(subject);
+            }
+
+            String accessToken = tokenService.createToken(UUID.randomUUID().toString(), subject, jwtProps.getExpire(), Map.of("type", "access"));
+            return TokenDTO.builder()
+                    .accessToken(accessToken)
+                    .expire(jwtProps.getExpire())
+                    .expireTime(new Date(System.currentTimeMillis() + jwtProps.getExpire() * 1000))
+                    .refreshToken(token)
+                    .refreshExpireTime(claimsJws.getPayload().getExpiration())
+                    .refreshExpireIn((time - System.currentTimeMillis()) / 1000)
+                    .build();
         } catch (JwtException e) {
             throw new ServiceException("Refresh token error.");
         }

@@ -27,6 +27,8 @@ import top.mxzero.security.core.authentication.JsonAccessDeniedHandler;
 import top.mxzero.security.core.authentication.JsonAuthenticationEntryPoint;
 import top.mxzero.security.core.filter.JwtAuthenticationFilter;
 import top.mxzero.security.core.service.LoginService;
+import top.mxzero.security.jwt.service.TokenService;
+
 import java.util.List;
 
 @Slf4j
@@ -43,7 +45,9 @@ public class SecurityCoreAutoConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginService loginService, SecurityConfigAggregator aggregator) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   LoginService loginService, TokenService tokenService,
+                                                   SecurityConfigAggregator aggregator) throws Exception {
         AuthenticationSuccessHandler successHandler = new CustomAuthenticationSuccessHandler(loginService);
         AuthenticationFailureHandler failureHandler = new CustomAuthenticationFailHandler(DEFAULT_LOGIN_URl);
         JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(DEFAULT_LOGIN_URl));
@@ -74,7 +78,7 @@ public class SecurityCoreAutoConfig {
                     handler.accessDeniedHandler(accessDeniedHandler);
                     handler.authenticationEntryPoint(authenticationEntryPoint);
                 })
-                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout.logoutUrl("/logout").permitAll())
 //                .sessionManagement(session -> {
 //                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
