@@ -1,6 +1,7 @@
 package top.mxzero.ai;
 
 import dev.langchain4j.data.message.ChatMessage;
+import dev.langchain4j.data.message.ChatMessageType;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import dev.langchain4j.store.memory.chat.InMemoryChatMemoryStore;
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +22,17 @@ public class JdbcChatMemoryStore implements ChatMemoryStore {
 
     @Override
     public List<ChatMessage> getMessages(Object o) {
-        log.info("getMessages:{}", o);
-        return this.chatMemoryStore.getMessages(o);
+        List<ChatMessage> messages = this.chatMemoryStore.getMessages(o);
+        log.info("getMessages:{}, cnt:{}", o, messages.size());
+        return messages;
     }
 
     @Override
     public void updateMessages(Object o, List<ChatMessage> list) {
         log.info("updateMessages:{}", o);
-        list.forEach(item->{
-            log.info("updateMessages item:{}", item);
-        });
+        ChatMessage newMessage = list.get(list.size() - 1);
+        ChatMessageType type = newMessage.type();
+        log.info("newMsg:{}", newMessage);
         this.chatMemoryStore.updateMessages(o, list);
     }
 

@@ -215,12 +215,26 @@ project("order-service") {
     }
 }
 
+
+project("langchain4j-samples") {
+    dependencies {
+        implementation project(":common")
+        implementation libraries.'langchain4j'
+        implementation libraries.'langchain4j-open-ai'
+//        implementation libraries.'langchain4j-reactor'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
+
+
 project("starter") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
         implementation project(":ai-chat")
         implementation project(":mxzero-tts")
+        implementation project(":langchain4j-samples")
 //        implementation project(":security-apikeys")
         implementation project(":oss")
         implementation project(":mxzero-filestore")
@@ -232,14 +246,6 @@ project("starter") {
 }
 
 
-project("langchain4j-samples") {
-    dependencies {
-        implementation project(":common")
-        implementation libraries.'langchain4j'
-        implementation libraries.'langchain4j-open-ai'
-        implementation libraries.'langchain4j-web-search-engine-google-custom'
-    }
-}
 
 project("multi-db-samples") {
     dependencies {

@@ -35,7 +35,7 @@ ext.versions = [
         aliSms            : "3.1.0",
         jackson           : "2.18.2",
         okhttp            : "4.12.0",
-        langchain4j       : "1.0.0-beta3",
+        langchain4j       : "1.0.0-rc1",
         shardingsphere    : "5.5.2",
 ]
 
@@ -93,5 +93,6 @@ ext.libraries = [
         // openai
         'langchain4j'                                : "dev.langchain4j:langchain4j:${versions.langchain4j}",
         'langchain4j-open-ai'                        : "dev.langchain4j:langchain4j-open-ai:${versions.langchain4j}",
+        'langchain4j-reactor'                        : "dev.langchain4j:langchain4j-reactor:${versions.langchain4j}",
         'langchain4j-web-search-engine-google-custom': "dev.langchain4j:langchain4j-web-search-engine-google-custom:${versions.langchain4j}",
 ]
