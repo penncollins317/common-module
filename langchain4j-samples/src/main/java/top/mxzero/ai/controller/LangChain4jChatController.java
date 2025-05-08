@@ -133,6 +133,14 @@ public class LangChain4jChatController {
                         log.error(e.getMessage());
                     }
                 }
+                try {
+                    SseEmitter.SseEventBuilder event = SseEmitter.event()
+                            .data(Map.of("v", "")) // 事件数据
+                            .name("completed"); // 事件名称
+                    emitter.send(event);
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
                 emitter.complete();
             }).onPartialResponse((s) -> {
                 SseEmitter.SseEventBuilder event = SseEmitter.event()
