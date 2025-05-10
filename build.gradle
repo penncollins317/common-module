@@ -262,3 +262,11 @@ project("common-gateway") {
         implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     }
 }
+
+project("httpclient-call"){
+    dependencies {
+        implementation project(":common")
+        implementation libraries.'retrofit'
+        implementation libraries.'converter-jackson'
+    }
+}

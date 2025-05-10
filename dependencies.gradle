@@ -37,6 +37,7 @@ ext.versions = [
         okhttp            : "4.12.0",
         langchain4j       : "1.0.0-rc1",
         shardingsphere    : "5.5.2",
+        retrofit          : "2.11.0",
 ]
 
 
@@ -95,4 +96,8 @@ ext.libraries = [
         'langchain4j-open-ai'                        : "dev.langchain4j:langchain4j-open-ai:${versions.langchain4j}",
         'langchain4j-reactor'                        : "dev.langchain4j:langchain4j-reactor:${versions.langchain4j}",
         'langchain4j-web-search-engine-google-custom': "dev.langchain4j:langchain4j-web-search-engine-google-custom:${versions.langchain4j}",
+
+        // httpclient
+        'retrofit'                                   : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+        'converter-jackson'                          : "com.squareup.retrofit2:converter-jackson:${versions.retrofit}",
 ]

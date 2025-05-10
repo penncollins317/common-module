@@ -17,4 +17,5 @@ include 'mxzero-filestore'
 include 'order-service'
 include 'common-gateway'
 include 'security-jwt'
+include 'httpclient-call'
 

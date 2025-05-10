@@ -10,7 +10,7 @@ spring:
     password: postgres
   jackson:
     time-zone: GMT+8
-    date-format: yyyy-MM-dd HH:mm:ssXXX
+    date-format: yyyy-MM-dd HH:mm:ss
   mail:
     host: smtp.qq.com
     port: 465

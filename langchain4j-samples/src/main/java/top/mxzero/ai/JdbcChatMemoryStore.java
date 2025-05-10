@@ -23,22 +23,18 @@ public class JdbcChatMemoryStore implements ChatMemoryStore {
     @Override
     public List<ChatMessage> getMessages(Object o) {
         List<ChatMessage> messages = this.chatMemoryStore.getMessages(o);
-        log.info("getMessages:{}, cnt:{}", o, messages.size());
         return messages;
     }
 
     @Override
     public void updateMessages(Object o, List<ChatMessage> list) {
-        log.info("updateMessages:{}", o);
         ChatMessage newMessage = list.get(list.size() - 1);
         ChatMessageType type = newMessage.type();
-        log.info("newMsg:{}", newMessage);
         this.chatMemoryStore.updateMessages(o, list);
     }
 
     @Override
     public void deleteMessages(Object o) {
-        log.info("deleteMessages:{}", o);
         this.chatMemoryStore.deleteMessages(o);
     }
 }
