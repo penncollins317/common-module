@@ -206,6 +206,15 @@ project("mxzero-tts") {
     }
 }
 
+project("product-service") {
+    dependencies {
+        implementation project(":common")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
+
 project("order-service") {
     dependencies {
         implementation project(":common")
@@ -214,6 +223,8 @@ project("order-service") {
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
+
+
 
 
 project("langchain4j-samples") {
@@ -234,6 +245,7 @@ project("starter") {
         implementation project(":security")
         implementation project(":ai-chat")
         implementation project(":mxzero-tts")
+        implementation project(":product-service")
         implementation project(":langchain4j-samples")
 //        implementation project(":security-apikeys")
         implementation project(":oss")
