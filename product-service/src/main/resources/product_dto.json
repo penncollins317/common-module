@@ -1,0 +1,282 @@
+{
+  "name": "衣服",
+  "subTitle": "2025新款 夏季 短袖",
+  "imageUrl": "http://store.mxzero.top/image.png",
+  "categoryId": 1,
+  "subImageUrls": [
+    "http://store.mxzero.top/sub_01.png",
+    "http://store.mxzero.top/sub_02.png"
+  ],
+  "detailImageUrls": [
+    "http://store.mxzero.top/detail_01.png",
+    "http://store.mxzero.top/detail_02.png",
+    "http://store.mxzero.top/detail_03.png"
+  ],
+  "description": "产品说明",
+  "tags": [
+    "夏季"
+  ],
+  "isMultiSpec": true,
+  "specs": [
+    {
+      "key": "颜色",
+      "values": [
+        "红色",
+        "米白色",
+        "绿色"
+      ]
+    },
+    {
+      "key": "尺码",
+      "values": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
+    }
+  ],
+  "skus": [
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "红色"
+        },
+        {
+          "key": "尺码",
+          "value": "S"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "RS",
+      "imageUrl": "http://store.mxzero.top/sku/rs.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "红色"
+        },
+        {
+          "key": "尺码",
+          "value": "M"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "RM",
+      "imageUrl": "http://store.mxzero.top/sku/rm.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "红色"
+        },
+        {
+          "key": "尺码",
+          "value": "L"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "RL",
+      "imageUrl": "http://store.mxzero.top/sku/rl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "红色"
+        },
+        {
+          "key": "尺码",
+          "value": "XL"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "RXL",
+      "imageUrl": "http://store.mxzero.top/sku/rxl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "红色"
+        },
+        {
+          "key": "尺码",
+          "value": "XXL"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "RXXL",
+      "imageUrl": "http://store.mxzero.top/sku/rxxl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "米白色"
+        },
+        {
+          "key": "尺码",
+          "value": "S"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "WS",
+      "imageUrl": "http://store.mxzero.top/sku/ws.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "米白色"
+        },
+        {
+          "key": "尺码",
+          "value": "M"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "WM",
+      "imageUrl": "http://store.mxzero.top/sku/wm.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "米白色"
+        },
+        {
+          "key": "尺码",
+          "value": "L"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "WL",
+      "imageUrl": "http://store.mxzero.top/sku/wl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "米白色"
+        },
+        {
+          "key": "尺码",
+          "value": "XL"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "WXL",
+      "imageUrl": "http://store.mxzero.top/sku/wxl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "米白色"
+        },
+        {
+          "key": "尺码",
+          "value": "XXL"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "WXXL",
+      "imageUrl": "http://store.mxzero.top/sku/wxxl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "绿色"
+        },
+        {
+          "key": "尺码",
+          "value": "S"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "GS",
+      "imageUrl": "http://store.mxzero.top/sku/gs.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "绿色"
+        },
+        {
+          "key": "尺码",
+          "value": "M"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "GM",
+      "imageUrl": "http://store.mxzero.top/sku/gm.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "绿色"
+        },
+        {
+          "key": "尺码",
+          "value": "L"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "GL",
+      "imageUrl": "http://store.mxzero.top/sku/gl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "绿色"
+        },
+        {
+          "key": "尺码",
+          "value": "XL"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "GXL",
+      "imageUrl": "http://store.mxzero.top/sku/gxl.png"
+    },
+    {
+      "spec": [
+        {
+          "key": "颜色",
+          "value": "绿色"
+        },
+        {
+          "key": "尺码",
+          "value": "XXL"
+        }
+      ],
+      "price": "49.90",
+      "stock": 10,
+      "code": "GXXL",
+      "imageUrl": "http://store.mxzero.top/sku/gxxl.png"
+    }
+  ]
+}
