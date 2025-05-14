@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group = 'top.mxzero.chat'
-version = 'unspecified'
+group = project_group
+version = project_version
 
 repositories {
     mavenCentral()

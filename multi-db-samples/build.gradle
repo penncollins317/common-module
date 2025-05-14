@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group = 'top.mxzero.multi.db'
-version = 'unspecified'
+group = project_group
+version = project_version
 
 repositories {
     mavenCentral()

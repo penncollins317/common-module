@@ -140,6 +140,14 @@ project("security-apikeys") {
     }
 }
 
+project("security-mqtt") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":security")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+    }
+}
+
 project("mxzero-chat-common") {
     dependencies {
         api libraries.'mybatis-plus'
@@ -247,6 +255,7 @@ project("starter") {
         implementation project(":mxzero-tts")
         implementation project(":product-service")
         implementation project(":langchain4j-samples")
+        implementation project(":security-mqtt")
 //        implementation project(":security-apikeys")
         implementation project(":oss")
         implementation project(":mxzero-filestore")

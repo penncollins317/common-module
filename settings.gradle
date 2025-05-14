@@ -19,4 +19,5 @@ include 'common-gateway'
 include 'security-jwt'
 include 'httpclient-call'
 include 'product-service'
+include 'security-mqtt'
 
