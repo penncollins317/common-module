@@ -66,7 +66,7 @@ public class HashUtils {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
 
             // 执行加密
-            byte[] hashedBytes = messageDigest.digest(input.getBytes());
+            byte[] hashedBytes = messageDigest.digest(input.getBytes(StandardCharsets.UTF_8));
 
             // 将字节数组转换为十六进制表示的字符串
             StringBuilder hexString = new StringBuilder();

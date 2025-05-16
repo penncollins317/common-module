@@ -140,6 +140,15 @@ project("security-apikeys") {
     }
 }
 
+project("security-wechat-qrcode-login"){
+    dependencies {
+        implementation project(":common")
+        implementation project(":security")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
+
 project("security-mqtt") {
     dependencies {
         implementation project(":common")
@@ -251,6 +260,7 @@ project("starter") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
+        implementation project(":security-wechat-qrcode-login")
         implementation project(":ai-chat")
         implementation project(":mxzero-tts")
         implementation project(":product-service")

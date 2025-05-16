@@ -2,17 +2,7 @@ plugins {
     id 'java'
 }
 
-project_group
+bootJar.enabled = true
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-    useJUnitPlatform()
-}
+group = project_group
+version = project_version

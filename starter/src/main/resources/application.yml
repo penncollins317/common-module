@@ -56,6 +56,13 @@ mxzero:
     expire: 2592000
     issuer: http://mxzero.top
     secret: ed8f07de-b628-49d5-a423-062d20e19907
+  security:
+    wechat:
+      biz:
+        appid: wx9cc9c76a79009543
+        app-secret: f6b3f10f638004cb24eb23cadf60011a
+        token: 381746E471C444E089B19FE12027BBD3
+        aes-key: WtrRxen3j5Cyovu8Ed5hENDNLcDju6zUlohrpVI3h0G
   oss:
     #      type: ali
     #      access-key: LTAI5tCb2roFbwLHjjt5h4o2
