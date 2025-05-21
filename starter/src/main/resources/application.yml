@@ -19,7 +19,7 @@ spring:
     default-encoding: UTF-8
     properties:
       company:
-        name: Your Company
+        name: 趣语星伴
       mail:
         smtp:
           ssl:

@@ -1,7 +1,9 @@
 package top.mxzero.oss.service.impl;
 
-import com.aliyun.oss.model.MultipartUpload;
-import com.qiniu.storage.*;
+import com.qiniu.storage.BucketManager;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.Region;
+import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
 import top.mxzero.oss.OssClientType;
