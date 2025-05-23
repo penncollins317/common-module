@@ -70,12 +70,18 @@ mxzero:
     #      endpoint: oss-cn-hangzhou.aliyuncs.com
     #      secret: true
     #      bucket-name: odoo-filestore
-    type: qiniu
-    access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
-    secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3
-    endpoint: store.mxzero.top
+#    type: qiniu
+#    access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
+#    secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3
+#    endpoint: qiniu.talkiestar.cn
+#    secret: false
+#    bucket-name: talkiestar
+    type: minio
+    access-key: uoxBxPoYTvTggt89Fklf
+    secret-key: CY5vKH737eOLqf4seGsxhJ96ao1K7RltkMh0hkjO
+    endpoint: talkiestar.cn:9000
     secret: false
-    bucket-name: mxzero-store
+    bucket-name: first
   tts:
     app-key: 496600955eb048d1
     app-secret: NkaR8fhbGy4063s9BYk3n4CZgAU651Hi

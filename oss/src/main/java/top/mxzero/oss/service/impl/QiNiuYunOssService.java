@@ -99,7 +99,7 @@ public class QiNiuYunOssService implements OssService {
 
     @Override
     public String privateAccessUrl(String key) {
-        return AUTH.privateDownloadUrl(key, 3600 * 1000);
+        return AUTH.privateDownloadUrl(this.prefix + key);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package top.mxzero.oss.service.impl;
 
-import com.aliyun.oss.*;
+import com.aliyun.oss.HttpMethod;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.auth.DefaultCredentialProvider;
 import com.aliyun.oss.model.*;
 import lombok.extern.slf4j.Slf4j;
@@ -77,22 +79,16 @@ public class AliCloudOssService implements OssService {
             GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(this.props.getBucketName(), name, HttpMethod.PUT);
             request.setExpiration(expiration);
             return this.client.generatePresignedUrl(request).toString();
-        } catch (OSSException oe) {
-            log.error("Caught an OSSException, which means your request made it to OSS, "
-                    + "but was rejected with an error response for some reason.");
-            log.error("Error Message:{}", oe.getErrorMessage());
-            log.error("Error Code:{}", oe.getErrorCode());
-            log.error("Request ID:{}", oe.getRequestId());
-            log.error("Host ID:{}", oe.getHostId());
-        } catch (ClientException ce) {
-            log.error("Caught an ClientException, which means the client encountered "
-                    + "a serious internal problem while trying to communicate with OSS, "
-                    + "such as not being able to access the network.");
-            log.error("Error Message:{}", ce.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return null;
     }
 
+    @Override
+    public String privateAccessUrl(String key) {
+        return this.prepareSign(key);
+    }
 
     @Override
     public String prefixName() {

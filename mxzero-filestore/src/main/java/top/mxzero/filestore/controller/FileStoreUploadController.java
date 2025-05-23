@@ -1,21 +1,37 @@
 package top.mxzero.filestore.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.mxzero.common.dto.RestData;
+import top.mxzero.common.exceptions.ServiceException;
+import top.mxzero.oss.dto.OssUploadResult;
+import top.mxzero.oss.service.OssService;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 文件上传接口
+ *
+ * @author Peng
+ * @since 2025/5/5
+ */
 @RestController
 @RequestMapping("/upload")
 public class FileStoreUploadController {
+    @Autowired
+    private OssService ossService;
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yy/MM/dd");
 
-    private static final long MAX_SIMPLE_UPLOAD_SIZE = 4 * 1024 * 1024; // 4MB
+    private static final long MAX_SIMPLE_UPLOAD_SIZE = 10 * 1024 * 1024; // 10MB
     private static final Path UPLOAD_DIR = Paths.get("/upload-dir");
 
     // 保存文件上传状态（可换成 Redis）
@@ -29,17 +45,23 @@ public class FileStoreUploadController {
     /**
      * 小文件直传
      */
-    @PostMapping("/simple")
-    public ResponseEntity<String> uploadSimple(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/direct")
+    public RestData<OssUploadResult> uploadSimple(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.getSize() > MAX_SIMPLE_UPLOAD_SIZE) {
-            return ResponseEntity.badRequest().body("File too large for simple upload.");
+            throw new ServiceException("File too large for simple upload.");
+        }
+        int i = file.getOriginalFilename().lastIndexOf(".");
+        String extendName = null;
+        if (i == -1) {
+            extendName = "";
+        } else {
+            extendName = file.getOriginalFilename().substring(i);
         }
 
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path target = UPLOAD_DIR.resolve(filename);
-        Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
-
-        return ResponseEntity.ok("Uploaded as: " + filename);
+        String filename = LocalDateTime.now().format(DATE_TIME_FORMATTER) + "/"
+                + UUID.randomUUID().toString().replaceAll("-", "") + extendName;
+        OssUploadResult result = ossService.upload(file.getInputStream(), filename, file.getContentType(), file.getSize());
+        return RestData.ok(result);
     }
 
     /**

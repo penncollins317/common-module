@@ -13,9 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * @author Peng
@@ -103,6 +101,22 @@ public class MinioOssService implements OssService {
                             .expiry(5, TimeUnit.MINUTES)
                             .build());
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String privateAccessUrl(String key) {
+        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                .expiry(3600, TimeUnit.SECONDS)
+                .bucket(props.getBucketName())
+                .object(key)
+                .method(Method.GET)
+                .build();
+        try {
+            return client.getPresignedObjectUrl(args);
+        } catch (Exception e) {
+            log.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

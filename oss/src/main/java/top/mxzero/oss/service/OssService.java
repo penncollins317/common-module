@@ -1,5 +1,6 @@
 package top.mxzero.oss.service;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import top.mxzero.oss.dto.OssUploadResult;
 
@@ -77,7 +78,7 @@ public interface OssService {
      * @return
      */
     default String privateAccessUrl(String key) {
-        return null;
+        throw new NotImplementedException("method not implement.");
     }
 
     /**
