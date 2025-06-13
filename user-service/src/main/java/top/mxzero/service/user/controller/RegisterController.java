@@ -1,4 +1,4 @@
-package top.mxzero.security.core.controller;
+package top.mxzero.service.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

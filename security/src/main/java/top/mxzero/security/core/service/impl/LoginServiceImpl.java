@@ -16,8 +16,6 @@ import top.mxzero.security.core.service.LoginService;
 import top.mxzero.security.jwt.JwtProps;
 import top.mxzero.security.jwt.dto.TokenDTO;
 import top.mxzero.security.jwt.service.TokenService;
-import top.mxzero.service.user.entity.User;
-import top.mxzero.service.user.mapper.UserMapper;
 
 import java.util.Date;
 import java.util.Map;
@@ -32,7 +30,6 @@ import java.util.UUID;
 public class LoginServiceImpl implements LoginService {
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
-    private final UserMapper userMapper;
     private final JwtProps jwtProps;
     private static final char ACCESS_FLAG = 'a';
     private static final char REFRESH_FLAG = 'f';
@@ -41,10 +38,6 @@ public class LoginServiceImpl implements LoginService {
     public TokenDTO loginByUsername(LoginRequestBody args) {
         try {
             Authentication authenticate = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(args.getUsername(), args.getPassword()));
-            User user = new User();
-            user.setId(Long.valueOf(authenticate.getName()));
-            user.setLastLoginAt(new Date());
-            this.userMapper.updateById(user);
             return this.createToken(authenticate.getName());
         } catch (UsernameNotFoundException e) {
             throw new BadCredentialsException("账号或密码错误");

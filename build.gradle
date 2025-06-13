@@ -66,6 +66,7 @@ project("common") {
         implementation 'com.google.zxing:javase:3.5.2'
         api libraries.'mybatis-plus'
         api libraries.'mybatis-spring'
+        api 'com.baomidou:mybatis-plus-annotation'
         implementation 'com.baomidou:mybatis-plus-jsqlparser'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
@@ -94,7 +95,6 @@ project('security-jwt') {
 project("security") {
     dependencies {
         api project(":common")
-        api project(":user-service")
         api project(":security-jwt")
         api 'org.springframework.boot:spring-boot-starter-security'
         api 'org.springframework.boot:spring-boot-starter-web'
@@ -182,8 +182,8 @@ project("mcp-weather") {
         implementation 'org.postgresql:postgresql'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
         implementation 'org.springframework.boot:spring-boot-starter-web'
-//        implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
-//        implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+        implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
+        implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }

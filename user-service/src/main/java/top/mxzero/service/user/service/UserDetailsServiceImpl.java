@@ -1,4 +1,4 @@
-package top.mxzero.security.core.service.impl;
+package top.mxzero.service.user.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import top.mxzero.service.user.entity.Role;
 import top.mxzero.service.user.entity.User;
@@ -19,7 +18,6 @@ import java.util.List;
  * @author Peng
  * @since 2025/1/21
  */
-@Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserMapper userMapper;

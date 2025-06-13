@@ -7,13 +7,13 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import top.mxzero.ai.AiIntetrationApplication;
+import top.mxzero.ai.AiIntetrationAutoConfig;
 
 /**
  * @author Peng
  * @since 2025/3/4
  */
-@SpringBootTest(classes = AiIntetrationApplication.class)
+@SpringBootTest(classes = AiIntetrationAutoConfig.class)
 public class ChatTest {
     @Autowired
     private ChatModel chatModel;

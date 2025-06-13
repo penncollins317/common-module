@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.*;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import top.mxzero.chat.entity.AiChatMessage;
 import top.mxzero.chat.mapper.AiChatMessageMapper;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
  * @since 2024/12/10
  */
 @Slf4j
-@Component
 @AllArgsConstructor
 public class DatabasePersistentChatMemory implements ChatMemory {
     private final AiChatMessageMapper messageMapper;

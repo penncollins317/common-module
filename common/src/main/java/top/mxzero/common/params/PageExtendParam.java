@@ -13,8 +13,7 @@ import java.util.Set;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PageSearchParam extends PageParam implements Serializable {
-    private String keyword;
+public class PageExtendParam extends PageParam implements Serializable {
     private Set<String> orders;
     public Set<String> fields;
 }

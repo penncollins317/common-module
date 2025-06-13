@@ -1,4 +1,4 @@
-package top.mxzero.security.core.dto;
+package top.mxzero.service.user.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

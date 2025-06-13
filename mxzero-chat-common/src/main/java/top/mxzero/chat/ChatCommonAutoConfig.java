@@ -1,7 +1,6 @@
 package top.mxzero.chat;
 
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
  * @since 2025/4/23
  */
 @Configuration
-@ComponentScan
 @MapperScan("top.mxzero.chat.mapper")
 public class ChatCommonAutoConfig {
 }

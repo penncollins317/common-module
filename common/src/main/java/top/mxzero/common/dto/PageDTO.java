@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import top.mxzero.common.annotations.SearchField;
 import top.mxzero.common.annotations.SortField;
 import top.mxzero.common.params.PageParam;
-import top.mxzero.common.params.PageSearchParam;
+import top.mxzero.common.params.PageExtendParam;
 import top.mxzero.common.utils.DeepBeanUtil;
 
 import java.io.Serializable;
@@ -69,17 +69,17 @@ public class PageDTO<T> implements Serializable {
     public static <T> PageDTO<T> wrap(BaseMapper<T> baseMapper, Class<T> entityClass, PageParam pageParam) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
 
-        if (pageParam instanceof PageSearchParam pageSearchParam) {
-            String[] fields = requireField(pageSearchParam.getFields(), entityClass);
+        if (pageParam instanceof PageExtendParam PageExtendParam) {
+            String[] fields = requireField(PageExtendParam.getFields(), entityClass);
             if (fields.length > 0) {
                 queryWrapper.select(fields);
             }
 
-            if (StringUtils.hasLength(pageSearchParam.getKeyword())) {
-                search(pageSearchParam.getKeyword(), queryWrapper, entityClass);
+            if (StringUtils.hasLength(PageExtendParam.getSearch())) {
+                search(PageExtendParam.getSearch(), queryWrapper, entityClass);
             }
 
-            order(pageSearchParam.getOrders(), queryWrapper, entityClass);
+            order(PageExtendParam.getOrders(), queryWrapper, entityClass);
         }
 
         return handleResult(baseMapper.selectPage(new Page<>(pageParam.getPage(), pageParam.getSize()), queryWrapper));
@@ -88,17 +88,17 @@ public class PageDTO<T> implements Serializable {
     public static <T, D> PageDTO<D> wrap(BaseMapper<T> baseMapper, Class<T> entityClass, PageParam pageParam, Supplier<D> supplier) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
 
-        if (pageParam instanceof PageSearchParam pageSearchParam) {
-            String[] fields = requireField(pageSearchParam.getFields(), entityClass);
+        if (pageParam instanceof PageExtendParam PageExtendParam) {
+            String[] fields = requireField(PageExtendParam.getFields(), entityClass);
             if (fields.length > 0) {
                 queryWrapper.select(fields);
             }
 
-            if (StringUtils.hasLength(pageSearchParam.getKeyword())) {
-                search(pageSearchParam.getKeyword(), queryWrapper, entityClass);
+            if (StringUtils.hasLength(PageExtendParam.getSearch())) {
+                search(PageExtendParam.getSearch(), queryWrapper, entityClass);
             }
 
-            order(pageSearchParam.getOrders(), queryWrapper, entityClass);
+            order(PageExtendParam.getOrders(), queryWrapper, entityClass);
         }
 
         Page<T> tPage = baseMapper.selectPage(new Page<>(pageParam.getPage(), pageParam.getSize()), queryWrapper);
@@ -109,34 +109,34 @@ public class PageDTO<T> implements Serializable {
         if (queryWrapper == null) {
             return wrap(baseMapper, entityClass, pageParam);
         }
-        if (pageParam instanceof PageSearchParam pageSearchParam) {
-            String[] fields = requireField(pageSearchParam.getFields(), entityClass);
+        if (pageParam instanceof PageExtendParam PageExtendParam) {
+            String[] fields = requireField(PageExtendParam.getFields(), entityClass);
             if (fields.length > 0) {
                 queryWrapper.select(fields);
             }
 
-            if (StringUtils.hasLength(pageSearchParam.getKeyword())) {
-                search(pageSearchParam.getKeyword(), queryWrapper, entityClass);
+            if (StringUtils.hasLength(PageExtendParam.getSearch())) {
+                search(PageExtendParam.getSearch(), queryWrapper, entityClass);
             }
 
-            order(pageSearchParam.getOrders(), queryWrapper, entityClass);
+            order(PageExtendParam.getOrders(), queryWrapper, entityClass);
         }
 
         return handleResult(baseMapper.selectPage(new Page<>(pageParam.getPage(), pageParam.getSize()), queryWrapper));
     }
 
     public static <T, D> PageDTO<D> wrap(BaseMapper<T> baseMapper, Class<T> entityClass, PageParam pageParam, QueryWrapper<T> queryWrapper, Supplier<D> supplier) {
-        if (pageParam instanceof PageSearchParam pageSearchParam) {
-            String[] fields = requireField(pageSearchParam.getFields(), entityClass);
+        if (pageParam instanceof PageExtendParam PageExtendParam) {
+            String[] fields = requireField(PageExtendParam.getFields(), entityClass);
             if (fields.length > 0) {
                 queryWrapper.select(fields);
             }
 
-            if (StringUtils.hasLength(pageSearchParam.getKeyword())) {
-                search(pageSearchParam.getKeyword(), queryWrapper, entityClass);
+            if (StringUtils.hasLength(PageExtendParam.getSearch())) {
+                search(PageExtendParam.getSearch(), queryWrapper, entityClass);
             }
 
-            order(pageSearchParam.getOrders(), queryWrapper, entityClass);
+            order(PageExtendParam.getOrders(), queryWrapper, entityClass);
         }
 
         Page<T> tPage = baseMapper.selectPage(new Page<>(pageParam.getPage(), pageParam.getSize()), queryWrapper);

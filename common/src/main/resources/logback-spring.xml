@@ -6,8 +6,9 @@
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"/>
 
     <!-- 日志存储路径 -->
-    <property name="LOG_PATH" value="logs" />
-    <property name="APP_NAME" value="im-gateway" />
+    <property name="LOG_PATH" value="logs"/>
+    <springProperty name="APP_NAME" source="spring.application.name" defaultValue="default-app"/>
+
 
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -19,7 +20,7 @@
 
     <!-- 日志文件输出（按天滚动） -->
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-<!--        <file>${LOG_PATH}/${APP_NAME}.log</file>-->
+        <!--        <file>${LOG_PATH}/${APP_NAME}.log</file>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/${APP_NAME}_%d{yyyy_MM_dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory> <!-- 保留30天 -->
@@ -32,7 +33,7 @@
 
     <!-- 错误日志单独输出 -->
     <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-<!--        <file>${LOG_PATH}/${APP_NAME}-error.log</file>-->
+        <!--        <file>${LOG_PATH}/${APP_NAME}-error.log</file>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/${APP_NAME}_error_%d{yyyy_MM_dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
@@ -54,8 +55,8 @@
     </root>
 
     <!-- 单独为 Spring 和其他包设置日志级别（可选） -->
-<!--    <logger name="org.springframework" level="WARN"/>-->
-<!--    <logger name="org.hibernate" level="WARN"/>-->
-<!--    <logger name="com.zaxxer.hikari" level="WARN"/>-->
+    <!--    <logger name="org.springframework" level="WARN"/>-->
+    <!--    <logger name="org.hibernate" level="WARN"/>-->
+    <!--    <logger name="com.zaxxer.hikari" level="WARN"/>-->
 
 </configuration>

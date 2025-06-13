@@ -17,7 +17,7 @@ import top.mxzero.security.oauth2.service.RegisterService;
  */
 @AllArgsConstructor
 @Controller
-public class RegisterController {
+public class OAuthRegisterController {
     private final RegisterService registerService;
 
     @GetMapping("/register")

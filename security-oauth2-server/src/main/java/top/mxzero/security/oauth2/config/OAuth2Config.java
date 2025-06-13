@@ -89,7 +89,8 @@ public class OAuth2Config {
     private static void saveKeyToFile(String fileName, byte[] key) {
         File file = new File(fileName);
         if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
+            boolean result = file.getParentFile().mkdirs();
+            log.info("create dir result:{}", result);
         }
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(key);

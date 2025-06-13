@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group = 'top.mxzero'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.netty:netty-all:4.2.2.Final'
+}
+
+test {
+    useJUnitPlatform()
+}

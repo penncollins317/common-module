@@ -2,7 +2,7 @@ package top.mxzero.service.user.service;
 
 import jakarta.annotation.Nullable;
 import top.mxzero.common.dto.PageDTO;
-import top.mxzero.common.params.PageSearchParam;
+import top.mxzero.common.params.PageExtendParam;
 import top.mxzero.service.user.dto.*;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public interface UserService {
      *
      * @param param 查询参数
      */
-    PageDTO<UserinfoDTO> search(PageSearchParam param);
+    PageDTO<UserinfoDTO> search(PageExtendParam param);
 
     /**
      * 新增用户

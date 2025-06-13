@@ -1,11 +1,11 @@
-package top.mxzero.security.core.controller;
+package top.mxzero.service.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import top.mxzero.common.dto.RestData;
 import top.mxzero.common.annotations.AuthenticatedRequired;
-import top.mxzero.security.core.dto.GetPublicUserinfoRequest;
+import top.mxzero.common.dto.RestData;
+import top.mxzero.service.user.dto.GetPublicUserinfoRequest;
 import top.mxzero.service.user.dto.UserDetailInfoDTO;
 import top.mxzero.service.user.dto.UserinfoDTO;
 import top.mxzero.service.user.dto.UserinfoModifyDTO;

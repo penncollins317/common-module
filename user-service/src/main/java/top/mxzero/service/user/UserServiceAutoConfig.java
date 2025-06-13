@@ -1,8 +1,13 @@
 package top.mxzero.service.user;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import top.mxzero.service.user.mapper.RoleMapper;
+import top.mxzero.service.user.mapper.UserMapper;
+import top.mxzero.service.user.service.UserDetailsServiceImpl;
 
 /**
  * @author Peng
@@ -12,4 +17,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan
 public class UserServiceAutoConfig {
+    @Bean
+    public UserDetailsService userDetailsService(UserMapper userMapper, RoleMapper roleMapper) {
+        return new UserDetailsServiceImpl(userMapper, roleMapper);
+    }
 }

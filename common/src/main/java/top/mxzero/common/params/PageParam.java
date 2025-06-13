@@ -10,5 +10,5 @@ import lombok.Data;
 public class PageParam {
     private long page = 1L;
     private long size = 10L;
-    private String keyword;
+    private String search;
 }

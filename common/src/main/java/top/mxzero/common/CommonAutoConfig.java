@@ -18,6 +18,7 @@ import org.springframework.web.filter.CorsFilter;
 import top.mxzero.common.api.IpQueryApi;
 import top.mxzero.common.config.props.IpQueryProp;
 import top.mxzero.common.config.props.YunTongXunSmsProps;
+import top.mxzero.common.filter.RequestTraceFilter;
 import top.mxzero.common.service.EmailSender;
 import top.mxzero.common.service.SmsSender;
 import top.mxzero.common.service.impl.ConsoleSmsSender;
@@ -38,8 +39,15 @@ import java.util.concurrent.Executors;
 @Configuration
 @EnableAsync
 @ComponentScan
-public class CommonAutoConfig  {
+public class CommonAutoConfig {
 
+    @Bean
+    public FilterRegistrationBean<RequestTraceFilter> requestTraceFilterFilterRegistrationBean() {
+        FilterRegistrationBean<RequestTraceFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new RequestTraceFilter());
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registration;
+    }
 //    @Override
 //    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 //        configurer

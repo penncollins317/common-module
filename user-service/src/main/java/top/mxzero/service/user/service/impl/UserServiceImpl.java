@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.mxzero.common.dto.PageDTO;
 import top.mxzero.common.exceptions.ServiceException;
-import top.mxzero.common.params.PageSearchParam;
+import top.mxzero.common.params.PageExtendParam;
 import top.mxzero.common.utils.DeepBeanUtil;
 import top.mxzero.service.user.dto.*;
 import top.mxzero.service.user.entity.User;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageDTO<UserinfoDTO> search(PageSearchParam parma) {
+    public PageDTO<UserinfoDTO> search(PageExtendParam parma) {
         parma.setFields(Set.of("id", "avatar_url", "username", "nickname", "pwd_version"));
         return PageDTO.<User, UserinfoDTO>wrap(this.userMapper, User.class, parma, UserinfoDTO::new);
     }
