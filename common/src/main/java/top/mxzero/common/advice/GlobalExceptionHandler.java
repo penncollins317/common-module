@@ -22,6 +22,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.common.exceptions.ServiceException;
+import top.mxzero.common.utils.JsonUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +96,7 @@ public class GlobalExceptionHandler {
         for (FieldError error : e.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-        return RestData.ok(errors, 422, "参数验证错误");
+        return RestData.error(JsonUtils.stringify(errors), 422);
     }
 
 
