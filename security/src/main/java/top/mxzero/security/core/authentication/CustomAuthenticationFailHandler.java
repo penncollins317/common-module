@@ -4,7 +4,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import top.mxzero.common.dto.RestData;
@@ -38,9 +37,8 @@ public class CustomAuthenticationFailHandler extends SimpleUrlAuthenticationFail
 
     private void responseJson(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         try (PrintWriter writer = response.getWriter()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            writer.print(JsonUtils.stringify(RestData.error("BadCredentials", response.getStatus())));
+            writer.print(JsonUtils.stringify(RestData.error("Bad credentials")));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

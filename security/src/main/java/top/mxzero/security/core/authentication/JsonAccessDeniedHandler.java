@@ -27,7 +27,6 @@ public class JsonAccessDeniedHandler implements AccessDeniedHandler {
 
         String accept = request.getHeader("Accept");
         if (accept != null && accept.startsWith(MediaType.APPLICATION_JSON_VALUE)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             try (PrintWriter writer = response.getWriter()) {

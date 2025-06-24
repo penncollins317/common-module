@@ -111,7 +111,6 @@ public class SignatureAuthenticationFilter extends OncePerRequestFilter {
 
     private void errorResponse(HttpServletResponse response, String error) {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         try (PrintWriter writer = response.getWriter()) {
             writer.print(OBJECT_MAPPER.writeValueAsString(RestData.error(error)));

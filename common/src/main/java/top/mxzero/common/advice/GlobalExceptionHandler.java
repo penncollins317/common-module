@@ -16,10 +16,8 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import top.mxzero.common.dto.RestData;
@@ -37,7 +35,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public RestData<?> handleAllException(Exception e) {
         e.printStackTrace();
@@ -48,48 +45,40 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MaxUploadSizeExceededException.class})
     public RestData<?> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e, HttpServletResponse response) {
         HttpStatusCode statusCode = e.getStatusCode();
-        response.setStatus(statusCode.value());
         return RestData.error(e.getMessage(), statusCode.value());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadCredentialsException.class)
     public RestData<?> handleBadCredentialsException(BadCredentialsException e) {
-        return RestData.error(e.getMessage(), 400);
+        return RestData.error(e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
     public RestData<?> handleAuthenticationException(AuthenticationException e) {
         return RestData.error(e.getMessage(), 401);
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
     public RestData<?> handleAccessDeniedException() {
         return RestData.error("无权访问", 403);
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({AuthenticationCredentialsNotFoundException.class})
     public RestData<?> handleNoAuthenticateException() {
         return RestData.error("用户未登录", 401);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class, HttpMediaTypeNotAcceptableException.class})
     public RestData<?> handleNoHandlerFoundException(HttpServletRequest request) {
         return RestData.error(request.getRequestURI() + " not found", HttpServletResponse.SC_NOT_FOUND);
     }
 
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RestData<?> handleHttpRequestMethodNotSupportedException() {
         return RestData.error("请求方法不支持", HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
 
 
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RestData<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         return RestData.error(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY.value());
@@ -97,12 +86,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     public RestData<?> handleServiceException(ServiceException e, HttpServletResponse response) {
-        if (e.getCode() == 404) {
-            response.setStatus(404);
-        } else {
-            response.setStatus(400);
-        }
-        return RestData.error(e.getMessage(), e.getCode() == 404 ? 404 : 400);
+        return RestData.error(e.getMessage(), e.getCode());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -111,12 +95,10 @@ public class GlobalExceptionHandler {
         for (FieldError error : e.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-        response.setStatus(422);
         return RestData.ok(errors, 422, "参数验证错误");
     }
 
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public RestData<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         return RestData.error(e.getMessage(), 422);

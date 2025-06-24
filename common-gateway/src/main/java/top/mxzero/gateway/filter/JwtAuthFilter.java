@@ -8,7 +8,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -68,7 +67,6 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     }
 
     private Mono<Void> unauthorized(ServerWebExchange exchange, String msg) {
-        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
         byte[] bytes = ("{\"error\": \"" + msg + "\"}").getBytes(StandardCharsets.UTF_8);
         return exchange.getResponse().writeWith(Mono.just(exchange.getResponse()

@@ -19,7 +19,6 @@ import java.io.PrintWriter;
 public class JsonAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         try (PrintWriter writer = response.getWriter()) {
             writer.print(JsonUtils.stringify(RestData.error("FORBIDDEN", 403)));
