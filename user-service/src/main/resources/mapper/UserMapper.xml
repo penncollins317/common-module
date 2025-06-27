@@ -7,13 +7,14 @@
     </select>
 
     <select id="findUserinfoByUsername" resultType="top.mxzero.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url FROM t_user WHERE username = #{username} limit 1
+        SELECT id, username, nickname, avatar_url FROM t_user WHERE username = #{username} LIMIT 1
     </select>
 
     <select id="findUserinfoByIds" resultType="top.mxzero.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url FROM t_user WHERE id in
+        SELECT id, username, nickname, avatar_url FROM t_user WHERE id IN
         <foreach collection="userIds" item="userId" separator="," open="(" close=")">
             #{userId}
         </foreach>
+        ORDER BY id ASC
     </select>
 </mapper>

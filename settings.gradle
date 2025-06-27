@@ -21,8 +21,6 @@ include 'httpclient-call'
 include 'product-service'
 include 'security-mqtt'
 include 'security-wechat-qrcode-login'
-
-
 include 'domain-server'
 include 'intelligent-chat'
 
