@@ -19,6 +19,7 @@ subprojects {
     targetCompatibility = project_jdk
 
     dependencies {
+        implementation platform(libraries.'spring-ai-bom')
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -26,7 +27,6 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom libraries.'mybatis-plus-bom'
-            mavenBom libraries.'spring-ai-bom'
             mavenBom libraries.'spring-boot-dependencies'
             mavenBom libraries.'spring-cloud-dependencies'
         }
@@ -140,7 +140,7 @@ project("security-apikeys") {
     }
 }
 
-project("security-wechat-qrcode-login"){
+project("security-wechat-qrcode-login") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
@@ -242,8 +242,6 @@ project("order-service") {
 }
 
 
-
-
 project("langchain4j-samples") {
     dependencies {
         implementation project(":common")
@@ -277,7 +275,6 @@ project("starter") {
 }
 
 
-
 project("multi-db-samples") {
     dependencies {
         implementation 'org.postgresql:postgresql'
@@ -294,10 +291,22 @@ project("common-gateway") {
     }
 }
 
-project("httpclient-call"){
+project("httpclient-call") {
     dependencies {
         implementation project(":common")
         implementation libraries.'retrofit'
         implementation libraries.'converter-jackson'
+    }
+}
+
+project("intelligent-chat") {
+    dependencies {
+        implementation(libraries.'dashscope-sdk-java') {
+            exclude module: "slf4j-simple"
+        }
+        implementation libraries.'openai-java'
+        implementation 'org.springframework.ai:spring-ai-openai'
+        implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 }

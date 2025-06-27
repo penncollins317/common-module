@@ -4,7 +4,7 @@ ext.versions = [
         springCloud       : '2024.0.1',
         springCloudAlibaba: '2022.0.0.0',
         springDoc         : '2.2.0',
-        springAi          : '1.0.0-M7',
+        springAi          : '1.0.0',
         springBootAdmin   : '3.1.8',
         springData        : '3.4.2',
         oauthServer       : '1.4.2',
@@ -38,8 +38,9 @@ ext.versions = [
         langchain4j       : "1.0.0-rc1",
         shardingsphere    : "5.5.2",
         retrofit          : "2.11.0",
+        dashscope         : "2.20.6",
+        openai         : "2.9.0",
 ]
-
 
 ext.libraries = [
         'spring-boot-gradle-plugin'                  : "org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}",
@@ -96,6 +97,10 @@ ext.libraries = [
         'langchain4j-open-ai'                        : "dev.langchain4j:langchain4j-open-ai:${versions.langchain4j}",
         'langchain4j-reactor'                        : "dev.langchain4j:langchain4j-reactor:${versions.langchain4j}",
         'langchain4j-web-search-engine-google-custom': "dev.langchain4j:langchain4j-web-search-engine-google-custom:${versions.langchain4j}",
+
+        // ali ai
+        'dashscope-sdk-java'                         : "com.alibaba:dashscope-sdk-java:${versions.dashscope}",
+        'openai-java'                         : "com.openai:openai-java:${versions.openai}",
 
         // httpclient
         'retrofit'                                   : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
