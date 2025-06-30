@@ -1,7 +1,6 @@
 package top.mxzero.ai.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -40,9 +39,9 @@ public class DatabasePersistentChatMemory implements ChatMemory {
     }
 
     @Override
-    public List<Message> get(String conversationId, int lastN) {
+    public List<Message> get(String conversationId) {
         QueryWrapper<AiChatMessage> queryWrapper = new QueryWrapper<AiChatMessage>().eq("conversation_id", conversationId).orderByDesc("id");
-        List<AiChatMessage> records = this.messageMapper.selectPage(new Page<>(1, lastN), queryWrapper).getRecords();
+        List<AiChatMessage> records = this.messageMapper.selectList(queryWrapper);
         return records.stream().map(assistMessage -> {
                     MessageType role = MessageType.valueOf(assistMessage.getRole());
                     return switch (role) {
@@ -54,6 +53,7 @@ public class DatabasePersistentChatMemory implements ChatMemory {
                 })
                 .collect(Collectors.toList());
     }
+
 
     @Override
     @Transactional

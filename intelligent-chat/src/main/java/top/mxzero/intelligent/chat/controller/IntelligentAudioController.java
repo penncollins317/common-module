@@ -1,6 +1,5 @@
 package top.mxzero.intelligent.chat.controller;
 
-import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
@@ -36,8 +35,6 @@ public class IntelligentAudioController {
     public ResponseEntity<byte[]> speechApi(
             @RequestParam("text") String text
     ) {
-        SpeechSynthesizer se;
-//        byte[] audioBytes = audioModel.call(text);
         byte[] audioBytes = this.speechService.speech(text);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("audio/mpeg"))

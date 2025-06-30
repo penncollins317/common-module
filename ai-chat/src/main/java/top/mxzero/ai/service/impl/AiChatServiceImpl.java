@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -62,8 +61,7 @@ public class AiChatServiceImpl implements AiChatService {
     }
 
     private ChatClient buildChatClient(ChatModel chatModel) {
-        return ChatClient.builder(chatModel).defaultAdvisors(new PromptChatMemoryAdvisor(this.chatMemory))
-                .build();
+        return ChatClient.builder(chatModel).build();
     }
 
     @Override

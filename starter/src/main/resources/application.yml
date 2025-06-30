@@ -35,16 +35,7 @@ spring:
       base-url: https://dashscope.aliyuncs.com/compatible-mode
       chat:
         options:
-          model: qwen-plus
-          temperature: 0.7
-      image:
-        options:
-          model: Kwai-Kolors/Kolors
-      audio:
-        speech:
-          options:
-            model: FunAudioLLM/CosyVoice2-0.5B
-            voice: ALLOY
+          model: deepseek-v3
 mxzero:
   openai:
     api-key: sk-fdeb5cb9b141473ca196615ed8537df0
