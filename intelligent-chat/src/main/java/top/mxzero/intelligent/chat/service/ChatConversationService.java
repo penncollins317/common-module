@@ -9,6 +9,12 @@ import java.util.List;
  * @since 2025/6/30
  */
 public interface ChatConversationService {
+    /**
+     * 获取会话
+     *
+     * @param conversationId 会话ID
+     */
+    ChatConversation get(String conversationId);
 
     /**
      * 获取用户的会话列表

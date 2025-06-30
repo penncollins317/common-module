@@ -21,6 +21,11 @@ public class ChatConversationServiceImpl implements ChatConversationService {
     private final ChatConversationMapper chatConversationMapper;
 
     @Override
+    public ChatConversation get(String conversationId) {
+        return this.chatConversationMapper.selectById(conversationId);
+    }
+
+    @Override
     public List<ChatConversation> listByUserId(Long userId) {
         QueryWrapper<ChatConversation> queryWrapper = new QueryWrapper<ChatConversation>().eq("user_id", userId).orderByDesc("updated_at");
         return chatConversationMapper.selectList(queryWrapper);

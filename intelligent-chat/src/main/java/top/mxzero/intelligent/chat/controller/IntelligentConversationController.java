@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/intelligent/conversations")
 @AllArgsConstructor
-public class IntelligentChatConversationController {
+public class IntelligentConversationController {
     private final ChatConversationService chatConversationService;
 
     /**
