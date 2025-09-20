@@ -11,16 +11,23 @@ repositories {
     mavenCentral()
 }
 
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            artifactId = 'common'
+            artifactId = 'common'  // 你发布的包名
         }
     }
 
     repositories {
-        mavenLocal()
+        maven {
+            name = "nexus"
+            allowInsecureProtocol = true
+            url = uri("http://echovoid.top:8081/repository/maven-releases/") // Hosted 仓库 URL
+            credentials {
+                username = project.findProperty("nexusUsername")
+                password = project.findProperty("nexusPassword")
+            }
+        }
     }
 }
