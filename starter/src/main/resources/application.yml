@@ -4,10 +4,17 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://localhost:5432/mxzero_common
+    url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
+
+  data:
+    redis:
+      host: echovoid.top
+      port: 26409
+      password: helloredis
+
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -25,24 +32,8 @@ spring:
           ssl:
             enable: true
           auth: true
-  ai:
-    mcp:
-      server:
-        name: mxzero-common-mcp
-        version: 0.0.1
-    openai:
-      api-key: sk-fdeb5cb9b141473ca196615ed8537df0
-      base-url: https://dashscope.aliyuncs.com/compatible-mode
-      chat:
-        options:
-          model: deepseek-v3
+
 mxzero:
-  openai:
-    api-key: sk-fdeb5cb9b141473ca196615ed8537df0
-    base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
-    chat:
-      model: qwen-turbo-latest
-      temperature: 1.0
   jwt:
     expire: 2592000
     issuer: http://mxzero.top
@@ -67,15 +58,22 @@ mxzero:
     endpoint: qiniu.talkiestar.cn
     secret: false
     bucket-name: talkiestar
+  filestore:
+    type: local
+    local:
+      path: D:\\filestore
 #    type: minio
 #    access-key: uoxBxPoYTvTggt89Fklf
 #    secret-key: CY5vKH737eOLqf4seGsxhJ96ao1K7RltkMh0hkjO
 #    endpoint: talkiestar.cn:9000
 #    secret: false
 #    bucket-name: first
-  tts:
-    app-key: 496600955eb048d1
-    app-secret: NkaR8fhbGy4063s9BYk3n4CZgAU651Hi
 logging:
   level:
     org.springframework.security: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus

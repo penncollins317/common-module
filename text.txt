@@ -1,0 +1,13 @@
+docker run -d \
+  --name redis-stack \
+  -p 26409:6379 \
+  -p 26481:8001 \
+  -v /data/redis-stack:/data \
+  -e REDIS_ARGS="--requirepass helloredis" \
+  redis/redis-stack:latest
+
+docker run -d \
+  --name redis \
+  -p 26409:6379 \
+  -v /data/redis-stack:/data \
+  redis

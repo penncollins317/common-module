@@ -3,6 +3,7 @@ package top.mxzero.security.core;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Peng
@@ -12,14 +13,17 @@ public interface SecurityConfigProvider {
     /**
      * 需要认证的路径
      */
-    default List<String> authorizationUrls() {
-        return Collections.emptyList();
+
+    default Set<String> ignoreUrls() {
+        return Collections.emptySet();
     }
 
+
+
     /**
-     * 需要角色权限的路径
+     * 基于角色认证的路径
      */
-    default Map<String, List<String>> roleBasedUrls() {
+    default Map<String, Set<String>> roleBasedUrls() {
         return Collections.emptyMap();
     }
 }

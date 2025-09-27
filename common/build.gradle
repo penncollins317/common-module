@@ -19,15 +19,15 @@ publishing {
         }
     }
 
-    repositories {
-        maven {
-            name = "nexus"
-            allowInsecureProtocol = true
-            url = uri("http://echovoid.top:8081/repository/maven-releases/") // Hosted 仓库 URL
-            credentials {
-                username = project.findProperty("nexusUsername")
-                password = project.findProperty("nexusPassword")
-            }
-        }
-    }
+//    repositories {
+//        maven {
+//            name = "nexus"
+//            allowInsecureProtocol = true
+//            url = uri("http://echovoid.top:8081/repository/maven-releases/") // Hosted 仓库 URL
+//            credentials {
+//                username = project.findProperty("nexusUsername")
+//                password = project.findProperty("nexusPassword")
+//            }
+//        }
+//    }
 }

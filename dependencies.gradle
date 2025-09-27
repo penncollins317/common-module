@@ -39,7 +39,8 @@ ext.versions = [
         shardingsphere    : "5.5.2",
         retrofit          : "2.11.0",
         dashscope         : "2.20.6",
-        openai         : "2.9.0",
+        openai            : "2.9.0",
+        prometheus        : "1.15.4",
 ]
 
 ext.libraries = [
@@ -88,7 +89,7 @@ ext.libraries = [
         'mybatis-plus-bom'                           : "com.baomidou:mybatis-plus-bom:${versions.mybatisPlus3}",
         'mybatis-plus-jsqlparser'                    : "com.baomidou:mybatis-plus-jsqlparser:${versions.mybatisPlus3}",
         'shardingsphere-jdbc'                        : "org.apache.shardingsphere:shardingsphere-jdbc:${versions.shardingsphere}",
-
+        'micrometer-registry-prometheus'             : "io.micrometer:micrometer-registry-prometheus:${versions.prometheus}",
         // spring security
         'spring-security-oauth2-authorization-server': "org.springframework.security:spring-security-oauth2-authorization-server:${versions.oauthServer}",
 
@@ -100,7 +101,7 @@ ext.libraries = [
 
         // ali ai
         'dashscope-sdk-java'                         : "com.alibaba:dashscope-sdk-java:${versions.dashscope}",
-        'openai-java'                         : "com.openai:openai-java:${versions.openai}",
+        'openai-java'                                : "com.openai:openai-java:${versions.openai}",
 
         // httpclient
         'retrofit'                                   : "com.squareup.retrofit2:retrofit:${versions.retrofit}",

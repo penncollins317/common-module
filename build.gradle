@@ -205,7 +205,7 @@ project("oss") {
 }
 
 
-project("mxzero-filestore") {
+project("filestore") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
@@ -269,27 +269,6 @@ project("intelligent-chat") {
     }
 }
 
-project("starter") {
-    dependencies {
-        implementation project(":common")
-        implementation project(":security")
-        implementation project(":security-wechat-qrcode-login")
-//        implementation project(":ai-chat")
-        implementation project(":mxzero-tts")
-        implementation project(":product-service")
-//        implementation project(":langchain4j-samples")
-        implementation project(":security-mqtt")
-//        implementation project(":security-apikeys")
-        implementation project(":oss")
-        implementation project(":mxzero-filestore")
-        implementation project(":order-service")
-        implementation project(":intelligent-chat")
-        implementation 'org.postgresql:postgresql'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
-    }
-}
-
 
 project("multi-db-samples") {
     dependencies {
@@ -312,6 +291,25 @@ project("httpclient-call") {
         implementation project(":common")
         implementation libraries.'retrofit'
         implementation libraries.'converter-jackson'
+    }
+}
+
+
+project("starter") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":security")
+        implementation project(":security-wechat-qrcode-login")
+        implementation project(":product-service")
+        implementation project(":order-service")
+//        implementation project(":security-apikeys")
+        implementation project(":oss")
+        implementation project(":filestore")
+        implementation 'org.postgresql:postgresql'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation libraries.'micrometer-registry-prometheus'
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
     }
 }
 

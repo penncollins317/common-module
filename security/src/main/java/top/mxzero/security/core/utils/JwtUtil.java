@@ -2,7 +2,6 @@ package top.mxzero.security.core.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
-import top.mxzero.security.core.enums.TokenType;
 
 /**
  * @author Peng
@@ -10,18 +9,20 @@ import top.mxzero.security.core.enums.TokenType;
  * @since 2023/8/15
  */
 public class JwtUtil {
+    private static final String ACCESS_TOKEN_PARAMETER_NAME = "access_token";
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String AUTHORIZATION_SCHEMA = "Bearer ";
 
     public static String getToken(HttpServletRequest request) {
-        String token = request.getParameter(TokenType.ACCESS_TOKEN.getValue());
-        if (StringUtils.hasLength(token)) {
-            return token;
+        String token = request.getParameter(ACCESS_TOKEN_PARAMETER_NAME);
+        if (StringUtils.hasText(token)) {
+            return token.trim();
         }
 
-        String authStr = request.getHeader("Authorization");
-        if (StringUtils.hasLength(authStr) && authStr.startsWith("Bearer ")) {
-            return authStr.substring(7);
+        String authHeader = request.getHeader(AUTHORIZATION_HEADER_NAME);
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith(AUTHORIZATION_SCHEMA)) {
+            return authHeader.substring(AUTHORIZATION_SCHEMA.length()).trim();
         }
-
         return null;
     }
 }

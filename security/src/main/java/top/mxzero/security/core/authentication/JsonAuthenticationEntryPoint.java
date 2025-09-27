@@ -22,11 +22,12 @@ import java.nio.charset.StandardCharsets;
 @AllArgsConstructor
 public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final LoginUrlAuthenticationEntryPoint defaultEntryPoint;
+    private final boolean forceJson;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.startsWith(MediaType.APPLICATION_JSON_VALUE)) {
+        if (forceJson || (accept != null && accept.startsWith(MediaType.APPLICATION_JSON_VALUE))) {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             try (PrintWriter writer = response.getWriter()) {

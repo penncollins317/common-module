@@ -12,17 +12,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import top.mxzero.security.core.authentication.CustomAuthenticationFailHandler;
-import top.mxzero.security.core.authentication.CustomAuthenticationSuccessHandler;
 import top.mxzero.security.core.authentication.JsonAccessDeniedHandler;
 import top.mxzero.security.core.authentication.JsonAuthenticationEntryPoint;
 import top.mxzero.security.core.filter.JwtAuthenticationFilter;
@@ -45,45 +42,30 @@ public class SecurityCoreAutoConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   LoginService loginService, TokenService tokenService,
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,  TokenService tokenService,
                                                    SecurityConfigAggregator aggregator) throws Exception {
-        AuthenticationSuccessHandler successHandler = new CustomAuthenticationSuccessHandler(loginService);
-        AuthenticationFailureHandler failureHandler = new CustomAuthenticationFailHandler(DEFAULT_LOGIN_URl);
-        JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(DEFAULT_LOGIN_URl));
+        JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(DEFAULT_LOGIN_URl), true);
         JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(new AccessDeniedHandlerImpl());
         http.authorizeHttpRequests(authorize -> {
-                    if (aggregator.getAuthorizationUrls().length > 0) {
-                        authorize.requestMatchers(aggregator.getAuthorizationUrls()).authenticated();
-                    }
                     if (!aggregator.getRoleBasedUrls().isEmpty()) {
                         aggregator.getRoleBasedUrls().forEach(((role, urls) -> {
                             authorize.requestMatchers(urls.toArray(new String[0])).hasRole(role);
                         }));
                     }
-                    authorize.requestMatchers("/token/**", "/error", "/public/**").permitAll();
-                    authorize.anyRequest().permitAll();
+                    authorize.requestMatchers(aggregator.getIgnoreUrls().toArray(new String[0])).permitAll();
+                    authorize.requestMatchers("/token/**", "/error").permitAll();
+                    authorize.anyRequest().authenticated();
                 })
-                .formLogin(login -> {
-                    login.loginPage(DEFAULT_LOGIN_URl).permitAll()
-                            .successHandler(successHandler)
-                            .failureHandler(failureHandler);
-                })
-//                .oneTimeTokenLogin(oneTime -> {
-//                    oneTime.authenticationSuccessHandler(successHandler)
-//                            .authenticationFailureHandler(failureHandler)
-//                    ;
-//                })
                 .exceptionHandling(handler -> {
                     handler.accessDeniedHandler(accessDeniedHandler);
                     handler.authenticationEntryPoint(authenticationEntryPoint);
                 })
-                .addFilterBefore(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
-                .logout(logout -> logout.logoutUrl("/logout").permitAll())
-//                .sessionManagement(session -> {
-//                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//                })
-//                .requestCache(AbstractHttpConfigurer::disable)
+                .addFilterAt(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
+                .logout(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> {
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
+                .requestCache(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable);
         return http.build();
