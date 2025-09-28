@@ -11,6 +11,9 @@ import top.mxzero.filestore.handler.FileUploadHandler;
 import top.mxzero.filestore.service.FileStoreService;
 import top.mxzero.filestore.service.FileSystemFileStoreService;
 import top.mxzero.oss.mapper.FileMetaMapper;
+import top.mxzero.security.core.SecurityConfigProvider;
+
+import java.util.Set;
 
 import static org.springframework.web.servlet.function.RequestPredicates.POST;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
@@ -37,5 +40,15 @@ public class FileStoreAutoConfig {
     @ConditionalOnMissingBean(FileStoreService.class)
     public FileStoreService fileSystemFileStoreService(FileSystemFileStoreService.FileSystemProps props, FileMetaMapper fileMetaMapper) {
         return new FileSystemFileStoreService(props, fileMetaMapper);
+    }
+
+    @Bean
+    public SecurityConfigProvider filestoreSecurityConfigProvider(){
+        return new SecurityConfigProvider() {
+            @Override
+            public Set<String> ignoreUrls() {
+                return Set.of("/filestore/access/**");
+            }
+        };
     }
 }

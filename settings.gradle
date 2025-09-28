@@ -24,3 +24,5 @@ include 'security-wechat-qrcode-login'
 include 'domain-server'
 include 'intelligent-chat'
 
+
+include 'payment'

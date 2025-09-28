@@ -1,24 +1,20 @@
 package top.mxzero.filestore.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import top.mxzero.common.utils.DeepBeanUtil;
 import top.mxzero.common.utils.FileUtils;
-import top.mxzero.filestore.dto.FileDownloadResponse;
-import top.mxzero.filestore.dto.FileMetadata;
-import top.mxzero.filestore.dto.FileUploadRequest;
-import top.mxzero.filestore.dto.FileUploadResponse;
+import top.mxzero.filestore.dto.*;
 import top.mxzero.oss.entity.FileMeta;
 import top.mxzero.oss.enums.FileStatus;
 import top.mxzero.oss.mapper.FileMetaMapper;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -81,6 +77,28 @@ public class FileSystemFileStoreService implements FileStoreService {
     @Override
     public String generateAccessUrl(Long fileId, Long expirySeconds) {
         return "";
+    }
+
+    @Override
+    public Optional<FileAccessDTO> getInputStreamByKey(String key) {
+
+        LambdaQueryWrapper<FileMeta> queryWrapper = new LambdaQueryWrapper<FileMeta>().eq(FileMeta::getStorePath, key);
+
+        FileMeta fileMeta = fileMetaMapper.selectOne(queryWrapper);
+        if (fileMeta == null) return Optional.empty();
+
+        try {
+            File file = new File(props.getPath() + File.separator + fileMeta.getStorePath());
+            FileAccessDTO accessDTO = FileAccessDTO.builder()
+                    .inputStream(new FileInputStream(file))
+                    .size(fileMeta.getSize())
+                    .contentType(fileMeta.getContentType())
+                    .name(fileMeta.getName())
+                    .build();
+            return Optional.of(accessDTO);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Getter

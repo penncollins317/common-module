@@ -1,12 +1,11 @@
 package top.mxzero.filestore.service;
 
-import top.mxzero.filestore.dto.FileDownloadResponse;
-import top.mxzero.filestore.dto.FileMetadata;
-import top.mxzero.filestore.dto.FileUploadRequest;
-import top.mxzero.filestore.dto.FileUploadResponse;
+import top.mxzero.filestore.dto.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /**
  * @author Peng
@@ -55,5 +54,12 @@ public interface FileStoreService {
      * @return 文件访问URL
      */
     String generateAccessUrl(Long fileId, Long expirySeconds);
+
+    /**
+     * 获取文件访问流
+     *
+     * @param key 文件存储key
+     */
+    Optional<FileAccessDTO> getInputStreamByKey(String key);
 }
 

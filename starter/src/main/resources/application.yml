@@ -1,10 +1,12 @@
 spring:
+#  profiles:
+#    active: removedev
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/mxzero_common
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
@@ -46,12 +48,6 @@ mxzero:
         token: 381746E471C444E089B19FE12027BBD3
         aes-key: WtrRxen3j5Cyovu8Ed5hENDNLcDju6zUlohrpVI3h0G
   oss:
-    #      type: ali
-    #      access-key: LTAI5tCb2roFbwLHjjt5h4o2
-    #      secret-key: Nc4xdBIYSSOvYJaYDNu07v38wJxoQH
-    #      endpoint: oss-cn-hangzhou.aliyuncs.com
-    #      secret: true
-    #      bucket-name: odoo-filestore
     type: qiniu
     access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
     secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3
@@ -62,12 +58,6 @@ mxzero:
     type: local
     local:
       path: D:\\filestore
-#    type: minio
-#    access-key: uoxBxPoYTvTggt89Fklf
-#    secret-key: CY5vKH737eOLqf4seGsxhJ96ao1K7RltkMh0hkjO
-#    endpoint: talkiestar.cn:9000
-#    secret: false
-#    bucket-name: first
 logging:
   level:
     org.springframework.security: DEBUG
