@@ -2,8 +2,7 @@ version: "3.8"
 
 services:
   app:
-    build: .
-    container_name: mxzero-common-web
+    image: mxzero-common-web
     ports:
       - "8080:8080"
     depends_on:
