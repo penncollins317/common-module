@@ -1,22 +1,8 @@
 spring:
-#  profiles:
-#    active: removedev
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  datasource:
-    url: jdbc:postgresql://localhost:5432/mxzero_common
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: postgres
-
-  data:
-    redis:
-      host: echovoid.top
-      port: 26409
-      password: helloredis
-
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -54,13 +40,10 @@ mxzero:
     endpoint: qiniu.talkiestar.cn
     secret: false
     bucket-name: talkiestar
-  filestore:
-    type: local
-    local:
-      path: D:\\filestore
-logging:
-  level:
-    org.springframework.security: DEBUG
+
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
 
 management:
   endpoints:

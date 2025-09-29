@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/mxzero_common
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+  data:
+    redis:
+      host: redis
+      port: 6379
+
+mxzero:
+  filestore:
+    type: local
+    local:
+      path: /data/filestore
