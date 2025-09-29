@@ -15,3 +15,7 @@ mxzero:
     type: local
     local:
       path: /data/filestore
+  jwt:
+    secret: a0fd20e0-5a5f-4f43-b93c-004846539bb4
+    expire: 7200
+    refresh-rate: 180
