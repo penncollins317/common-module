@@ -26,3 +26,4 @@ include 'intelligent-chat'
 
 
 include 'payment'
+include 'payment-alipay'

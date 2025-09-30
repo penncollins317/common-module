@@ -8,6 +8,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -28,14 +29,38 @@ public class MybatisPlusConfig {
         return new MetaObjectHandler() {
             @Override
             public void insertFill(MetaObject metaObject) {
-                this.strictInsertFill(metaObject, "createdAt", Date.class, new Date());
-                this.strictInsertFill(metaObject, "updatedAt", Date.class, new Date());
+                // createdAt
+                if (metaObject.hasSetter("createdAt")) {
+                    Class<?> type = metaObject.getGetterType("createdAt");
+                    if (type.isAssignableFrom(Date.class)) {
+                        this.strictInsertFill(metaObject, "createdAt", Date.class, new Date());
+                    } else if (type.isAssignableFrom(LocalDateTime.class)) {
+                        this.strictInsertFill(metaObject, "createdAt", LocalDateTime.class, LocalDateTime.now());
+                    }
+                }
+                // updatedAt
+                if (metaObject.hasSetter("updatedAt")) {
+                    Class<?> type = metaObject.getGetterType("updatedAt");
+                    if (type.isAssignableFrom(Date.class)) {
+                        this.strictInsertFill(metaObject, "updatedAt", Date.class, new Date());
+                    } else if (type.isAssignableFrom(LocalDateTime.class)) {
+                        this.strictInsertFill(metaObject, "updatedAt", LocalDateTime.class, LocalDateTime.now());
+                    }
+                }
             }
 
             @Override
             public void updateFill(MetaObject metaObject) {
-                this.strictInsertFill(metaObject, "updatedAt", Date.class, new Date());
+                if (metaObject.hasSetter("updatedAt")) {
+                    Class<?> type = metaObject.getGetterType("updatedAt");
+                    if (type.isAssignableFrom(Date.class)) {
+                        this.strictUpdateFill(metaObject, "updatedAt", Date.class, new Date());
+                    } else if (type.isAssignableFrom(LocalDateTime.class)) {
+                        this.strictUpdateFill(metaObject, "updatedAt", LocalDateTime.class, LocalDateTime.now());
+                    }
+                }
             }
         };
     }
+
 }

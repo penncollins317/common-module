@@ -23,6 +23,7 @@ subprojects {
         implementation platform(libraries.'spring-ai-bom')
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        implementation 'org.springframework.boot:spring-boot-starter'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
     dependencyManagement {
@@ -242,6 +243,23 @@ project("order-service") {
     }
 }
 
+project("payment") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":security")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+    }
+}
+
+project("payment-alipay") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":payment")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
 
 project("langchain4j-samples") {
     dependencies {
@@ -305,6 +323,7 @@ project("starter") {
 //        implementation project(":security-apikeys")
         implementation project(":oss")
         implementation project(":filestore")
+        implementation project(":payment")
         implementation 'org.postgresql:postgresql'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
