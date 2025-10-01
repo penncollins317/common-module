@@ -22,10 +22,10 @@ import java.time.LocalDateTime;
 public class PaymentRequest {
     private Long id;
     private String subject;
-    private String outTradeNo;
     private PaymentStatus status;
     private BigDecimal amount;
     private LocalDateTime paymentAt;
+    private String origin;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
     @TableField(fill = FieldFill.INSERT_UPDATE)

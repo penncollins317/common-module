@@ -1,51 +1,87 @@
+-- ============================
+-- 支付请求表 (payment_request)
+-- ============================
+DROP TABLE IF EXISTS payment_request;
 CREATE TABLE payment_request
 (
-    id           BIGSERIAL PRIMARY KEY,                 -- 主键，自增
-    subject      VARCHAR(255)   NOT NULL,               -- 主题/描述
-    out_trade_no VARCHAR(64)    NOT NULL,               -- 外部交易号（业务唯一标识）
-    status       VARCHAR(32)    NOT NULL,               -- 支付状态（枚举存储为字符串）
-    amount       NUMERIC(18, 2) NOT NULL,               -- 金额，保留两位小数
-    payment_at   TIMESTAMP,                             -- 支付完成时间
-    created_at   TIMESTAMP      NOT NULL DEFAULT now(), -- 创建时间
-    updated_at   TIMESTAMP      NOT NULL DEFAULT now()  -- 更新时间
+    id         BIGSERIAL PRIMARY KEY,                 -- 主键
+    subject    VARCHAR(255)   NOT NULL,               -- 主题/描述
+    origin     VARCHAR(80)    NULL,                   -- 订单来源（源订单号）
+    status     VARCHAR(32)    NOT NULL,               -- pending, success, failed, canceled
+    amount     NUMERIC(18, 2) NOT NULL,               -- 金额
+    payment_at TIMESTAMP,                             -- 支付完成时间
+    created_at TIMESTAMP      NOT NULL DEFAULT now(), -- 创建时间
+    updated_at TIMESTAMP      NOT NULL DEFAULT now()  -- 更新时间
 );
 
--- 确保外部交易号唯一
-CREATE UNIQUE INDEX idx_payment_request_out_trade_no
-    ON payment_request (out_trade_no);
-
--- 状态 + 创建时间索引，便于查询某状态的最新请求
-CREATE INDEX idx_payment_request_status_created
+-- 索引
+CREATE INDEX idx_pr_status_created
     ON payment_request (status, created_at DESC);
 
--- 支付时间索引，便于统计/查询已支付订单
-CREATE INDEX idx_payment_request_payment_at
+CREATE INDEX idx_pr_payment_at
     ON payment_request (payment_at);
 
--- 金额区间查询索引（如统计大额订单）
-CREATE INDEX idx_payment_request_amount
-    ON payment_request (amount);
 
-
-
+-- ============================
+-- 支付商品表 (payment_goods)
+-- ============================
+DROP TABLE IF EXISTS payment_goods;
 CREATE TABLE payment_goods
 (
-    id         BIGSERIAL PRIMARY KEY,                        -- 主键
-    payment_id BIGINT         NOT NULL,                      -- 关联 PaymentRequest.id
-    goods_id   VARCHAR(64)    NOT NULL,                      -- 商品编号（外部业务ID）
-    goods_name VARCHAR(255)   NOT NULL,                      -- 商品名称
-    price      NUMERIC(18, 2) NOT NULL CHECK (price >= 0),   -- 单价，不能为负
-    quantity   INT            NOT NULL CHECK (quantity > 0) -- 数量，必须大于 0
+    id         BIGSERIAL PRIMARY KEY,                       -- 主键
+    payment_id BIGINT         NOT NULL,                     -- 关联 payment_request.id
+    goods_id   VARCHAR(64)    NOT NULL,                     -- 商品编号（外部业务ID）
+    goods_name VARCHAR(255)   NOT NULL,                     -- 商品名称
+    price      NUMERIC(18, 2) NOT NULL CHECK (price >= 0),  -- 单价
+    quantity   INT            NOT NULL CHECK (quantity > 0) -- 数量
 );
 
--- 按支付请求查所有商品
-CREATE INDEX idx_payment_goods_payment_id
+-- 索引
+CREATE INDEX idx_pg_payment_id
     ON payment_goods (payment_id);
 
--- 如果经常按商品ID查询（例如统计某商品的销售情况）
-CREATE INDEX idx_payment_goods_goods_id
-    ON payment_goods (goods_id);
 
--- 如果需要查询单价范围
-CREATE INDEX idx_payment_goods_price
-    ON payment_goods (price);
+
+-- ============================
+-- 支付流水表 (payment_transaction)
+-- ============================
+DROP TABLE IF EXISTS payment_transaction;
+CREATE TABLE payment_transaction
+(
+    id                     BIGSERIAL PRIMARY KEY,
+    payment_id             BIGINT       NOT NULL, -- 关联 payment_request.id
+    out_trade_no           VARCHAR(50)  NOT NULL, -- 系统生成的唯一单号
+    channel_transaction_id VARCHAR(128) NOT NULL, -- 渠道返回的唯一交易号
+    channel                VARCHAR(32),           -- alipay, wechat, ...
+    amount                 NUMERIC(12, 2),
+    channel_status         VARCHAR(32)  NOT NULL, -- 支付渠道商支付状态
+    third_party_payload    JSONB,
+    payment_at             TIMESTAMP    NULL,     -- 实际支付成功时间
+    created_at             TIMESTAMP DEFAULT now(),
+    updated_at             TIMESTAMP DEFAULT now()
+);
+
+-- 唯一索引
+CREATE UNIQUE INDEX uk_pt_out_trade_no
+    ON payment_transaction (out_trade_no);
+
+CREATE UNIQUE INDEX uk_pt_channel_txn_id
+    ON payment_transaction (channel_transaction_id);
+
+-- 普通索引
+CREATE INDEX idx_pt_payment_id
+    ON payment_transaction (payment_id);
+
+CREATE INDEX idx_pt_channel_status
+    ON payment_transaction (channel_status);
+
+CREATE INDEX idx_pt_payment_at
+    ON payment_transaction (payment_at);
+
+-- 常用组合索引（可选）
+-- 1. 查某支付单下最新交易
+CREATE INDEX idx_pt_payment_id_created
+    ON payment_transaction (payment_id, created_at DESC);
+
+CREATE INDEX idx_pt_channel_status_updated
+    ON payment_transaction (channel_status, updated_at);

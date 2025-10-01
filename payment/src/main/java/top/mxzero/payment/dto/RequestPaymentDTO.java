@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RequestPaymentDTO {
     @NotBlank
-    private String outTradeNo;
+    private String origin;
     @NotBlank
     private String subject;
     @NotNull

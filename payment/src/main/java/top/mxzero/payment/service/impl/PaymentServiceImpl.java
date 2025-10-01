@@ -34,12 +34,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentDTO requestPayment(RequestPaymentDTO requestPaymentDTO) {
-        if(this.requestMapper.exists(new LambdaQueryWrapper<PaymentRequest>().eq(PaymentRequest::getOutTradeNo, requestPaymentDTO.getOutTradeNo()))) {
-            throw new ServiceException("out_trade_no has exist");
-        }
+    public Long requestPayment(RequestPaymentDTO requestPaymentDTO) {
         PaymentRequest paymentRequest = PaymentRequest.builder()
-                .outTradeNo(requestPaymentDTO.getOutTradeNo())
+                .origin(requestPaymentDTO.getOrigin())
                 .amount(requestPaymentDTO.getAmount())
                 .subject(requestPaymentDTO.getSubject())
                 .status(PaymentStatus.PENDING)
@@ -57,12 +54,24 @@ public class PaymentServiceImpl implements PaymentService {
                 goodsMapper.insert(goods);
             });
         }
-        return this.query(requestPaymentDTO.getOutTradeNo());
+        return paymentRequest.getId();
     }
 
     @Override
-    public PaymentDTO query(String outTradeNo) {
-        LambdaQueryWrapper<PaymentRequest> queryWrapper = new LambdaQueryWrapper<PaymentRequest>().eq(PaymentRequest::getOutTradeNo, outTradeNo);
+    public String createTransaction(Long paymentId, String channel) {
+        PaymentRequest paymentRequest = requestMapper.selectById(paymentId);
+        if (paymentRequest == null) {
+            throw new ServiceException(String.format("支付单 %s 不存在", paymentId));
+        }
+        if (paymentRequest.getStatus() != PaymentStatus.PENDING) {
+            throw new ServiceException("当前支付单无法发起支付");
+        }
+        return "";
+    }
+
+    @Override
+    public PaymentDTO query(Long paymentId) {
+        LambdaQueryWrapper<PaymentRequest> queryWrapper = new LambdaQueryWrapper<PaymentRequest>().eq(PaymentRequest::getId, paymentId);
         PaymentRequest paymentRequest = requestMapper.selectOne(queryWrapper);
         if (paymentRequest == null) {
             return null;
@@ -81,17 +90,17 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public String requestRefund(String outTradeNo, BigDecimal refundAmount) {
+    public String requestRefund(Long paymentId, BigDecimal refundAmount) {
         return "";
     }
 
     @Override
-    public boolean cancel(String outTradeNo) {
+    public boolean close(String paymentId) {
         return false;
     }
 
     @Override
-    public boolean cancelRefund(String outTradeNo, BigDecimal refundAmount) {
+    public boolean closeRefund(String outTradeNo, BigDecimal refundAmount) {
         return false;
     }
 }

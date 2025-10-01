@@ -1,4 +1,4 @@
-package top.mxzero.payment.dto;
+package top.mxzero.payment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

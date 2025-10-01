@@ -1,6 +1,7 @@
 package top.mxzero.payment.dto;
 
 import lombok.*;
+import top.mxzero.payment.PaymentChannel;
 import top.mxzero.payment.enums.PaymentStatus;
 
 import java.math.BigDecimal;

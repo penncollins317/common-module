@@ -16,13 +16,18 @@ public interface PaymentService {
      * 请求支付
      *
      */
-    PaymentDTO requestPayment(RequestPaymentDTO requestPaymentDTO);
+    Long requestPayment(RequestPaymentDTO requestPaymentDTO);
+
+    /**
+     * 创建支付渠道单
+     */
+    String createTransaction(Long paymentId, String channel);
 
     /**
      * 查询支付信息
      *
      */
-    PaymentDTO query(String outTradeNo);
+    PaymentDTO query(Long paymentId);
 
     /**
      * 查询退款单
@@ -32,17 +37,17 @@ public interface PaymentService {
     /**
      * 申请退款
      */
-    String requestRefund(String outTradeNo, BigDecimal refundAmount);
+    String requestRefund(Long paymentId, BigDecimal refundAmount);
 
     /**
-     * 取消支付单
+     * 关闭支付单
      *
      */
-    boolean cancel(String outTradeNo);
+    boolean close(String paymentId);
 
     /**
-     * 取消退款单
+     * 关闭退款单
      *
      */
-    boolean cancelRefund(String outTradeNo, BigDecimal refundAmount);
+    boolean closeRefund(String outTradeNo, BigDecimal refundAmount);
 }

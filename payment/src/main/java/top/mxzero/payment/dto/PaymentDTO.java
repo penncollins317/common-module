@@ -1,5 +1,6 @@
 package top.mxzero.payment.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,12 +20,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentDTO {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long id;
     private String subject;
     private String outTradeNo;
     private BigDecimal amount;
     private PaymentStatus status;
-    private LocalDateTime paymentAt;
     private List<GoodsDTO> goodsDetail;
+    private LocalDateTime paymentAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -23,7 +23,5 @@ include 'security-mqtt'
 include 'security-wechat-qrcode-login'
 include 'domain-server'
 include 'intelligent-chat'
-
-
 include 'payment'
 include 'payment-alipay'

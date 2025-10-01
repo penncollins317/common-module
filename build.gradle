@@ -246,7 +246,6 @@ project("order-service") {
 project("payment") {
     dependencies {
         implementation project(":common")
-        implementation project(":security")
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
     }
@@ -256,6 +255,8 @@ project("payment-alipay") {
     dependencies {
         implementation project(":common")
         implementation project(":payment")
+        implementation project(":security")
+        implementation libraries.'alipay-sdk-java'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }

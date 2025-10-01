@@ -24,7 +24,8 @@ public class PaymentTestController {
      */
     @RequestMapping("/test/payment")
     public RestData<PaymentDTO> requestPaymentTestApi(@Valid RequestPaymentDTO requestPaymentDTO) {
-        return RestData.ok(paymentService.requestPayment(requestPaymentDTO));
+        Long paymentId = paymentService.requestPayment(requestPaymentDTO);
+        return RestData.ok(paymentService.query(paymentId));
     }
 
 }
