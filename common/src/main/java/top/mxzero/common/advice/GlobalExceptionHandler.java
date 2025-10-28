@@ -13,19 +13,23 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import top.mxzero.common.dto.ApiErrorResponse;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.common.exceptions.ServiceException;
-import top.mxzero.common.utils.JsonUtils;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Zhang Peng
@@ -40,7 +44,7 @@ public class GlobalExceptionHandler {
     public RestData<?> handleAllException(Exception e) {
         e.printStackTrace();
         log.error("{}:{}", e.getClass().getName(), e.getMessage());
-        return RestData.error("系统错误", 500);
+        return RestData.error("System error.", 500);
     }
 
     @ExceptionHandler({MaxUploadSizeExceededException.class})
@@ -56,17 +60,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public RestData<?> handleAuthenticationException(AuthenticationException e) {
-        return RestData.error(e.getMessage(), 401);
+        return RestData.error(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public RestData<?> handleAccessDeniedException() {
-        return RestData.error("无权访问", 403);
+        return RestData.error("无权访问", HttpStatus.FORBIDDEN.value());
     }
 
     @ExceptionHandler({AuthenticationCredentialsNotFoundException.class})
     public RestData<?> handleNoAuthenticateException() {
-        return RestData.error("用户未登录", 401);
+        return RestData.error("用户未登录", HttpStatus.UNAUTHORIZED.value());
     }
 
     @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class, HttpMediaTypeNotAcceptableException.class})
@@ -81,27 +85,103 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public RestData<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return RestData.error(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY.value());
+    public ApiErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
+                                                                  HttpServletRequest request) {
+        List<Map<String, String>> errors = List.of(
+                Map.of("location", "body", "message", "请求体格式不正确或无法解析")
+        );
+
+        return ApiErrorResponse.builder()
+                .code(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .message("请求体格式错误")
+                .errors(errors)
+                .path(request.getRequestURI())
+                .timestamp(new Date())
+                .build();
     }
 
+
     @ExceptionHandler(ServiceException.class)
-    public RestData<?> handleServiceException(ServiceException e, HttpServletResponse response) {
+    public RestData<?> handleServiceException(ServiceException e) {
         return RestData.error(e.getMessage(), e.getCode());
     }
 
+
+    /**
+     * 处理 @Valid 参数校验失败异常
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public RestData<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) {
-        Map<String, Object> errors = new HashMap<>();
-        for (FieldError error : e.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
+    public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e,
+                                                                  HttpServletRequest request) {
+
+        String location;
+        if (e.getParameter().hasParameterAnnotation(RequestBody.class)) {
+            location = "body";
+        } else {
+            location = "form";
         }
-        return RestData.error(JsonUtils.stringify(errors), 422);
+
+        // 合并同字段错误
+        Map<String, String> mergedErrors = e.getBindingResult().getFieldErrors()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        FieldError::getField,
+                        LinkedHashMap::new,
+                        Collectors.mapping(FieldError::getDefaultMessage, Collectors.joining("；"))
+                ));
+
+        // 构造返回列表
+        List<Map<String, String>> errors = mergedErrors.entrySet()
+                .stream()
+                .map(entry -> Map.of(
+                        "field", entry.getKey(),
+                        "message", entry.getValue(),
+                        "location", location
+                ))
+                .collect(Collectors.toList());
+
+        return ApiErrorResponse.builder()
+                .code(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .message("参数验证失败")
+                .errors(errors)
+                .path(request.getRequestURI())
+                .timestamp(new Date())
+                .build();
     }
 
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public RestData<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
-        return RestData.error(e.getMessage(), 422);
+    @ExceptionHandler(MissingRequestValueException.class)
+    public ApiErrorResponse handleMissingRequestValueException(MissingRequestValueException e,
+                                                               HttpServletRequest request) {
+        String location = "unknown";
+        String name = "unknown";
+
+        if (e instanceof MissingServletRequestParameterException ex) {
+            location = "query";
+            name = ex.getParameterName();
+        } else if (e instanceof MissingRequestHeaderException ex) {
+            location = "header";
+            name = ex.getHeaderName();
+        } else if (e instanceof MissingRequestCookieException ex) {
+            location = "cookie";
+            name = ex.getCookieName();
+        }
+
+        List<Map<String, String>> errors = List.of(
+                Map.of(
+                        "location", location,
+                        "name", name,
+                        "message", e.getMessage()
+                )
+        );
+
+        return ApiErrorResponse.builder()
+                .code(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .message("请求缺少必要的参数/头部/Cookie")
+                .errors(errors)
+                .path(request.getRequestURI())
+                .timestamp(new Date())
+                .build();
     }
+
 }
