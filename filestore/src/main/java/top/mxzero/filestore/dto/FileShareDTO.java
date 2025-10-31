@@ -1,0 +1,30 @@
+package top.mxzero.filestore.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import top.mxzero.oss.dto.FileMetaDTO;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+
+/**
+ * @author Peng
+ * @since 2025/11/1
+ */
+@Getter
+@Builder
+@AllArgsConstructor
+public class FileShareDTO {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long id;
+    private FileMetaDTO fileMetaDTO;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime expireAt;
+    private String token;
+    private String accessUrl;
+}
+
+

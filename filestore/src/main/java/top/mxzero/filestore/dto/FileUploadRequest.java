@@ -3,6 +3,7 @@ package top.mxzero.filestore.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import top.mxzero.oss.enums.AclType;
 
 import java.io.InputStream;
 
@@ -18,6 +19,6 @@ public class FileUploadRequest {
     private InputStream inputStream;
     private long size;
     private String contentType;
-    private boolean isPublic;
+    private AclType acl;
     private Long userId;
 }

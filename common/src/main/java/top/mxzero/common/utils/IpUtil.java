@@ -52,6 +52,52 @@ public class IpUtil {
         return matcher.matches();
     }
 
+    public static String getAccessHost() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (servletRequestAttributes == null) {
+            throw new IllegalStateException("current context not support.");
+        }
+        return getAccessHost(servletRequestAttributes.getRequest());
+    }
+
+    /**
+     * 获取请求的协议 + 域名 + 端口
+     * 兼容 Nginx 反向代理 (X-Forwarded-Proto, X-Forwarded-Host, X-Forwarded-Port)
+     *
+     * @param request HttpServletRequest
+     * @return 例如 https://example.com 或 https://example.com:8080
+     */
+    public static String getAccessHost(HttpServletRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("HttpServletRequest cannot be null");
+        }
+
+        String scheme = request.getHeader("X-Forwarded-Proto");
+        if (scheme == null || scheme.isEmpty()) {
+            scheme = request.getScheme(); // http / https
+        }
+
+        String host = request.getHeader("X-Forwarded-Host");
+        if (host == null || host.isEmpty()) {
+            host = request.getServerName();
+        }
+
+        String portHeader = request.getHeader("X-Forwarded-Port");
+        int port = (portHeader != null && !portHeader.isEmpty())
+                ? Integer.parseInt(portHeader)
+                : request.getServerPort();
+
+        StringBuilder baseUrl = new StringBuilder();
+        baseUrl.append(scheme).append("://").append(host);
+
+        if ((scheme.equalsIgnoreCase("http") && port != 80)
+                || (scheme.equalsIgnoreCase("https") && port != 443)) {
+            baseUrl.append(":").append(port);
+        }
+
+        return baseUrl.toString();
+    }
+
     /**
      * 获取请求客户端IP地址
      */

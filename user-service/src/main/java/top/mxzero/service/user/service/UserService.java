@@ -72,4 +72,12 @@ public interface UserService {
      * 用户账号绑定
      */
     boolean BindAccountDTO(BindAccountDTO dto);
+
+    /**
+     * 获取用户角色信息
+     *
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    List<String> getUserRolesByUserId(Long userId);
 }

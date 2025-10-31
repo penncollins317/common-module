@@ -2,27 +2,23 @@ package top.mxzero.filestore.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
+import top.mxzero.common.dto.PageDTO;
 import top.mxzero.common.dto.RestData;
+import top.mxzero.common.params.PageParam;
 import top.mxzero.common.utils.FileUtils;
-import top.mxzero.filestore.dto.FileAccessDTO;
-import top.mxzero.filestore.dto.FileMetadata;
 import top.mxzero.filestore.dto.FileUploadRequest;
 import top.mxzero.filestore.dto.FileUploadResponse;
 import top.mxzero.filestore.service.FileStoreService;
+import top.mxzero.oss.dto.FileMetaDTO;
+import top.mxzero.oss.enums.AclType;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * 文件管理服务
@@ -41,15 +37,15 @@ public class FileStoreController {
      * 文件上传
      */
     @PostMapping("/upload")
-    public RestData<FileUploadResponse> uploadApi(@RequestParam MultipartFile file, Principal principal, boolean isPublic) throws IOException {
+    public RestData<FileUploadResponse> uploadApi(@RequestParam MultipartFile file, @RequestParam AclType acl, Principal principal) throws IOException {
         FileUtils.checkFile(file);
         FileUploadRequest request = FileUploadRequest.builder()
                 .filename(file.getOriginalFilename())
                 .size(file.getSize())
                 .contentType(file.getContentType())
                 .inputStream(file.getInputStream())
-                .isPublic(isPublic)
-                .userId(principal != null ? Long.valueOf(principal.getName()) : null)
+                .acl(acl)
+                .userId(Long.valueOf(principal.getName()))
                 .build();
 
         return RestData.ok(fileStoreService.upload(request));
@@ -59,46 +55,18 @@ public class FileStoreController {
      * 文件元数据
      */
     @RequestMapping("/meta_info")
-    public RestData<FileMetadata> metaApi(@RequestParam Long fileId) {
+    public RestData<FileMetaDTO> metaApi(@RequestParam Long fileId) {
         return RestData.ok(fileStoreService.getMetadata(fileId));
     }
 
+
     /**
-     * 文件流访问
+     * 文件列表
      *
-     * @param path 文件路径
      */
-    @RequestMapping("/access/{*path}")
-    public ResponseEntity<InputStreamResource> fileAccessApi(@PathVariable String path, Principal principal) throws NoResourceFoundException {
-        String fileKey = path.substring(1);
-        Optional<FileAccessDTO> fileAccessDTOOptional = fileStoreService.getInputStreamByKey(fileKey);
-        if (fileAccessDTOOptional.isEmpty()) {
-            throw new NoResourceFoundException(HttpMethod.GET, fileKey);
-        }
-        FileAccessDTO fileAccessDTO = fileAccessDTOOptional.get();
-
-        MediaType mediaType = null;
-        if (fileAccessDTO.getContentType() != null) {
-            try {
-                mediaType = MediaType.parseMediaType(fileAccessDTO.getContentType());
-            } catch (Exception ignore) {
-                mediaType = MediaType.APPLICATION_OCTET_STREAM;
-            }
-        } else {
-            mediaType = MediaType.APPLICATION_OCTET_STREAM;
-        }
-
-
-        String fileName = fileAccessDTO.getName();
-        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20"); // 空格处理
-
-        String contentDisposition = "inline; filename*=UTF-8''" + encodedFileName;
-        return ResponseEntity.ok()
-                .contentType(mediaType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-                .contentLength(fileAccessDTO.getSize())
-                .body(new InputStreamResource(fileAccessDTO.getInputStream()));
-
+    @RequestMapping("/file_list")
+    public RestData<PageDTO<FileMetaDTO>> fileListApi(Principal principal, PageParam pageParam) {
+        return RestData.ok(fileStoreService.fileList(Long.valueOf(principal.getName()), pageParam));
     }
+
 }

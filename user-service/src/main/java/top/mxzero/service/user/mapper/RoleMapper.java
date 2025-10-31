@@ -13,4 +13,5 @@ import java.util.List;
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
     List<Role> findByUserId(Long userId);
+    List<String> findNameByUserId(Long userId);
 }

@@ -1,16 +1,18 @@
 package top.mxzero.filestore;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 import top.mxzero.filestore.handler.FileUploadHandler;
 import top.mxzero.filestore.service.FileStoreService;
-import top.mxzero.filestore.service.FileSystemFileStoreService;
-import top.mxzero.oss.mapper.FileMetaMapper;
+import top.mxzero.filestore.service.impl.FileSystemFileStoreService;
 import top.mxzero.security.core.SecurityConfigProvider;
 
 import java.util.Set;
@@ -22,6 +24,7 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
  * @author Peng
  * @since 2025/4/28
  */
+@MapperScan("top.mxzero.filestore.mapper")
 @Configuration
 @ComponentScan
 @EnableConfigurationProperties({FileStoreProperties.class, FileSystemFileStoreService.FileSystemProps.class})
@@ -38,12 +41,12 @@ public class FileStoreAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean(FileStoreService.class)
-    public FileStoreService fileSystemFileStoreService(FileSystemFileStoreService.FileSystemProps props, FileMetaMapper fileMetaMapper) {
-        return new FileSystemFileStoreService(props, fileMetaMapper);
+    public FileStoreService fileSystemFileStoreService(FileSystemFileStoreService.FileSystemProps props) {
+        return new FileSystemFileStoreService(props);
     }
 
     @Bean
-    public SecurityConfigProvider filestoreSecurityConfigProvider(){
+    public SecurityConfigProvider filestoreSecurityConfigProvider() {
         return new SecurityConfigProvider() {
             @Override
             public Set<String> ignoreUrls() {

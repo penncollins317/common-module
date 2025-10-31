@@ -1,6 +1,5 @@
 package top.mxzero.filestore.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 @RequestMapping("/upload")
 public class FileStoreUploadController {
-    @Autowired
-    private OssService ossService;
+    private final OssService ossService;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yy/MM/dd");
 
     private static final long MAX_SIMPLE_UPLOAD_SIZE = 10 * 1024 * 1024; // 10MB
@@ -38,7 +36,8 @@ public class FileStoreUploadController {
     private final Map<String, Set<Integer>> uploadedChunks = new ConcurrentHashMap<>();
 
 
-    public FileStoreUploadController() throws IOException {
+    public FileStoreUploadController(OssService ossService) throws IOException {
+        this.ossService = ossService;
         Files.createDirectories(UPLOAD_DIR);
     }
 

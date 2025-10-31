@@ -210,8 +210,10 @@ project("filestore") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
+        implementation project(":user-service")
         implementation project(":oss")
         implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     }
 }
 
@@ -221,7 +223,6 @@ project("mxzero-tts") {
         implementation project(":common")
         implementation project(":security")
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
 

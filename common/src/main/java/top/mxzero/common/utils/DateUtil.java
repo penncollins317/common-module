@@ -2,7 +2,6 @@ package top.mxzero.common.utils;
 
 import org.springframework.util.StringUtils;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,6 +25,9 @@ public class DateUtil {
     private DateUtil() {
     }
 
+    public static String formatDatetime(LocalDateTime date) {
+        return DATE_TIME_FORMATTER.format(date);
+    }
 
     public static String formatDatetime(Date date) {
         return DATE_TIME_FORMATTER.format(date.toInstant().atZone(ZoneId.systemDefault()));
@@ -49,6 +51,10 @@ public class DateUtil {
 
     public static String fromIsoTimestampToStr(Long timestamp) {
         return formatDatetime(new Date(timestamp * 1000));
+    }
+
+    public static String formatNumber(LocalDateTime date) {
+        return NUMBER_FORMATTER.format(date);
     }
 
     public static String formatNumber(Date date) {

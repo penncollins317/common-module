@@ -12,11 +12,11 @@ import top.mxzero.common.utils.DeepBeanUtil;
 import top.mxzero.service.user.dto.*;
 import top.mxzero.service.user.entity.User;
 import top.mxzero.service.user.entity.UserAccount;
+import top.mxzero.service.user.mapper.RoleMapper;
 import top.mxzero.service.user.mapper.UserAccountMapper;
 import top.mxzero.service.user.mapper.UserMapper;
 import top.mxzero.service.user.service.UserService;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +28,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
     private final UserAccountMapper accountMapper;
 
     @Override
@@ -98,5 +99,10 @@ public class UserServiceImpl implements UserService {
         account = DeepBeanUtil.copyProperties(dto, UserAccount::new);
         account.setValidated(false);
         return this.accountMapper.insert(account) > 0;
+    }
+
+    @Override
+    public List<String> getUserRolesByUserId(Long userId) {
+        return this.roleMapper.findNameByUserId(userId);
     }
 }

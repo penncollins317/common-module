@@ -1,10 +1,13 @@
 package top.mxzero.oss.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.mxzero.oss.enums.AclType;
 import top.mxzero.oss.enums.FileStatus;
 
 import java.util.Date;
@@ -29,7 +32,9 @@ public class FileMeta {
     private String md5;
     private String sha256;
     private Long userId;
-    private Boolean isPublic;
+    private AclType acl;
+    @TableField(fill = FieldFill.INSERT)
     private Date createdAt;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedAt;
 }

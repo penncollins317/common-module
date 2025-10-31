@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.mxzero.oss.enums.AclType;
 import top.mxzero.oss.enums.FileStatus;
 
 import java.util.Date;
@@ -29,6 +30,7 @@ public class FileMetaDTO {
     private FileStatus status;
     private String md5;
     private String sha256;
+    private AclType acl;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long userId;
     private Date createdAt;

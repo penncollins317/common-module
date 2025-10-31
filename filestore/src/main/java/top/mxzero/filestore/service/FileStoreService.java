@@ -1,9 +1,12 @@
 package top.mxzero.filestore.service;
 
+import jakarta.annotation.Nullable;
+import top.mxzero.common.dto.PageDTO;
+import top.mxzero.common.params.PageParam;
 import top.mxzero.filestore.dto.*;
+import top.mxzero.oss.dto.FileMetaDTO;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -21,6 +24,24 @@ public interface FileStoreService {
      * @return 上传结果（包含文件ID、访问URL等）
      */
     FileUploadResponse upload(FileUploadRequest request) throws IOException;
+
+    /**
+     * 检查指定文件是否可访问
+     *
+     * @param fileId 文件ID
+     * @param userId 用户ID
+     * @param token  文件访问凭证
+     */
+    boolean checkAccessible(Long fileId, @Nullable Long userId, @Nullable String token);
+
+    /**
+     * 检查指定文件是否可访问
+     *
+     * @param fileKey 文件Key
+     * @param userId  用户ID
+     * @param token   文件访问凭证
+     */
+    boolean checkAccessible(String fileKey, @Nullable Long userId, @Nullable String token);
 
     /**
      * 下载文件
@@ -44,7 +65,7 @@ public interface FileStoreService {
      * @param fileId 文件唯一标识
      * @return 文件元信息（大小、类型、权限等）
      */
-    FileMetadata getMetadata(Long fileId);
+    FileMetaDTO getMetadata(Long fileId);
 
     /**
      * 生成可访问的文件URL（支持临时授权）
@@ -61,5 +82,13 @@ public interface FileStoreService {
      * @param key 文件存储key
      */
     Optional<FileAccessDTO> getInputStreamByKey(String key);
-}
 
+
+    /**
+     * 文件列表
+     *
+     * @param userId 用户ID
+     */
+    PageDTO<FileMetaDTO> fileList(Long userId, PageParam pageParam);
+
+}

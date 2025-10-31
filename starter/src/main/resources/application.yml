@@ -22,6 +22,10 @@ spring:
           ssl:
             enable: true
           auth: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
 mxzero:
   jwt:

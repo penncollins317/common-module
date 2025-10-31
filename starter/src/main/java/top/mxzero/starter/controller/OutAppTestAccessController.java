@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.mxzero.common.annotations.AuthenticatedRequired;
+import top.mxzero.common.annotations.HasRole;
 import top.mxzero.common.annotations.HasScope;
 import top.mxzero.common.dto.RestData;
 
@@ -32,6 +33,12 @@ public class OutAppTestAccessController {
 
     ) {
         log.info("headerName={}", headerName);
+        return RestData.success(principal.getName());
+    }
+
+    @HasRole("ADMIN")
+    @RequestMapping("/hello/admin")
+    public RestData<String> helloAdminApi(Principal principal  ) {
         return RestData.success(principal.getName());
     }
 }

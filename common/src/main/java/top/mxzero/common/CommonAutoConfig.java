@@ -1,9 +1,11 @@
 package top.mxzero.common;
 
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +27,7 @@ import top.mxzero.common.service.impl.ConsoleSmsSender;
 import top.mxzero.common.service.impl.YunTongXinSmsSender;
 
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
@@ -131,5 +134,12 @@ public class CommonAutoConfig {
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(corsFilter());
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE); // 设置优先级为最高
         return bean;
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
+        return builder -> {
+            builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        };
     }
 }

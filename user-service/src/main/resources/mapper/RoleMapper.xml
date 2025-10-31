@@ -5,4 +5,8 @@
     <select id="findByUserId" resultType="top.mxzero.service.user.entity.Role">
         SELECT r.id, r.name FROM t_role r join t_user_role ur ON r.id = ur.role_id WHERE ur.user_id = #{userId}
     </select>
+
+    <select id="findNameByUserId" resultType="string">
+        SELECT r.name FROM t_role r join t_user_role ur ON r.id = ur.role_id WHERE ur.user_id = #{userId}
+    </select>
 </mapper>

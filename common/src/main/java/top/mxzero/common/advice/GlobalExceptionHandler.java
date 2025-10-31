@@ -24,7 +24,6 @@ import top.mxzero.common.dto.ApiErrorResponse;
 import top.mxzero.common.dto.RestData;
 import top.mxzero.common.exceptions.ServiceException;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -64,8 +63,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public RestData<?> handleAccessDeniedException() {
-        return RestData.error("无权访问", HttpStatus.FORBIDDEN.value());
+    public RestData<?> handleAccessDeniedException(AccessDeniedException e) {
+        return RestData.error(e.getMessage(), HttpStatus.FORBIDDEN.value());
     }
 
     @ExceptionHandler({AuthenticationCredentialsNotFoundException.class})
