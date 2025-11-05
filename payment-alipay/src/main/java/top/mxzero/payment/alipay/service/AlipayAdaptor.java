@@ -10,10 +10,15 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import top.mxzero.common.exceptions.ServiceException;
+import top.mxzero.common.utils.IpUtil;
 import top.mxzero.payment.alipay.config.AliPayConfigProps;
 import top.mxzero.payment.alipay.dto.AlipayTradeQueryResponseDTO;
 
@@ -140,7 +145,16 @@ public class AlipayAdaptor {
         model.setProductCode("FAST_INSTANT_TRADE_PAY");
 
         request.setBizModel(model);
-        request.setNotifyUrl(configProps.getNotifyUrl());
+
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest httpServletRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
+            String accessHost = IpUtil.getAccessHost(httpServletRequest);
+            request.setNotifyUrl(accessHost + "/alipay/notify");
+        } else {
+            request.setNotifyUrl(configProps.getNotifyUrl());
+        }
+
 
         AlipayTradePagePayResponse response = alipayClient.sdkExecute(request);
         log.info("PC支付响应: {}", response.getBody());

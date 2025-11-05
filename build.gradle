@@ -247,6 +247,7 @@ project("order-service") {
 project("payment") {
     dependencies {
         implementation project(":common")
+        implementation project(":security")
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
     }
@@ -326,6 +327,7 @@ project("starter") {
         implementation project(":oss")
         implementation project(":filestore")
         implementation project(":payment")
+        implementation project(":payment-alipay")
         implementation 'org.postgresql:postgresql'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-actuator'

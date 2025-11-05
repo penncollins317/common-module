@@ -1,9 +1,12 @@
 package top.mxzero.payment.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -20,9 +23,8 @@ public class GoodsDTO {
     private String goodsId;
     @NotBlank
     private String goodsName;
-    @NotNull
-    @Size(min = 1)
-    private Integer quantity;
-    @NotNull
+    @Positive(message = "商品数量必须大于0")
+    private int quantity;
+    @Positive(message = "商品价格必须大于0")
     private BigDecimal price;
 }

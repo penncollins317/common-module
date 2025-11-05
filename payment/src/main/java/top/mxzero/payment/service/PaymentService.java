@@ -1,7 +1,9 @@
 package top.mxzero.payment.service;
 
+import top.mxzero.payment.PaymentChannel;
 import top.mxzero.payment.dto.PaymentDTO;
 import top.mxzero.payment.dto.PaymentRefundDTO;
+import top.mxzero.payment.dto.PaymentTransactionDTO;
 import top.mxzero.payment.dto.RequestPaymentDTO;
 
 import java.math.BigDecimal;
@@ -50,4 +52,13 @@ public interface PaymentService {
      *
      */
     boolean closeRefund(String outTradeNo, BigDecimal refundAmount);
+
+    /**
+     * 创建支付事务
+     *
+     * @param requestId 支付请求ID
+     * @param channel   支付渠道
+     * @return 支付事务参数
+     */
+    PaymentTransactionDTO createTransaction(Long requestId, PaymentChannel channel);
 }

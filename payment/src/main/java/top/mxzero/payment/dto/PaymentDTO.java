@@ -23,8 +23,8 @@ public class PaymentDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     private String subject;
-    private String outTradeNo;
     private BigDecimal amount;
+    private String remark;
     private PaymentStatus status;
     private List<GoodsDTO> goodsDetail;
     private LocalDateTime paymentAt;

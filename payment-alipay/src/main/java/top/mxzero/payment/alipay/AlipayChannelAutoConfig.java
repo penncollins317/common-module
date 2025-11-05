@@ -25,7 +25,7 @@ public class AlipayChannelAutoConfig {
         return new SecurityConfigProvider() {
             @Override
             public Set<String> ignoreUrls() {
-                return Set.of("/alipay/notify");
+                return Set.of("/alipay/notify", "/test/alipay/**");
             }
         };
     }

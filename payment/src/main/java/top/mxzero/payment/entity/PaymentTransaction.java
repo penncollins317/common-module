@@ -35,7 +35,7 @@ public class PaymentTransaction {
     /**
      * 第三方渠道返回的交易号
      */
-    private String channelTransactionId;
+    private String transactionId;
 
     /**
      * 支付渠道，例如 alipay, wechat
@@ -55,7 +55,7 @@ public class PaymentTransaction {
     /**
      * 第三方返回的原始数据，JSON 格式
      */
-    private String thirdPartyPayload;
+    private String channelPayload;
 
     /**
      * 实际支付成功时间

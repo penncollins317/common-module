@@ -26,6 +26,7 @@ public class PaymentRequest {
     private BigDecimal amount;
     private LocalDateTime paymentAt;
     private String origin;
+    private String remark;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
     @TableField(fill = FieldFill.INSERT_UPDATE)

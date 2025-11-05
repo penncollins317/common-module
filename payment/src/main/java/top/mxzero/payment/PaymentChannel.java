@@ -9,8 +9,12 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class PaymentChannel {
+public final class PaymentChannel {
     public static final PaymentChannel ALIPAY = new PaymentChannel("alipay");
     public static final PaymentChannel WECHAT_PAY = new PaymentChannel("wechat_pay");
     private final String code;
+
+    public static PaymentChannel of(String code) {
+        return new PaymentChannel(code);
+    }
 }

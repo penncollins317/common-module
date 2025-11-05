@@ -9,6 +9,7 @@ CREATE TABLE payment_request
     origin     VARCHAR(80)    NULL,                   -- 订单来源（源订单号）
     status     VARCHAR(32)    NOT NULL,               -- pending, success, failed, canceled
     amount     NUMERIC(18, 2) NOT NULL,               -- 金额
+    remark     varchar(255)   NULL,                   -- 备注
     payment_at TIMESTAMP,                             -- 支付完成时间
     created_at TIMESTAMP      NOT NULL DEFAULT now(), -- 创建时间
     updated_at TIMESTAMP      NOT NULL DEFAULT now()  -- 更新时间
@@ -48,17 +49,17 @@ CREATE INDEX idx_pg_payment_id
 DROP TABLE IF EXISTS payment_transaction;
 CREATE TABLE payment_transaction
 (
-    id                     BIGSERIAL PRIMARY KEY,
-    payment_id             BIGINT       NOT NULL, -- 关联 payment_request.id
-    out_trade_no           VARCHAR(50)  NOT NULL, -- 系统生成的唯一单号
-    channel_transaction_id VARCHAR(128) NOT NULL, -- 渠道返回的唯一交易号
-    channel                VARCHAR(32),           -- alipay, wechat, ...
-    amount                 NUMERIC(12, 2),
-    channel_status         VARCHAR(32)  NOT NULL, -- 支付渠道商支付状态
-    third_party_payload    JSONB,
-    payment_at             TIMESTAMP    NULL,     -- 实际支付成功时间
-    created_at             TIMESTAMP DEFAULT now(),
-    updated_at             TIMESTAMP DEFAULT now()
+    id              BIGSERIAL PRIMARY KEY,
+    payment_id      BIGINT       NOT NULL, -- 关联 payment_request.id
+    out_trade_no    VARCHAR(50)  NOT NULL, -- 系统生成的唯一单号
+    transaction_id  VARCHAR(128) NULL,     -- 渠道返回的唯一交易号
+    channel         VARCHAR(32),           -- alipay, wechat, ...
+    amount          NUMERIC(12, 2),
+    channel_status  VARCHAR(32)  NULL,     -- 支付渠道商支付状态
+    channel_payload JSONB,
+    payment_at      TIMESTAMP    NULL,     -- 实际支付成功时间
+    created_at      TIMESTAMP DEFAULT now(),
+    updated_at      TIMESTAMP DEFAULT now()
 );
 
 -- 唯一索引
@@ -66,7 +67,7 @@ CREATE UNIQUE INDEX uk_pt_out_trade_no
     ON payment_transaction (out_trade_no);
 
 CREATE UNIQUE INDEX uk_pt_channel_txn_id
-    ON payment_transaction (channel_transaction_id);
+    ON payment_transaction (transaction_id);
 
 -- 普通索引
 CREATE INDEX idx_pt_payment_id

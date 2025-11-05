@@ -28,6 +28,11 @@ spring:
       ddl-auto: update
 
 mxzero:
+  alipay:
+    appid: 9021000123615029
+    gateway-url: https://openapi-sandbox.dl.alipaydev.com/gateway.do
+    alipay-public-key: classpath:/alipay/alipay_public_key.txt
+    app-private-key-path: classpath:/alipay/alipay_app_private_key.txt
   jwt:
     expire: 2592000
     issuer: http://mxzero.top

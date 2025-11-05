@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.mxzero.common.exceptions.ServiceException;
 import top.mxzero.payment.dto.PaymentDTO;
+import top.mxzero.payment.dto.PaymentTransactionDTO;
 
 import java.util.Map;
 
@@ -19,10 +20,11 @@ import java.util.Map;
 public class AlipayService {
     private final AlipayAdaptor alipayAdaptor;
 
-    public String pagePay(PaymentDTO payRequest) {
+    public String pagePay(PaymentTransactionDTO transactionDTO) {
+        PaymentDTO paymentDTO = transactionDTO.getPaymentDTO();
         try {
-            String result = alipayAdaptor.pagePay(payRequest.getOutTradeNo(), payRequest.getSubject(), payRequest.getAmount());
-            log.info("alipay call: {} success", payRequest.getOutTradeNo());
+            String result = alipayAdaptor.pagePay(transactionDTO.getOutTradeNo(), paymentDTO.getSubject(), paymentDTO.getAmount());
+            log.info("alipay call: {} success", transactionDTO.getOutTradeNo());
             return result;
         } catch (AlipayApiException e) {
             log.error(e.getMessage());
@@ -31,10 +33,11 @@ public class AlipayService {
     }
 
 
-    public String wayPay(PaymentDTO payRequest) {
+    public String wayPay(PaymentTransactionDTO transactionDTO) {
+        PaymentDTO paymentDTO = transactionDTO.getPaymentDTO();
         try {
-            String result = alipayAdaptor.wapPay(payRequest.getOutTradeNo(), payRequest.getSubject(), payRequest.getAmount());
-            log.info("alipay call: {} success", payRequest.getOutTradeNo());
+            String result = alipayAdaptor.wapPay(transactionDTO.getOutTradeNo(), paymentDTO.getSubject(), paymentDTO.getAmount());
+            log.info("alipay call: {} success", transactionDTO.getOutTradeNo());
             return result;
         } catch (AlipayApiException e) {
             log.error(e.getMessage());
@@ -58,4 +61,6 @@ public class AlipayService {
         }
         return true;
     }
+
+
 }

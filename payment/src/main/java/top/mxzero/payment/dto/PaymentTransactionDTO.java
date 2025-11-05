@@ -1,10 +1,13 @@
 package top.mxzero.payment.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import top.mxzero.payment.PaymentChannel;
-import top.mxzero.payment.enums.PaymentStatus;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author Peng
@@ -15,10 +18,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentTransactionDTO {
+    private Long id;
     private String outTradeNo;
     private String transactionId;
     private BigDecimal amount;
     private PaymentChannel channel;
-    private PaymentStatus status;
+    private String channelStatus;
     private String remark;
+    private Date paymentAt;
+    private PaymentDTO paymentDTO;
+    private boolean paymentSuccess;
 }
