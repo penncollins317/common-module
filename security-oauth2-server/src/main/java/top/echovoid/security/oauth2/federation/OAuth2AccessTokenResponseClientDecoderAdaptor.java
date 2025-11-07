@@ -2,9 +2,9 @@ package top.echovoid.security.oauth2.federation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.endpoint.RestClientAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 public class OAuth2AccessTokenResponseClientDecoderAdaptor implements OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> {
     private static final RestTemplate REST_TEMPLATE = new RestTemplate();
-    private static final DefaultAuthorizationCodeTokenResponseClient DEFAULT_AUTHORIZATION_CODE_TOKEN_RESPONSE_CLIENT = new DefaultAuthorizationCodeTokenResponseClient();
+    private static final OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> DEFAULT_AUTHORIZATION_CODE_TOKEN_RESPONSE_CLIENT = new RestClientAuthorizationCodeTokenResponseClient();
 
     @Override
     public OAuth2AccessTokenResponse getTokenResponse(OAuth2AuthorizationCodeGrantRequest request) {
@@ -37,7 +37,7 @@ public class OAuth2AccessTokenResponseClientDecoderAdaptor implements OAuth2Acce
     }
 
     public OAuth2AccessTokenResponse handlerByWeibo(OAuth2AuthorizationCodeGrantRequest request) {
-        URI uri = UriComponentsBuilder.fromHttpUrl(request.getClientRegistration().getProviderDetails().getTokenUri())
+        URI uri = UriComponentsBuilder.fromUriString(request.getClientRegistration().getProviderDetails().getTokenUri())
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("client_id", request.getClientRegistration().getClientId())
                 .queryParam("client_secret", request.getClientRegistration().getClientSecret())
@@ -62,7 +62,7 @@ public class OAuth2AccessTokenResponseClientDecoderAdaptor implements OAuth2Acce
     }
 
     public OAuth2AccessTokenResponse handlerByQQ(OAuth2AuthorizationCodeGrantRequest request) {
-        URI uri = UriComponentsBuilder.fromHttpUrl(request.getClientRegistration().getProviderDetails().getTokenUri())
+        URI uri = UriComponentsBuilder.fromUriString(request.getClientRegistration().getProviderDetails().getTokenUri())
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("client_id", request.getClientRegistration().getClientId())
                 .queryParam("client_secret", request.getClientRegistration().getClientSecret())

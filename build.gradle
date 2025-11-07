@@ -2,7 +2,7 @@ buildscript {
     apply from: 'dependencies.gradle'
 
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url = uri('https://maven.aliyun.com/repository/public') }
     }
 
     dependencies {
@@ -16,8 +16,9 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-    sourceCompatibility = project_jdk
-    targetCompatibility = project_jdk
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+    }
 
     dependencies {
         implementation platform(libraries.'spring-ai-bom')
@@ -35,18 +36,20 @@ subprojects {
     }
     repositories {
         mavenLocal()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://repo.spring.io/milestone' }
-        maven { url 'https://repo.spring.io/snapshot' }
+        maven { url = uri('https://maven.aliyun.com/repository/public/') }
+        maven { url = uri('https://repo.spring.io/milestone') }
+        maven { url = uri('https://repo.spring.io/snapshot') }
         maven {
             name = 'Central Portal Snapshots'
-            url = 'https://central.sonatype.com/repository/maven-snapshots/'
+            url = uri('https://central.sonatype.com/repository/maven-snapshots/')
         }
         mavenCentral()
     }
 
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.encoding = 'UTF-8'
+        }
     }
 }
 

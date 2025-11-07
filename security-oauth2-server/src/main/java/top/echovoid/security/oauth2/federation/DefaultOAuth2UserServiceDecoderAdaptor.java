@@ -51,7 +51,7 @@ public class DefaultOAuth2UserServiceDecoderAdaptor extends DefaultOAuth2UserSer
 
     private OAuth2User loadUserHandlerWeibo(OAuth2UserRequest request) {
         String uid = this.getUid(request.getAccessToken().getTokenValue());
-        URI uri = UriComponentsBuilder.fromHttpUrl(request.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUri()).queryParam("access_token", request.getAccessToken().getTokenValue()).queryParam("uid", uid).build().encode() // 重要！避免特殊字符问题
+        URI uri = UriComponentsBuilder.fromUriString(request.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUri()).queryParam("access_token", request.getAccessToken().getTokenValue()).queryParam("uid", uid).build().encode() // 重要！避免特殊字符问题
                 .toUri();
         try {
             ResponseEntity<String> response = REST_TEMPLATE.getForEntity(uri, String.class);
@@ -64,7 +64,7 @@ public class DefaultOAuth2UserServiceDecoderAdaptor extends DefaultOAuth2UserSer
     }
 
     private String getUid(String accessToken) {
-        URI uri = UriComponentsBuilder.fromHttpUrl("https://api.weibo.com/2/account/get_uid.json").queryParam("access_token", accessToken).build().encode() // 重要！避免特殊字符问题
+        URI uri = UriComponentsBuilder.fromUriString("https://api.weibo.com/2/account/get_uid.json").queryParam("access_token", accessToken).build().encode() // 重要！避免特殊字符问题
                 .toUri();
 
         try {
@@ -79,7 +79,7 @@ public class DefaultOAuth2UserServiceDecoderAdaptor extends DefaultOAuth2UserSer
 
 
     private OAuth2User loadUserHandlerQQ(OAuth2UserRequest request) {
-        URI uri = UriComponentsBuilder.fromHttpUrl("https://graph.qq.com/oauth2.0/me").queryParam("access_token", request.getAccessToken().getTokenValue()).queryParam("fmt", "json").build().encode() // 重要！避免特殊字符问题
+        URI uri = UriComponentsBuilder.fromUriString("https://graph.qq.com/oauth2.0/me").queryParam("access_token", request.getAccessToken().getTokenValue()).queryParam("fmt", "json").build().encode() // 重要！避免特殊字符问题
                 .toUri();
 
         try {
@@ -96,7 +96,7 @@ public class DefaultOAuth2UserServiceDecoderAdaptor extends DefaultOAuth2UserSer
     }
 
     private Map<String, Object> getUserinfo(String appid, String accessToken, String openid) {
-        URI uri = UriComponentsBuilder.fromHttpUrl("https://graph.qq.com/user/get_user_info").queryParam("access_token", accessToken).queryParam("openid", openid).queryParam("oauth_consumer_key", appid).build().encode() // 重要！避免特殊字符问题
+        URI uri = UriComponentsBuilder.fromUriString("https://graph.qq.com/user/get_user_info").queryParam("access_token", accessToken).queryParam("openid", openid).queryParam("oauth_consumer_key", appid).build().encode() // 重要！避免特殊字符问题
                 .toUri();
 
         ResponseEntity<String> response = REST_TEMPLATE.getForEntity(uri, String.class);

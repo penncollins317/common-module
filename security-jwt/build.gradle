@@ -5,6 +5,8 @@ plugins {
 
 group = project_group
 version = project_version
+bootJar.enabled = false
+jar.enabled = true
 repositories {
     mavenCentral()
 }

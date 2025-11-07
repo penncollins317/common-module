@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group = 'top.echovoid'
-version = 'unspecified'
+group = project_group
+version = project_version
 
 repositories {
     mavenCentral()
