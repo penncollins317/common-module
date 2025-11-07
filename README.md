@@ -56,14 +56,13 @@ common-module/
 
 ### 核心框架
 
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| Spring Boot | 3.4.4 | 核心框架 |
+| 技术 | 版本       | 说明 |
+|------|----------|------|
+| Spring Boot | 3.4.4    | 核心框架 |
 | Spring Cloud | 2024.0.1 | 微服务框架 |
-| Spring Security | 6.4.2 | 安全框架 |
-| Spring AI | 1.0.0 | AI 集成框架 |
+| Spring AI | 1.0.0    | AI 集成框架 |
 | MyBatis Plus | 3.5.10.1 | ORM 框架 |
-| Gradle | - | 构建工具 |
+| Gradle | 8.14.3   | 构建工具 |
 
 ### 数据库与存储
 
