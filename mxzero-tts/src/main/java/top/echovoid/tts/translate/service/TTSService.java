@@ -3,7 +3,7 @@ package top.echovoid.tts.translate.service;
 /**
  * 文本转音频服务
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/23
  */
 public interface TTSService {

@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 文件上传接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/5
  */
 @RestController

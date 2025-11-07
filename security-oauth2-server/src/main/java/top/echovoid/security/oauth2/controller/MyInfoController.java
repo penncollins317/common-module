@@ -10,7 +10,7 @@ import top.echovoid.service.user.service.UserService;
 import java.security.Principal;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/31
  */
 @Controller

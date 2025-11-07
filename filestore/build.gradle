@@ -24,7 +24,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            artifactId = 'mxzero-filestore'
+            artifactId = 'echovoid-filestore'
         }
     }
 

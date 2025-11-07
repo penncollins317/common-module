@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import top.echovoid.ai.AiIntetrationAutoConfig;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/4
  */
 @SpringBootTest(classes = AiIntetrationAutoConfig.class)

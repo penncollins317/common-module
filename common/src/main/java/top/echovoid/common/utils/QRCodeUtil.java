@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/12/7
  */
 public class QRCodeUtil {

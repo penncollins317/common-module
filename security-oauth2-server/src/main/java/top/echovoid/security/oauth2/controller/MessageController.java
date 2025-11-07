@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.echovoid.common.dto.RestData;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/5
  */
 @RestController

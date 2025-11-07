@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2024/1/22
  */

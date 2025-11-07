@@ -18,7 +18,7 @@ import top.echovoid.payment.service.PaymentService;
 import java.io.IOException;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/2
  */
 @RestController

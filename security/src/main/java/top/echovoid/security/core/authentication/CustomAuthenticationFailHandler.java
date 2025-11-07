@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/9
  */
 public class CustomAuthenticationFailHandler extends SimpleUrlAuthenticationFailureHandler {

@@ -15,7 +15,7 @@ import top.echovoid.service.user.service.UserService;
 /**
  * 注册接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/21
  */
 @Slf4j

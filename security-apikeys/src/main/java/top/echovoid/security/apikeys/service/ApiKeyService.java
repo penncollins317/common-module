@@ -1,7 +1,7 @@
 package top.echovoid.security.apikeys.service;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/4
  */
 public interface ApiKeyService {

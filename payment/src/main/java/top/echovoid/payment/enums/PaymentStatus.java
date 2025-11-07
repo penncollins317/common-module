@@ -1,7 +1,7 @@
 package top.echovoid.payment.enums;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/9/30
  */
 public enum PaymentStatus {

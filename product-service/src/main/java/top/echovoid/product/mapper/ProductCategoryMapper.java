@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.product.entity.ProductCategory;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/10
  */
 @Mapper

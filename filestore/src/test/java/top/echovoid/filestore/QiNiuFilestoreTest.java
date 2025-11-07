@@ -1,7 +1,7 @@
 package top.echovoid.filestore;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/20
  */
 public class QiNiuFilestoreTest {

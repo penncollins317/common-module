@@ -4,7 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/25
  */
 @SpringBootApplication

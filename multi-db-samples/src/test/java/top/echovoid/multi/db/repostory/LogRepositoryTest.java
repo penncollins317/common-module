@@ -12,7 +12,7 @@ import top.echovoid.multi.db.mapper.LogMapper;
 import java.util.Date;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/25
  */
 @SpringBootTest(classes = MultiDBConfig.class)

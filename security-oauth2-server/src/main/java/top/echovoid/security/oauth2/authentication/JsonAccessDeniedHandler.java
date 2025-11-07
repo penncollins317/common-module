@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/19
  */
 public class JsonAccessDeniedHandler implements AccessDeniedHandler {

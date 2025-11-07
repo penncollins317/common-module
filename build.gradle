@@ -159,7 +159,7 @@ project("security-mqtt") {
     }
 }
 
-project("mxzero-chat-common") {
+project("echovoid-chat-common") {
     dependencies {
         api libraries.'mybatis-plus'
         api libraries.'mybatis-spring'
@@ -169,7 +169,7 @@ project("mxzero-chat-common") {
 
 project("ai-chat") {
     dependencies {
-        implementation project(":mxzero-chat-common")
+        implementation project(":echovoid-chat-common")
         implementation project(":common")
         implementation project(":security")
         implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
@@ -217,7 +217,7 @@ project("filestore") {
     }
 }
 
-project("mxzero-tts") {
+project("echovoid-tts") {
     dependencies {
         implementation libraries.'okhttp'
         implementation project(":common")

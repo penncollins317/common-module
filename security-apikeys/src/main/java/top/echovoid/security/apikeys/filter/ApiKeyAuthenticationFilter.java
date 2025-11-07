@@ -19,7 +19,7 @@ import top.echovoid.security.apikeys.mapper.ApiKeyMapper;
 import java.io.IOException;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/17
  */
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {

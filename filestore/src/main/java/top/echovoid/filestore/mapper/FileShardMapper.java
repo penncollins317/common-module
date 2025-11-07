@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import top.echovoid.filestore.entity.FileShared;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/30
  */
 @Repository

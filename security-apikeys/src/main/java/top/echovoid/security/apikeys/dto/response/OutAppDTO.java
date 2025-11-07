@@ -7,7 +7,7 @@ import top.echovoid.security.apikeys.enums.OutAppStatus;
 import java.util.Date;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/15
  */
 @Data

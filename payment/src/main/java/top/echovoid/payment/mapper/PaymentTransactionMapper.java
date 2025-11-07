@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.payment.entity.PaymentTransaction;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/2
  */
 @Mapper

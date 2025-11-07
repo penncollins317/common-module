@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 适配QQ、微博获取access_token接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/31
  */
 @Slf4j

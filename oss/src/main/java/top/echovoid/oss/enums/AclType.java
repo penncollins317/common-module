@@ -3,7 +3,7 @@ package top.echovoid.oss.enums;
 import lombok.Getter;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/30
  */
 @Getter

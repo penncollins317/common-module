@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/20
  */
 @Import(SecurityCoreAutoConfig.class)

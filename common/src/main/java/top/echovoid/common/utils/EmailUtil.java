@@ -3,7 +3,7 @@ package top.echovoid.common.utils;
 /**
  * 邮箱验证以及脱敏
  *
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/9/1
  */

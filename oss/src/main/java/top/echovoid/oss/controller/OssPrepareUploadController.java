@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * OSS上传签名
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/20
  */
 @RestController

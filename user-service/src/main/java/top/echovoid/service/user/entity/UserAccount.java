@@ -6,7 +6,7 @@ import top.echovoid.service.user.enums.AccountType;
 import java.util.Date;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/13
  */
 @Data

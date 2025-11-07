@@ -12,7 +12,7 @@ import top.echovoid.product.utils.ProductSpecValidator;
 /**
  * 产品接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/13
  */
 @RestController

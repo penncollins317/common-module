@@ -8,7 +8,7 @@ import top.echovoid.ai.config.DatabasePersistentChatMemory;
 import top.echovoid.chat.mapper.AiChatMessageMapper;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/11/27
  */
 @Configuration

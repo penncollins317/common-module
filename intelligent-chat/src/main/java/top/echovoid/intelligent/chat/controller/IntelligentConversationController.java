@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 聊天会话管理
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/6/30
  */
 @AuthenticatedRequired

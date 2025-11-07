@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 标注业务数据唯一值
  *
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2024/2/20
  */

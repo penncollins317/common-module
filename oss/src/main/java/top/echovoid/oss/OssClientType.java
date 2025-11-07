@@ -1,7 +1,7 @@
 package top.echovoid.oss;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/9/25
  */
 public enum OssClientType {

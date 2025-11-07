@@ -9,7 +9,7 @@ import top.echovoid.oss.dto.FileMetaDTO;
 import java.time.LocalDateTime;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/11/1
  */
 @Getter

@@ -11,7 +11,7 @@ import top.echovoid.httpclient.dto.response.LoginResponseDTO;
 import top.echovoid.httpclient.dto.response.UserinfoDTO;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/9
  */
 public interface LoginServiceApi {

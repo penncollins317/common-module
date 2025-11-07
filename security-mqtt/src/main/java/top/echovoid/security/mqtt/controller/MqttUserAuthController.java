@@ -21,7 +21,7 @@ import java.util.UUID;
 /**
  * MQTT 认证接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/14
  */
 @Slf4j

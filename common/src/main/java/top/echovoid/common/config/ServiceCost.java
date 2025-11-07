@@ -3,7 +3,7 @@ package top.echovoid.common.config;
 import java.util.Set;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/10/15
  */

@@ -10,10 +10,10 @@ spring:
           predicates:
             - Path=/**
 
-mxzero:
+echovoid:
   jwt:
     expire: 2592000
-    issuer: http://mxzero.top
+    issuer: http://echovoid.top
     secret: ed8f07de-b628-49d5-a423-062d20e19907
   gateway:
     auth:

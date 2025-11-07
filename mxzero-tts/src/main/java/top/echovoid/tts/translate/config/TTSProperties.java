@@ -4,11 +4,11 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/23
  */
 @Data
-@ConfigurationProperties(prefix = "mxzero.tts")
+@ConfigurationProperties(prefix = "echovoid.tts")
 public class TTSProperties {
     private String appKey;
     private String appSecret;

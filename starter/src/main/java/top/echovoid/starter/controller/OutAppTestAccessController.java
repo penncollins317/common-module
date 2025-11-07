@@ -11,7 +11,7 @@ import top.echovoid.common.dto.RestData;
 import java.security.Principal;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/15
  */
 @Slf4j

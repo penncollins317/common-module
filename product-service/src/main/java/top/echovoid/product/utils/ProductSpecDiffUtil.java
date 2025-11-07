@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * 产品规格变化工具类
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/13
  */
 public class ProductSpecDiffUtil {

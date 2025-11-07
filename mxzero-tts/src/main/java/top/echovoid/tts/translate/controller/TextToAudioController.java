@@ -14,7 +14,7 @@ import top.echovoid.tts.translate.service.TTSService;
 import java.util.Date;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/23
  */
 @RestController

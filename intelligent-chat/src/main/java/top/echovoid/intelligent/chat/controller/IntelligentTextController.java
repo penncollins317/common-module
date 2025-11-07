@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * 文字接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/6/27
  */
 @RestController

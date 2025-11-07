@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * 认证配置聚合器
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/14
  */
 public class SecurityConfigAggregator {

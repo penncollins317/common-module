@@ -8,7 +8,7 @@ import top.echovoid.service.user.dto.*;
 import java.util.List;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/21
  */
 public interface UserService {

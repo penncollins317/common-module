@@ -1,4 +1,4 @@
-# mxzero-common-project
+# common-module
 
 一个基于 Spring Boot 3.x 的企业级公共业务能力沉淀项目，提供开箱即用的微服务基础模块和通用能力支持。
 
@@ -6,7 +6,7 @@
 
 ## 📖 项目简介
 
-`mxzero-common-project` 是一个多模块的 Java 企业级应用框架，旨在为企业级应用提供可复用的公共业务模块和基础能力。项目采用模块化设计，包含了常见的**用户管理、认证授权、安全控制、支付处理、文件存储、对象存储、AI集成、消息通信**等业务场景，开发者可以直接使用或在此基础上快速扩展，避免重复造轮子。
+`common-module` 是一个多模块的 Java 企业级应用框架，旨在为企业级应用提供可复用的公共业务模块和基础能力。项目采用模块化设计，包含了常见的**用户管理、认证授权、安全控制、支付处理、文件存储、对象存储、AI集成、消息通信**等业务场景，开发者可以直接使用或在此基础上快速扩展，避免重复造轮子。
 
 ### 核心价值
 
@@ -21,7 +21,7 @@
 ## 🏗 项目架构
 
 ```
-mxzero-common-project/
+common-module/
 ├── common/                      # 核心通用模块
 ├── security/                    # 安全认证核心模块
 ├── security-jwt/                # JWT 令牌支持
@@ -37,9 +37,9 @@ mxzero-common-project/
 ├── payment-alipay/              # 支付宝支付集成
 ├── ai-chat/                     # AI 聊天集成（Spring AI）
 ├── intelligent-chat/            # 智能聊天服务
-├── mxzero-tts/                  # 语音合成服务
+├── echovoid-tts/                  # 语音合成服务
 ├── langchain4j-samples/         # LangChain4j 示例
-├── mxzero-chat-common/          # 聊天通用模块
+├── echovoid-chat-common/          # 聊天通用模块
 ├── order-service/               # 订单服务示例
 ├── product-service/             # 产品服务示例
 ├── common-gateway/              # API 网关
@@ -226,7 +226,7 @@ JWT 令牌的创建、解析和刷新功能。
 - OpenAI
 - 其他兼容服务商
 
-### 11. mxzero-tts（语音合成）
+### 11. echovoid-tts（语音合成）
 
 文本转语音（TTS）服务。
 
@@ -283,8 +283,8 @@ LangChain4j 框架的使用示例和最佳实践。
 ### 克隆项目
 
 ```bash
-git clone https://github.com/<yourname>/mxzero-common-project.git
-cd mxzero-common-project
+git clone https://github.com/penncollins317/common-module.git
+cd common-module
 ```
 
 ### 构建项目
@@ -324,7 +324,7 @@ cd starter
 ```yaml
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/mxzero_db
+    url: jdbc:postgresql://localhost:5432/echovoid_db
     username: your_username
     password: your_password
     driver-class-name: org.postgresql.Driver
@@ -333,7 +333,7 @@ spring:
 ### JWT 配置
 
 ```yaml
-mxzero:
+echovoid:
   jwt:
     secret: your-jwt-secret-key
     issuer: http://your-domain.com
@@ -343,7 +343,7 @@ mxzero:
 ### OSS 配置示例（七牛云）
 
 ```yaml
-mxzero:
+echovoid:
   oss:
     type: qiniu
     access-key: your-access-key
@@ -356,7 +356,7 @@ mxzero:
 ### 安全配置
 
 ```yaml
-mxzero:
+echovoid:
   security:
     wechat:
       biz:
@@ -506,7 +506,7 @@ common (核心)
   ├── filestore (依赖 common, security, user-service, oss)
   ├── payment (依赖 common)
   ├── payment-alipay (依赖 payment, security)
-  ├── ai-chat (依赖 common, security, mxzero-chat-common)
+  ├── ai-chat (依赖 common, security, echovoid-chat-common)
   └── starter (整合多个模块)
 ```
 
@@ -553,7 +553,7 @@ common (核心)
 
 如有问题或建议，请通过以下方式联系：
 
-- 提交 Issue: [GitHub Issues](https://github.com/<yourname>/mxzero-common-project/issues)
+- 提交 Issue: [GitHub Issues](https://github.com/penncollins317/common-module/issues)
 - 邮箱: penncollins317@gmail.com
 
 ---

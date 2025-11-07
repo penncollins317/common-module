@@ -6,7 +6,7 @@ import top.echovoid.security.apikeys.enums.ApiKeyStatus;
 import java.util.Date;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/4
  */
 @Data

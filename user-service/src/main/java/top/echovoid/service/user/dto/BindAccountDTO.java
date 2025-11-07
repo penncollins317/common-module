@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import top.echovoid.service.user.enums.AccountType;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/13
  */
 @Data

@@ -11,7 +11,7 @@ import top.echovoid.ai.config.OpenAiConfig;
 import top.echovoid.ai.controller.LangChain4jChatController;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/7
  */
 @Configuration

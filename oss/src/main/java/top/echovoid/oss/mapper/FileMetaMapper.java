@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.oss.entity.FileMeta;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/19
  */
 @Mapper

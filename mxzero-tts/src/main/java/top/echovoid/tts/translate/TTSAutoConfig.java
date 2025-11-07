@@ -9,7 +9,7 @@ import top.echovoid.tts.translate.service.TTSService;
 import top.echovoid.tts.translate.service.impl.YouDaoAiTTSService;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/23
  */
 @EnableConfigurationProperties(TTSProperties.class)

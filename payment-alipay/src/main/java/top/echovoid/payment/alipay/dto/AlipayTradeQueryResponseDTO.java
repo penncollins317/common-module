@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 支付宝交易查询响应 DTO
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/8/14
  */
 @Data

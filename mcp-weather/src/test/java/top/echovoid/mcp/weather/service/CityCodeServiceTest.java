@@ -10,7 +10,7 @@ import top.echovoid.mcp.weather.McpWeatherServerApplication;
 import java.util.List;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/21
  */
 @SpringBootTest(classes = McpWeatherServerApplication.class)

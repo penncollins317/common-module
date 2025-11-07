@@ -18,19 +18,19 @@ import top.echovoid.oss.service.impl.QiNiuYunOssService;
 public class OSSAutoConfiguration {
 
     @Bean
-    @ConditionalOnProperty(name = "mxzero.oss.type", havingValue = "minio")
+    @ConditionalOnProperty(name = "echovoid.oss.type", havingValue = "minio")
     public OssService minioOssService(OssProps props) {
         return new MinioOssService(props);
     }
 
     @Bean
-    @ConditionalOnProperty(name = "mxzero.oss.type", havingValue = "qiniu")
+    @ConditionalOnProperty(name = "echovoid.oss.type", havingValue = "qiniu")
     public OssService qiniuOssService(OssProps props) {
         return new QiNiuYunOssService(props);
     }
 
     @Bean
-    @ConditionalOnProperty(name = "mxzero.oss.type", havingValue = "ali")
+    @ConditionalOnProperty(name = "echovoid.oss.type", havingValue = "ali")
     public OssService aliCloudOssService(OssProps props) {
         return new AliCloudOssService(props);
     }

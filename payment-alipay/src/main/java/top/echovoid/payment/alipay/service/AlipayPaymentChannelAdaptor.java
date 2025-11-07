@@ -12,7 +12,7 @@ import top.echovoid.payment.dto.PaymentTransactionDTO;
 import java.math.BigDecimal;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/2
  */
 @Slf4j

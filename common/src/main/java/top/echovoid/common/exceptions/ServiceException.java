@@ -4,7 +4,7 @@ import lombok.Getter;
 import top.echovoid.common.dto.RestData;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/8/21
  */

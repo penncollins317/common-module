@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 用于数据检索的字段
  *
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2024/2/20
  */

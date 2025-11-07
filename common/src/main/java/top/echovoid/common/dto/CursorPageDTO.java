@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 游标分页结果集
  *
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/12/4
  */

@@ -12,7 +12,7 @@ import top.echovoid.security.oauth2.dto.RegisterDTO;
 import top.echovoid.security.oauth2.service.RegisterService;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/12
  */
 @AllArgsConstructor

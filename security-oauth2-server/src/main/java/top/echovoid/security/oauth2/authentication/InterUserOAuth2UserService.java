@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/19
  */
 public class InterUserOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {

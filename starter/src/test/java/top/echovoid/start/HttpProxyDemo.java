@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/6/6
  */
 public class HttpProxyDemo {

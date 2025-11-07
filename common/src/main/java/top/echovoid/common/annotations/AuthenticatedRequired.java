@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/4
  */
 @Target({ElementType.METHOD, ElementType.TYPE})

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/13
  */
 public interface SecurityConfigProvider {

@@ -1,7 +1,7 @@
 package top.echovoid.common.service;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/5
  */
 public interface SmsSender {

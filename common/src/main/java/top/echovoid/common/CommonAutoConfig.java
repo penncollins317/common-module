@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2024/3/21
  */
@@ -63,7 +63,7 @@ public class CommonAutoConfig {
 
 
     @Bean
-    @ConfigurationProperties("mxzero.api.ip.key")
+    @ConfigurationProperties("echovoid.api.ip.key")
     public IpQueryProp ipQueryProp() {
         return new IpQueryProp();
     }
@@ -87,7 +87,7 @@ public class CommonAutoConfig {
 
 
     @Bean
-    @ConditionalOnProperty("mxzero.sms.yuntongxun")
+    @ConditionalOnProperty("echovoid.sms.yuntongxun")
     public YunTongXunSmsProps yunTongXunSmsProps() {
         return new YunTongXunSmsProps();
     }

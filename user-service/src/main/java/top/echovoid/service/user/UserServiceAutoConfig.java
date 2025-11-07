@@ -10,7 +10,7 @@ import top.echovoid.service.user.mapper.UserMapper;
 import top.echovoid.service.user.service.UserDetailsServiceImpl;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/4
  */
 @MapperScan("top.echovoid.service.user.mapper")

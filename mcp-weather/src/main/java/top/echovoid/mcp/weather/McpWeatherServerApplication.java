@@ -12,7 +12,7 @@ import top.echovoid.mcp.weather.service.CityCodeService;
 import top.echovoid.mcp.weather.service.WeatherService;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/19
  */
 @EnableConfigurationProperties(AMAPConfigProperties.class)

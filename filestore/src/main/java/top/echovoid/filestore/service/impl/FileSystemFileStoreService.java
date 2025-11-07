@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/9/26
  */
 @Slf4j
@@ -181,7 +181,7 @@ public class FileSystemFileStoreService implements FileStoreService, Application
 
     @Getter
     @AllArgsConstructor
-    @ConfigurationProperties("mxzero.filestore.local")
+    @ConfigurationProperties("echovoid.filestore.local")
     public static class FileSystemProps {
         private String path = "filestore_local_files";
     }

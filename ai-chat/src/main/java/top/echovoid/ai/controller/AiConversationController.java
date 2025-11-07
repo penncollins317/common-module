@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * AI会话接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/18
  */
 @AuthenticatedRequired

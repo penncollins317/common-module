@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * 聊天接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/6/27
  */
 @AuthenticatedRequired

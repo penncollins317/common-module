@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/9/13
  */

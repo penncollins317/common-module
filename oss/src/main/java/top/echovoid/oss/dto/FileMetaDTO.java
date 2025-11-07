@@ -11,7 +11,7 @@ import top.echovoid.oss.enums.FileStatus;
 import java.util.Date;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/14
  */
 @Data

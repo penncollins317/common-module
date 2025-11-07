@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.server.resource.web.DefaultBearerToke
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/12
  */
 @EnableMethodSecurity

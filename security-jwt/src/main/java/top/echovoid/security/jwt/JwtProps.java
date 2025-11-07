@@ -6,11 +6,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.UUID;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/13
  */
 @Data
-@ConfigurationProperties("mxzero.jwt")
+@ConfigurationProperties("echovoid.jwt")
 public class JwtProps {
     private String issuer = "default";
     private String secret = UUID.randomUUID().toString();

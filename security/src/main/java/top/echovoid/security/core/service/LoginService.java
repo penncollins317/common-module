@@ -6,7 +6,7 @@ import top.echovoid.security.jwt.dto.TokenDTO;
 /**
  * 登录业务
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/5
  */
 public interface LoginService {

@@ -9,7 +9,7 @@ import top.echovoid.ai.dto.response.ConversationDTO;
 import java.util.List;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/18
  */
 public interface AiConversationService {

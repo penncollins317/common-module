@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/11
  */
 @AllArgsConstructor

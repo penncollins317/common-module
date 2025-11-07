@@ -6,7 +6,7 @@ import top.echovoid.filestore.dto.FileShareDTO;
 import top.echovoid.filestore.dto.FileShareRequestDTO;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/30
  */
 public interface FileShareService {

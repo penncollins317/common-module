@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/11/7
  */
 @Configuration

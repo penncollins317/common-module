@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/5
  */
 @Data

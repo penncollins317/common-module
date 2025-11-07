@@ -16,7 +16,7 @@ import java.security.Principal;
 /**
  * 对话模型接口 V1
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/18
  */
 @AuthenticatedRequired

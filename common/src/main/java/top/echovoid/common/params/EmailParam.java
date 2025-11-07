@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import java.io.Serializable;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2024/3/12
  */

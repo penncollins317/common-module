@@ -4,11 +4,11 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/9/21
  */
 @Data
-@ConfigurationProperties("mxzero.oss")
+@ConfigurationProperties("echovoid.oss")
 public class OssProps {
     private String accessKey;
     private String secretKey;

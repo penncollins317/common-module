@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/mxzero_common
+    url: jdbc:postgresql://localhost:5432/echovoid_common
     username: postgres
     password: postgres
   data:
@@ -34,13 +34,13 @@ spring:
             clientId: 102019868
             clientSecret: GUWLwLYZP2RcbVDj
             authorizationGrantType: authorization_code
-            redirectUri: http://local.mxzero.top/login/oauth2/code/qq
+            redirectUri: http://local.echovoid.top/login/oauth2/code/qq
           weibo:
             provider: weibo
             clientId: 2459617706
             clientSecret: 0da8b21da070f8c5cad17e409691741e
             authorizationGrantType: authorization_code
-            redirectUri: http://local.mxzero.top/login/oauth2/code/weibo
+            redirectUri: http://local.echovoid.top/login/oauth2/code/weibo
 
         provider:
           qq:

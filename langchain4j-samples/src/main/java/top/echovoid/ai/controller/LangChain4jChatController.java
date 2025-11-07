@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * AI聊天服务
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/7
  */
 @AuthenticatedRequired

@@ -3,7 +3,7 @@ package top.echovoid.security.oauth2.service;
 import jakarta.mail.MessagingException;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/5
  */
 public interface EmailService {

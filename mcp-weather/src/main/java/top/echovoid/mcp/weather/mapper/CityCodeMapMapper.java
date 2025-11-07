@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.mcp.weather.entity.CityCodeMap;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/21
  */
 @Mapper

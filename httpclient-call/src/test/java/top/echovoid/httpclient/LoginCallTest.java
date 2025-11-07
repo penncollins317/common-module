@@ -15,7 +15,7 @@ import top.echovoid.httpclient.dto.response.UserinfoDTO;
 import java.io.IOException;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/9
  */
 public class LoginCallTest {

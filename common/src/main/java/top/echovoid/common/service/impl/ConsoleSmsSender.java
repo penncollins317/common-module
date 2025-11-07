@@ -5,7 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import top.echovoid.common.service.SmsSender;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/5
  */
 @Slf4j

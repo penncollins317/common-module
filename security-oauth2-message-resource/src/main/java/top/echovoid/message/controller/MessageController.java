@@ -7,7 +7,7 @@ import top.echovoid.common.annotations.HasScope;
 import java.security.Principal;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/12
  */
 @RestController

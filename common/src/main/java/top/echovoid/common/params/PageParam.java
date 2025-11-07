@@ -3,7 +3,7 @@ package top.echovoid.common.params;
 import lombok.Data;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/3
  */
 @Data

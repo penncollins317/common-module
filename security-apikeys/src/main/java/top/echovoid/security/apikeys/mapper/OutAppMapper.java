@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.security.apikeys.entity.OutApp;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/15
  */
 @Mapper

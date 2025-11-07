@@ -7,7 +7,7 @@ import top.echovoid.security.jwt.service.TokenService;
 import top.echovoid.security.jwt.service.impl.TokenServiceImpl;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/7
  */
 @Configuration

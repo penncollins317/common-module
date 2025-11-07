@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/5
  */
 @Data

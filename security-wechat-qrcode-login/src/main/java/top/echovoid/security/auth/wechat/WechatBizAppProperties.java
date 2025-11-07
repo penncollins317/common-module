@@ -4,11 +4,11 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/17
  */
 @Data
-@ConfigurationProperties("mxzero.security.wechat.biz")
+@ConfigurationProperties("echovoid.security.wechat.biz")
 public class WechatBizAppProperties {
     private String appid;
     private String appSecret;

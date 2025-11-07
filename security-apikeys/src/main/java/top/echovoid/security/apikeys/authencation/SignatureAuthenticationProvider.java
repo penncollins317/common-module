@@ -6,7 +6,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.Assert;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/20
  */
 public class SignatureAuthenticationProvider implements AuthenticationProvider {

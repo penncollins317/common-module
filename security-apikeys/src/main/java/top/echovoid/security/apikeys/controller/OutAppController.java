@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 第三方应用接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/20
  */
 @AllArgsConstructor

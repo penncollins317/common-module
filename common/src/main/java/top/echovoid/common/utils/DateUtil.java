@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * 日期时间格式化工具
  *
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/9/1
  */

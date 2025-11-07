@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 用户详细信息
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/13
  */
 @EqualsAndHashCode(callSuper = true)

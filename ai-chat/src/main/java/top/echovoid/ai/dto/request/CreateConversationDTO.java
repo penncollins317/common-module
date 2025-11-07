@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/18
  */
 @Data

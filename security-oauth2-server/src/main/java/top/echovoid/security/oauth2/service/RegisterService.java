@@ -11,7 +11,7 @@ import top.echovoid.service.user.entity.User;
 import top.echovoid.service.user.mapper.UserMapper;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/12
  */
 @Service

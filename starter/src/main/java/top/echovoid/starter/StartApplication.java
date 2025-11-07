@@ -9,7 +9,7 @@ import top.echovoid.security.core.annotations.EnableSecurityConfig;
 import java.util.Set;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/15
  */
 @EnableSecurityConfig

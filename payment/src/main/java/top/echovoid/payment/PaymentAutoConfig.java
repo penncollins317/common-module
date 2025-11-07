@@ -9,7 +9,7 @@ import top.echovoid.security.core.SecurityConfigProvider;
 import java.util.Set;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/1
  */
 @Configuration

@@ -6,7 +6,7 @@ import top.echovoid.common.exceptions.ServiceException;
 /**
  * 文件处理工具类
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/23
  */
 public class FileUtils {

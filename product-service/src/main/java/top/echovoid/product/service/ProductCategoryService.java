@@ -5,7 +5,7 @@ import top.echovoid.product.entity.ProductCategory;
 import java.util.List;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/10
  */
 public interface ProductCategoryService {

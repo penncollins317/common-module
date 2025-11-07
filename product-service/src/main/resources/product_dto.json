@@ -1,16 +1,16 @@
 {
   "name": "衣服",
   "subTitle": "2025新款 夏季 短袖",
-  "imageUrl": "http://store.mxzero.top/image.png",
+  "imageUrl": "http://store.echovoid.top/image.png",
   "categoryId": 1,
   "subImageUrls": [
-    "http://store.mxzero.top/sub_01.png",
-    "http://store.mxzero.top/sub_02.png"
+    "http://store.echovoid.top/sub_01.png",
+    "http://store.echovoid.top/sub_02.png"
   ],
   "detailImageUrls": [
-    "http://store.mxzero.top/detail_01.png",
-    "http://store.mxzero.top/detail_02.png",
-    "http://store.mxzero.top/detail_03.png"
+    "http://store.echovoid.top/detail_01.png",
+    "http://store.echovoid.top/detail_02.png",
+    "http://store.echovoid.top/detail_03.png"
   ],
   "description": "产品说明",
   "tags": [
@@ -52,7 +52,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "RS",
-      "imageUrl": "http://store.mxzero.top/sku/rs.png"
+      "imageUrl": "http://store.echovoid.top/sku/rs.png"
     },
     {
       "spec": [
@@ -68,7 +68,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "RM",
-      "imageUrl": "http://store.mxzero.top/sku/rm.png"
+      "imageUrl": "http://store.echovoid.top/sku/rm.png"
     },
     {
       "spec": [
@@ -84,7 +84,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "RL",
-      "imageUrl": "http://store.mxzero.top/sku/rl.png"
+      "imageUrl": "http://store.echovoid.top/sku/rl.png"
     },
     {
       "spec": [
@@ -100,7 +100,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "RXL",
-      "imageUrl": "http://store.mxzero.top/sku/rxl.png"
+      "imageUrl": "http://store.echovoid.top/sku/rxl.png"
     },
     {
       "spec": [
@@ -116,7 +116,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "RXXL",
-      "imageUrl": "http://store.mxzero.top/sku/rxxl.png"
+      "imageUrl": "http://store.echovoid.top/sku/rxxl.png"
     },
     {
       "spec": [
@@ -132,7 +132,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "WS",
-      "imageUrl": "http://store.mxzero.top/sku/ws.png"
+      "imageUrl": "http://store.echovoid.top/sku/ws.png"
     },
     {
       "spec": [
@@ -148,7 +148,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "WM",
-      "imageUrl": "http://store.mxzero.top/sku/wm.png"
+      "imageUrl": "http://store.echovoid.top/sku/wm.png"
     },
     {
       "spec": [
@@ -164,7 +164,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "WL",
-      "imageUrl": "http://store.mxzero.top/sku/wl.png"
+      "imageUrl": "http://store.echovoid.top/sku/wl.png"
     },
     {
       "spec": [
@@ -180,7 +180,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "WXL",
-      "imageUrl": "http://store.mxzero.top/sku/wxl.png"
+      "imageUrl": "http://store.echovoid.top/sku/wxl.png"
     },
     {
       "spec": [
@@ -196,7 +196,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "WXXL",
-      "imageUrl": "http://store.mxzero.top/sku/wxxl.png"
+      "imageUrl": "http://store.echovoid.top/sku/wxxl.png"
     },
     {
       "spec": [
@@ -212,7 +212,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "GS",
-      "imageUrl": "http://store.mxzero.top/sku/gs.png"
+      "imageUrl": "http://store.echovoid.top/sku/gs.png"
     },
     {
       "spec": [
@@ -228,7 +228,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "GM",
-      "imageUrl": "http://store.mxzero.top/sku/gm.png"
+      "imageUrl": "http://store.echovoid.top/sku/gm.png"
     },
     {
       "spec": [
@@ -244,7 +244,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "GL",
-      "imageUrl": "http://store.mxzero.top/sku/gl.png"
+      "imageUrl": "http://store.echovoid.top/sku/gl.png"
     },
     {
       "spec": [
@@ -260,7 +260,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "GXL",
-      "imageUrl": "http://store.mxzero.top/sku/gxl.png"
+      "imageUrl": "http://store.echovoid.top/sku/gxl.png"
     },
     {
       "spec": [
@@ -276,7 +276,7 @@
       "price": "49.90",
       "stock": 10,
       "code": "GXXL",
-      "imageUrl": "http://store.mxzero.top/sku/gxxl.png"
+      "imageUrl": "http://store.echovoid.top/sku/gxxl.png"
     }
   ]
 }

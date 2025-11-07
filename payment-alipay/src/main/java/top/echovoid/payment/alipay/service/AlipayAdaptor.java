@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * AlipayAdaptor 封装了支付宝支付相关的功能，包括电脑支付、手机WAP支付、查询、关闭订单、退款及退款查询。
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/8/14
  */
 @Slf4j

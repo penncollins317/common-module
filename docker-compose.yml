@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   app:
-    image: mxzero-common-web
+    image: echovoid-common-web
     ports:
       - "8080:8080"
     depends_on:
@@ -16,7 +16,7 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_DB: mxzero_common
+      POSTGRES_DB: echovoid_common
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:

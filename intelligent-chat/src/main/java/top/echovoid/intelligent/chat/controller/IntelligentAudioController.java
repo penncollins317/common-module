@@ -14,7 +14,7 @@ import top.echovoid.intelligent.chat.service.SpeechService;
 /**
  * AI音频
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/6/27
  */
 @Slf4j

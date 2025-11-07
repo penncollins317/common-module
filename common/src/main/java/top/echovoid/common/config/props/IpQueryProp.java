@@ -4,11 +4,11 @@ import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/3
  */
 @Data
-@ConditionalOnProperty("mxzero.api.ip.key")
+@ConditionalOnProperty("echovoid.api.ip.key")
 public class IpQueryProp {
     private String key;
 }

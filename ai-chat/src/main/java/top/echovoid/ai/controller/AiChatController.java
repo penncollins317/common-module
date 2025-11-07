@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * AI聊天
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2024/11/27
  */
 @RestController

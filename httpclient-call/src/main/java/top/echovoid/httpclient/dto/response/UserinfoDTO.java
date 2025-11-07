@@ -3,7 +3,7 @@ package top.echovoid.httpclient.dto.response;
 import lombok.Data;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/21
  */
 @Data

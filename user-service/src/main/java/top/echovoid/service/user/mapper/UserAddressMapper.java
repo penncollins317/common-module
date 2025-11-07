@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.service.user.entity.UserAddress;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/5
  */
 @Mapper

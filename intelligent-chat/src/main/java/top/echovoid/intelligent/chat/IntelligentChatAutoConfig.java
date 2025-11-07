@@ -4,7 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/6/27
  */
 @ComponentScan

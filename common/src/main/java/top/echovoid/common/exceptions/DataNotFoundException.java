@@ -1,7 +1,7 @@
 package top.echovoid.common.exceptions;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/17
  */
 public class DataNotFoundException extends ServiceException {

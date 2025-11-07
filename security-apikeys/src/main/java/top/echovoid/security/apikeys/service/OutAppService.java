@@ -7,7 +7,7 @@ import top.echovoid.security.apikeys.dto.response.OutAppDTO;
 import java.util.List;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/2/15
  */
 public interface OutAppService {

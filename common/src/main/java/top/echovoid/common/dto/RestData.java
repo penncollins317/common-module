@@ -6,7 +6,7 @@ import top.echovoid.common.exceptions.ServiceException;
 import top.echovoid.common.filter.RequestTraceFilter;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/9/1
  */

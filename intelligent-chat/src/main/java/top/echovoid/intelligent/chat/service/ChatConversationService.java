@@ -5,7 +5,7 @@ import top.echovoid.intelligent.chat.entity.ChatConversation;
 import java.util.List;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/6/30
  */
 public interface ChatConversationService {

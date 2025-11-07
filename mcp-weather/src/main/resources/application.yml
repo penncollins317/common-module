@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/mxzero_common
+    url: jdbc:postgresql://localhost:5432/echovoid_common
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
@@ -9,6 +9,6 @@ spring:
       server:
         name: 天气查询服务
         version: 0.0.1
-mxzero:
+echovoid:
   amap:
     web-service-key: 7462e722c4b0f10703df2268d4e4dd11

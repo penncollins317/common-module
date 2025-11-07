@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/10/4
  */
 public class QueryParamUtils {

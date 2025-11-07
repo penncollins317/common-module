@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * AI会话服务
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/19
  */
 public interface AiChatService {

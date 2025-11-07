@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 品牌接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/11
  */
 @RestController

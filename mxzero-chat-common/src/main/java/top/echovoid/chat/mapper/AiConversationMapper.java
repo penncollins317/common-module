@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.chat.entity.AiConversation;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/18
  */
 @Mapper

@@ -10,7 +10,7 @@ import top.echovoid.common.service.SmsSender;
 import java.util.HashMap;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2024/1/22
  */

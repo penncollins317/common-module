@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * 微信公众号消息推送
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/17
  */
 @Slf4j

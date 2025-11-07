@@ -9,7 +9,7 @@ import top.echovoid.common.annotations.SearchField;
 import java.util.Date;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/21
  */
 @Data

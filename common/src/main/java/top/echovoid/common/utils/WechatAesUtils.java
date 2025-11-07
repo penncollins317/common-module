@@ -9,7 +9,7 @@ import java.util.Base64;
 /**
  * 微信AES工具类
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/17
  */
 public class WechatAesUtils {

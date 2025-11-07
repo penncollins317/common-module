@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2024/8/15
  */

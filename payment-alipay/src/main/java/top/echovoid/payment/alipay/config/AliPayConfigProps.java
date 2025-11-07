@@ -4,11 +4,11 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/1
  */
 @Data
-@ConfigurationProperties(prefix = "mxzero.alipay")
+@ConfigurationProperties(prefix = "echovoid.alipay")
 public class AliPayConfigProps {
     private String gatewayUrl;
     private String appid;

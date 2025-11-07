@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * UUID v7生成器
  *
- * @author Peng
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2025/3/19
  */

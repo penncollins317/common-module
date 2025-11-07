@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.io.InputStream;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/9/29
  */
 @Getter

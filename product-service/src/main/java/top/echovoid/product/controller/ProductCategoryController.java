@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 产品分类接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/10
  */
 @RestController

@@ -14,7 +14,7 @@ import top.echovoid.security.apikeys.mapper.ApiKeyMapper;
 import top.echovoid.security.apikeys.mapper.OutAppMapper;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/20
  */
 @MapperScan("top.echovoid.security.apikeys.mapper")

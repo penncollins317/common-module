@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/17
  */
 public class XmlToMapUtil {

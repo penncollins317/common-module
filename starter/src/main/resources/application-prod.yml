@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/mxzero_common
+    url: jdbc:postgresql://db:5432/echovoid_common
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
@@ -10,7 +10,7 @@ spring:
       host: redis
       port: 6379
 
-mxzero:
+echovoid:
   filestore:
     type: local
     local:

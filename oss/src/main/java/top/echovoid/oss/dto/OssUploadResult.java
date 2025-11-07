@@ -5,7 +5,7 @@ import lombok.Data;
 import top.echovoid.oss.OssClientType;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/9/25
  */
 @Data

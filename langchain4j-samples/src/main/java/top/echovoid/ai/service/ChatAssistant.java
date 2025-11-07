@@ -6,7 +6,7 @@ import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.memory.ChatMemoryAccess;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/23
  */
 public interface ChatAssistant extends ChatMemoryAccess {

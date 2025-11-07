@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import top.echovoid.security.oauth2.entity.OAuth2UserRelated;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/3/19
  */
 @Mapper

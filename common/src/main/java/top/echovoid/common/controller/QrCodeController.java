@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.echovoid.common.utils.QRCodeUtil;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2024/12/7
  */
 @RestController

@@ -11,7 +11,7 @@ import top.echovoid.payment.service.PaymentService;
 /**
  * 公共支付接口
  *
- * @author Peng
+ * @author Penn Collins
  * @since 2025/10/1
  */
 @AllArgsConstructor

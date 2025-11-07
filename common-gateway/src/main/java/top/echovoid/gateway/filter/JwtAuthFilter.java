@@ -26,7 +26,7 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     private TokenService tokenService;
 
     private final AntPathMatcher matcher = new AntPathMatcher();
-    @Value("${mxzero.gateway.auth.whitelist}")
+    @Value("${echovoid.gateway.auth.whitelist}")
     private Set<String> whitelist;
 
     @Override

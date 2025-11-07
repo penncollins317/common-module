@@ -4,11 +4,11 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/4/21
  */
 @Data
-@ConfigurationProperties(prefix = "mxzero.amap")
+@ConfigurationProperties(prefix = "echovoid.amap")
 public class AMAPConfigProperties {
     private String webServiceKey;
 }

@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/1/11
  */
 public class AccessTokenAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {

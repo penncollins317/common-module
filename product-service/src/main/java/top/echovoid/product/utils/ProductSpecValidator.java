@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author Peng
+ * @author Penn Collins
  * @since 2025/5/13
  */
 public class ProductSpecValidator {
