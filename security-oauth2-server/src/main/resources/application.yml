@@ -69,6 +69,6 @@ spring:
           auth: true
 logging:
   level:
-    top.mxzero: debug
+    top.echovoid: debug
     org.springframework.security: debug
     org.springframework.security.oauth2: debug

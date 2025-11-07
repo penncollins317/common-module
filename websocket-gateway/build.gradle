@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'top.mxzero.gateway.websocket'
+group = 'top.echovoid'
 version = 'unspecified'
 
 repositories {

@@ -539,7 +539,7 @@ common (核心)
 
 ## 👥 作者
 
-- **Peng** - *项目维护者* - qianmeng6879@163.com
+- **Penn Collins** - *项目维护者* - penncollins317@gmail.com
 
 ---
 
@@ -554,7 +554,7 @@ common (核心)
 如有问题或建议，请通过以下方式联系：
 
 - 提交 Issue: [GitHub Issues](https://github.com/<yourname>/mxzero-common-project/issues)
-- 邮箱: qianmeng6879@163.com
+- 邮箱: penncollins317@gmail.com
 
 ---
 
