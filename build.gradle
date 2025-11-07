@@ -315,6 +315,14 @@ project("httpclient-call") {
     }
 }
 
+project("websocket-gateway") {
+    dependencies {
+        implementation project(":common")
+        implementation project(":security")
+        implementation 'org.springframework.boot:spring-boot-starter-websocket'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+}
 
 project("starter") {
     dependencies {
@@ -328,6 +336,7 @@ project("starter") {
         implementation project(":filestore")
         implementation project(":payment")
         implementation project(":payment-alipay")
+        implementation project(":websocket-gateway")
         implementation 'org.postgresql:postgresql'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
