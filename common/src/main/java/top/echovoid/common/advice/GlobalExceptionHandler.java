@@ -16,6 +16,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public RestData<?> handleAllException(Exception e) {
         log.error(e.getMessage(), e);
@@ -48,40 +50,47 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MaxUploadSizeExceededException.class})
     public RestData<?> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e, HttpServletResponse response) {
         HttpStatusCode statusCode = e.getStatusCode();
+        response.setStatus(statusCode.value());
         return RestData.error(e.getMessage(), statusCode.value());
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public RestData<?> handleBadCredentialsException(BadCredentialsException e) {
-        return RestData.error(e.getMessage());
-    }
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(BadCredentialsException.class)
+//    public RestData<?> handleBadCredentialsException(BadCredentialsException e) {
+//        return RestData.error(e.getMessage());
+//    }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public RestData<?> handleAuthenticationException(AuthenticationException e) {
-        return RestData.error(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
-    }
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    @ExceptionHandler(AuthenticationException.class)
+//    public RestData<?> handleAuthenticationException(AuthenticationException e) {
+//        return RestData.error(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
+//    }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public RestData<?> handleAccessDeniedException(AccessDeniedException e) {
-        return RestData.error(e.getMessage(), HttpStatus.FORBIDDEN.value());
-    }
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public RestData<?> handleAccessDeniedException(AccessDeniedException e) {
+//        return RestData.error(e.getMessage(), HttpStatus.FORBIDDEN.value());
+//    }
 
-    @ExceptionHandler({AuthenticationCredentialsNotFoundException.class})
-    public RestData<?> handleNoAuthenticateException() {
-        return RestData.error("用户未登录", HttpStatus.UNAUTHORIZED.value());
-    }
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    @ExceptionHandler({AuthenticationCredentialsNotFoundException.class})
+//    public RestData<?> handleNoAuthenticateException() {
+//        return RestData.error("用户未登录", HttpStatus.UNAUTHORIZED.value());
+//    }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class, HttpMediaTypeNotAcceptableException.class})
     public RestData<?> handleNoHandlerFoundException(HttpServletRequest request) {
         return RestData.error(request.getRequestURI() + " not found", HttpServletResponse.SC_NOT_FOUND);
     }
 
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RestData<?> handleHttpRequestMethodNotSupportedException() {
-        return RestData.error("请求方法不支持", HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        return RestData.error("method not Support.", HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
 
-
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
                                                                   HttpServletRequest request) {
@@ -98,7 +107,7 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ServiceException.class)
     public RestData<?> handleServiceException(ServiceException e) {
         return RestData.error(e.getMessage(), e.getCode());
@@ -108,6 +117,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理 @Valid 参数校验失败异常
      */
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e,
                                                                   HttpServletRequest request) {
@@ -147,7 +157,7 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MissingRequestValueException.class)
     public ApiErrorResponse handleMissingRequestValueException(MissingRequestValueException e,
                                                                HttpServletRequest request) {

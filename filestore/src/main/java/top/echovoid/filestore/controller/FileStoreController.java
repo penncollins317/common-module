@@ -2,10 +2,7 @@ package top.echovoid.filestore.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.echovoid.common.dto.PageDTO;
 import top.echovoid.common.dto.RestData;
@@ -14,8 +11,8 @@ import top.echovoid.common.utils.FileUtils;
 import top.echovoid.filestore.dto.FileUploadRequest;
 import top.echovoid.filestore.dto.FileUploadResponse;
 import top.echovoid.filestore.service.FileStoreService;
-import top.echovoid.oss.dto.FileMetaDTO;
-import top.echovoid.oss.enums.AclType;
+import top.echovoid.filestore.dto.FileMetaDTO;
+import top.echovoid.filestore.enums.AclType;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -54,7 +51,7 @@ public class FileStoreController {
     /**
      * 文件元数据
      */
-    @RequestMapping("/meta_info")
+    @GetMapping("/meta_info")
     public RestData<FileMetaDTO> metaApi(@RequestParam Long fileId) {
         return RestData.ok(fileStoreService.getMetadata(fileId));
     }
@@ -64,7 +61,7 @@ public class FileStoreController {
      * 文件列表
      *
      */
-    @RequestMapping("/file_list")
+    @GetMapping("/file_list")
     public RestData<PageDTO<FileMetaDTO>> fileListApi(Principal principal, PageParam pageParam) {
         return RestData.ok(fileStoreService.fileList(Long.valueOf(principal.getName()), pageParam));
     }

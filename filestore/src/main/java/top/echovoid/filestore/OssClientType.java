@@ -1,4 +1,4 @@
-package top.echovoid.oss;
+package top.echovoid.filestore;
 
 /**
  * @author Penn Collins

@@ -29,6 +29,7 @@ public class JsonAccessDeniedHandler implements AccessDeniedHandler {
         if (accept != null && accept.startsWith(MediaType.APPLICATION_JSON_VALUE)) {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             try (PrintWriter writer = response.getWriter()) {
                 writer.print(JsonUtils.stringify(RestData.error("FORBIDDEN", (HttpServletResponse.SC_FORBIDDEN))));
             }

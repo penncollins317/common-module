@@ -1,4 +1,4 @@
-package top.echovoid.oss.param;
+package top.echovoid.filestore.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

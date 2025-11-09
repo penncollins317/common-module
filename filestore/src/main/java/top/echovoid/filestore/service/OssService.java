@@ -1,14 +1,14 @@
-package top.echovoid.oss.service;
+package top.echovoid.filestore.service;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
-import top.echovoid.oss.dto.OssUploadResult;
+import top.echovoid.filestore.dto.OssUploadResult;
 
 import java.io.InputStream;
 import java.util.List;
 
 /**
- * @author zero
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/8/19
  */

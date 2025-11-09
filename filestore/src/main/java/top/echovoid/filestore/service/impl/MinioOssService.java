@@ -1,13 +1,13 @@
-package top.echovoid.oss.service.impl;
+package top.echovoid.filestore.service.impl;
 
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.DeleteObject;
 import lombok.extern.slf4j.Slf4j;
-import top.echovoid.oss.OssClientType;
-import top.echovoid.oss.OssProps;
-import top.echovoid.oss.dto.OssUploadResult;
-import top.echovoid.oss.service.OssService;
+import top.echovoid.filestore.OssClientType;
+import top.echovoid.filestore.OssProps;
+import top.echovoid.filestore.dto.OssUploadResult;
+import top.echovoid.filestore.service.OssService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

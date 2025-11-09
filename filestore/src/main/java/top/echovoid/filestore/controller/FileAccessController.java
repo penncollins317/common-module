@@ -8,15 +8,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import top.echovoid.common.dto.RestData;
 import top.echovoid.filestore.dto.FileAccessDTO;
 import top.echovoid.filestore.service.FileStoreService;
-import top.echovoid.oss.service.OssService;
+import top.echovoid.filestore.service.OssService;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +21,7 @@ import java.security.Principal;
 import java.util.Optional;
 
 /**
- * 私有文件访问接口
+ * 文件访问接口
  *
  * @author Penn Collins
  * @since 2025/5/24
@@ -41,7 +38,7 @@ public class FileAccessController {
      *
      * @param filename 文件路径
      */
-    @RequestMapping("/filestore/private")
+    @GetMapping("/filestore/private")
     public RestData<String> filestorePrivateAccessApi(@RequestParam("file") String filename) {
         return RestData.ok(ossService.privateAccessUrl(filename));
     }
@@ -51,7 +48,7 @@ public class FileAccessController {
      *
      * @param path 文件路径
      */
-    @RequestMapping("/filestore/access/{*path}")
+    @GetMapping("/filestore/access/{*path}")
     public ResponseEntity<InputStreamResource> fileAccessApi(@PathVariable String path, Principal principal, String token) throws NoResourceFoundException {
         log.info("user：{}", principal != null ? principal.getName() : null);
         String fileKey = path.substring(1);

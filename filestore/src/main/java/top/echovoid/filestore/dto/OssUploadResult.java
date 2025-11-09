@@ -1,8 +1,8 @@
-package top.echovoid.oss.dto;
+package top.echovoid.filestore.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import top.echovoid.oss.OssClientType;
+import top.echovoid.filestore.OssClientType;
 
 /**
  * @author Penn Collins

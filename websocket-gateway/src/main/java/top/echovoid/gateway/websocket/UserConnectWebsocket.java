@@ -26,7 +26,7 @@ public class UserConnectWebsocket extends TextWebSocketHandler {
         this.objectMapper = objectMapper;
     }
 
-    public static final Map<String, WebSocketSession> SESSION_MAP = new ConcurrentHashMap<>();
+    public static final Map<Long, WebSocketSession> SESSION_MAP = new ConcurrentHashMap<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -36,11 +36,12 @@ public class UserConnectWebsocket extends TextWebSocketHandler {
             return;
         }
         log.info("{} websocket connection established", principal.getName());
-        WebSocketSession existsWebsocket = SESSION_MAP.get(principal.getName());
+        Long userId = Long.valueOf(principal.getName());
+        WebSocketSession existsWebsocket = SESSION_MAP.get(userId);
         if (existsWebsocket != null) {
             existsWebsocket.close();
         }
-        SESSION_MAP.put(principal.getName(), session);
+        SESSION_MAP.put(userId, session);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class UserConnectWebsocket extends TextWebSocketHandler {
         Principal principal = session.getPrincipal();
         if (principal != null) {
             log.info("{} websocket connection closed", principal.getName());
-            SESSION_MAP.remove(principal.getName());
+            SESSION_MAP.remove(Long.valueOf(principal.getName()));
         }
     }
 
@@ -75,7 +76,7 @@ public class UserConnectWebsocket extends TextWebSocketHandler {
                 if (targetUser == null || content == null) {
                     return;
                 }
-                WebSocketSession targetSession = SESSION_MAP.get(targetUser);
+                WebSocketSession targetSession = SESSION_MAP.get(Long.valueOf(targetUser));
                 if (targetSession != null) {
                     WebsocketMessageDTO websocketResponseDTO = WebsocketMessageDTO.builder()
                             .requestId(requestDTO.getRequestId()).key("message_push").data(

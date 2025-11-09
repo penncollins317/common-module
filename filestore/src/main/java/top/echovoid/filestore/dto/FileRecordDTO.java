@@ -1,4 +1,4 @@
-package top.echovoid.oss.dto;
+package top.echovoid.filestore.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

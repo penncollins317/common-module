@@ -21,11 +21,11 @@ import top.echovoid.filestore.dto.FileUploadRequest;
 import top.echovoid.filestore.dto.FileUploadResponse;
 import top.echovoid.filestore.service.FileShareService;
 import top.echovoid.filestore.service.FileStoreService;
-import top.echovoid.oss.dto.FileMetaDTO;
-import top.echovoid.oss.entity.FileMeta;
-import top.echovoid.oss.enums.AclType;
-import top.echovoid.oss.enums.FileStatus;
-import top.echovoid.oss.mapper.FileMetaMapper;
+import top.echovoid.filestore.dto.FileMetaDTO;
+import top.echovoid.filestore.entity.FileMeta;
+import top.echovoid.filestore.enums.AclType;
+import top.echovoid.filestore.enums.FileStatus;
+import top.echovoid.filestore.mapper.FileMetaMapper;
 import top.echovoid.service.user.service.UserService;
 
 import java.io.*;
@@ -95,7 +95,7 @@ public class FileSystemFileStoreService implements FileStoreService, Application
             return false;
         }
         if (fileMeta.getAcl() == AclType.SHARED) {
-
+            // after
         }
         return true;
     }

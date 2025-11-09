@@ -1,4 +1,4 @@
-package top.echovoid.oss.service;
+package top.echovoid.filestore.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import top.echovoid.common.utils.DeepBeanUtil;
 import top.echovoid.common.utils.HashUtils;
-import top.echovoid.oss.dto.FileMetaDTO;
-import top.echovoid.oss.dto.OssUploadResult;
-import top.echovoid.oss.entity.FileMeta;
-import top.echovoid.oss.enums.FileStatus;
-import top.echovoid.oss.mapper.FileMetaMapper;
+import top.echovoid.filestore.dto.FileMetaDTO;
+import top.echovoid.filestore.dto.OssUploadResult;
+import top.echovoid.filestore.entity.FileMeta;
+import top.echovoid.filestore.enums.FileStatus;
+import top.echovoid.filestore.mapper.FileMetaMapper;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

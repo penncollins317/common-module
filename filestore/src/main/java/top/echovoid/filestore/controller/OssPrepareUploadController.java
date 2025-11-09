@@ -1,12 +1,12 @@
-package top.echovoid.oss.controller;
+package top.echovoid.filestore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.echovoid.common.dto.RestData;
 import top.echovoid.common.exceptions.ServiceException;
-import top.echovoid.oss.service.OssService;
+import top.echovoid.filestore.service.OssService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +31,7 @@ public class OssPrepareUploadController {
      * @param name 文件名称
      * @return 签名信息
      */
-    @RequestMapping("/upload/prepare/sign")
+    @GetMapping("/upload/prepare/sign")
     public RestData<UploadSignRecord> ossUploadPrepareApi(@RequestParam("name") String name) {
         // 预生成文件路径
         String datePath = LocalDate.now().format(DATE_TIME_FORMATTER);
@@ -58,7 +58,7 @@ public class OssPrepareUploadController {
      *
      * @param key 文件key
      */
-    @RequestMapping("/oss/private/access")
+    @GetMapping("/oss/private/access")
     public RestData<String> privateAccessUrl(@RequestParam String key) {
         return RestData.success(ossService.privateAccessUrl(key));
     }

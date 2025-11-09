@@ -1,8 +1,8 @@
-package top.echovoid.oss.mapper;
+package top.echovoid.filestore.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.echovoid.oss.entity.FileMeta;
+import top.echovoid.filestore.entity.FileMeta;
 
 /**
  * @author Penn Collins

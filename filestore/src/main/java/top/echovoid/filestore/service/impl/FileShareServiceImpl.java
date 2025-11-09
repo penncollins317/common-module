@@ -16,9 +16,9 @@ import top.echovoid.filestore.dto.FileShareRequestDTO;
 import top.echovoid.filestore.entity.FileShared;
 import top.echovoid.filestore.mapper.FileShardMapper;
 import top.echovoid.filestore.service.FileShareService;
-import top.echovoid.oss.dto.FileMetaDTO;
-import top.echovoid.oss.entity.FileMeta;
-import top.echovoid.oss.mapper.FileMetaMapper;
+import top.echovoid.filestore.dto.FileMetaDTO;
+import top.echovoid.filestore.entity.FileMeta;
+import top.echovoid.filestore.mapper.FileMetaMapper;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

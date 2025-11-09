@@ -7,7 +7,7 @@ import top.echovoid.filestore.dto.FileAccessDTO;
 import top.echovoid.filestore.dto.FileDownloadResponse;
 import top.echovoid.filestore.dto.FileUploadRequest;
 import top.echovoid.filestore.dto.FileUploadResponse;
-import top.echovoid.oss.dto.FileMetaDTO;
+import top.echovoid.filestore.dto.FileMetaDTO;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;

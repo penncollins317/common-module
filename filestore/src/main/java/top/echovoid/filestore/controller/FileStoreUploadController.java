@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.echovoid.common.dto.RestData;
 import top.echovoid.common.exceptions.ServiceException;
-import top.echovoid.oss.dto.OssUploadResult;
-import top.echovoid.oss.service.OssService;
+import top.echovoid.filestore.dto.OssUploadResult;
+import top.echovoid.filestore.service.OssService;
 
 import java.io.IOException;
 import java.io.OutputStream;

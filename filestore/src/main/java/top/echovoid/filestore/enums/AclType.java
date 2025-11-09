@@ -1,4 +1,4 @@
-package top.echovoid.oss.enums;
+package top.echovoid.filestore.enums;
 
 import lombok.Getter;
 

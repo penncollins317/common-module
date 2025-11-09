@@ -52,7 +52,7 @@ public class SecurityCoreAutoConfig {
                         }));
                     }
                     authorize.requestMatchers(aggregator.getIgnoreUrls().toArray(new String[0])).permitAll();
-                    authorize.requestMatchers("/token/**", "/error").permitAll();
+                    authorize.requestMatchers("/token/**", "/error", "/favicon.ico").permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .exceptionHandling(handler -> {

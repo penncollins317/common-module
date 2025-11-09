@@ -1,4 +1,4 @@
-package top.echovoid.oss;
+package top.echovoid.filestore;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

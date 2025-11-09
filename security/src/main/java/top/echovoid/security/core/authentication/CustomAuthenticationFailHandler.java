@@ -38,6 +38,7 @@ public class CustomAuthenticationFailHandler extends SimpleUrlAuthenticationFail
     private void responseJson(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         try (PrintWriter writer = response.getWriter()) {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             writer.print(JsonUtils.stringify(RestData.error("Bad credentials")));
         } catch (Exception e) {
             logger.error(e.getMessage());

@@ -2,6 +2,7 @@ package top.echovoid.gateway.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -11,6 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * @author Penn Collins
  * @since 2025/11/7
  */
+@ComponentScan("top.echovoid.gateway.websocket.controller")
 @Configuration
 @EnableWebSocket
 public class WebSocketGatewayAutoConfig implements WebSocketConfigurer {

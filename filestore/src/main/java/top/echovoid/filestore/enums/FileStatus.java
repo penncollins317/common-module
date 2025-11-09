@@ -1,4 +1,4 @@
-package top.echovoid.oss.enums;
+package top.echovoid.filestore.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;

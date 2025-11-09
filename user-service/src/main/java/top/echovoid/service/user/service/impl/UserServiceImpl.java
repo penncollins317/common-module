@@ -57,6 +57,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserinfoDTO> getUserinfo(Set<Long> userIds) {
+        return this.userMapper.findUserinfoByIdSet(userIds);
+    }
+
+    @Override
     public PageDTO<UserinfoDTO> search(PageExtendParam parma) {
         parma.setFields(Set.of("id", "avatar_url", "username", "nickname", "pwd_version"));
         return PageDTO.<User, UserinfoDTO>wrap(this.userMapper, User.class, parma, UserinfoDTO::new);

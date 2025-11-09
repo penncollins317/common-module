@@ -1,27 +1,25 @@
-package top.echovoid.oss.entity;
+package top.echovoid.filestore.dto;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import top.echovoid.oss.enums.AclType;
-import top.echovoid.oss.enums.FileStatus;
+import top.echovoid.filestore.enums.AclType;
+import top.echovoid.filestore.enums.FileStatus;
 
 import java.util.Date;
 
 /**
  * @author Penn Collins
- * @since 2024/10/19
+ * @since 2025/4/14
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("file_meta")
-public class FileMeta {
+public class FileMetaDTO {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     private String name;
     private String storePath;
@@ -31,10 +29,9 @@ public class FileMeta {
     private FileStatus status;
     private String md5;
     private String sha256;
-    private Long userId;
     private AclType acl;
-    @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long userId;
     private Date createdAt;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatedAt;
 }

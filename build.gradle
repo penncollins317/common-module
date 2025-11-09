@@ -193,30 +193,19 @@ project("mcp-weather") {
     }
 }
 
-project("oss") {
-    dependencies {
-        implementation project(":common")
-        implementation project(":security")
-        api libraries.'aliyun-sdk-oss'
-        api libraries.'qiniu-java-sdk'
-        api libraries.'minio'
-        api libraries.'s3'
-        api 'org.springframework.boot:spring-boot-starter-web'
-        api 'org.springframework.boot:spring-boot-starter-thymeleaf'
-        api 'org.springframework.boot:spring-boot-starter-data-redis'
-        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    }
-}
-
 
 project("filestore") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
         implementation project(":user-service")
-        implementation project(":oss")
+        implementation libraries.'aliyun-sdk-oss'
+        implementation libraries.'qiniu-java-sdk'
+        implementation libraries.'minio'
+        implementation libraries.'s3'
+        implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
 }
 
@@ -322,6 +311,8 @@ project("websocket-gateway") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
+        implementation project(":user-service")
+        implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-websocket'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     }
@@ -335,7 +326,6 @@ project("starter") {
         implementation project(":product-service")
         implementation project(":order-service")
 //        implementation project(":security-apikeys")
-        implementation project(":oss")
         implementation project(":filestore")
         implementation project(":payment")
         implementation project(":payment-alipay")

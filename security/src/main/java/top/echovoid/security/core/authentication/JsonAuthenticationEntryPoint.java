@@ -30,6 +30,7 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if (forceJson || (accept != null && accept.startsWith(MediaType.APPLICATION_JSON_VALUE))) {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             try (PrintWriter writer = response.getWriter()) {
                 writer.print(JsonUtils.stringify(RestData.error("UNAUTHORIZED", HttpServletResponse.SC_UNAUTHORIZED)));
             }

@@ -3,18 +3,49 @@
 
 <mapper namespace="top.echovoid.service.user.mapper.UserMapper">
     <select id="findUserinfoById" resultType="top.echovoid.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url FROM t_user WHERE id = #{userId}
+        SELECT id, username, nickname, avatar_url
+        FROM t_user
+        WHERE id = #{userId}
     </select>
 
     <select id="findUserinfoByUsername" resultType="top.echovoid.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url FROM t_user WHERE username = #{username} LIMIT 1
+        SELECT id, username, nickname, avatar_url
+        FROM t_user
+        WHERE username = #{username}
+        LIMIT 1
+    </select>
+    <select id="findUserinfoByIdSet" resultType="top.echovoid.service.user.dto.UserinfoDTO">
+        SELECT id, username, nickname, avatar_url
+        FROM t_user
+        <where>
+            <if test="userIds != null and userIds.size() > 0">
+                id IN
+                <foreach collection="userIds" item="userId" separator="," open="(" close=")">
+                    #{userId}
+                </foreach>
+            </if>
+            <if test="userIds == null or userIds.size() == 0">
+                1 = 0
+            </if>
+        </where>
+        ORDER BY id ASC
     </select>
 
     <select id="findUserinfoByIds" resultType="top.echovoid.service.user.dto.UserinfoDTO">
-        SELECT id, username, nickname, avatar_url FROM t_user WHERE id IN
-        <foreach collection="userIds" item="userId" separator="," open="(" close=")">
-            #{userId}
-        </foreach>
+        SELECT id, username, nickname, avatar_url
+        FROM t_user
+        <where>
+            <if test="userIds != null and userIds.size() > 0">
+                id IN
+                <foreach collection="userIds" item="userId" separator="," open="(" close=")">
+                    #{userId}
+                </foreach>
+            </if>
+            <if test="userIds == null or userIds.size() == 0">
+                1 = 0
+            </if>
+        </where>
         ORDER BY id ASC
     </select>
+
 </mapper>

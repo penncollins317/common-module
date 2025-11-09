@@ -1,4 +1,4 @@
-package top.echovoid.oss.service.impl;
+package top.echovoid.filestore.service.impl;
 
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
@@ -6,16 +6,16 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
-import top.echovoid.oss.OssClientType;
-import top.echovoid.oss.OssProps;
-import top.echovoid.oss.dto.OssUploadResult;
-import top.echovoid.oss.service.OssService;
+import top.echovoid.filestore.OssClientType;
+import top.echovoid.filestore.OssProps;
+import top.echovoid.filestore.dto.OssUploadResult;
+import top.echovoid.filestore.service.OssService;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 /**
- * @author zero
+ * @author Penn Collins
  * @email penncollins317@gmail.com
  * @since 2023/8/19
  */

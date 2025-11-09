@@ -2,6 +2,7 @@ package top.echovoid.filestore;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +11,11 @@ import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 import top.echovoid.filestore.handler.FileUploadHandler;
 import top.echovoid.filestore.service.FileStoreService;
+import top.echovoid.filestore.service.OssService;
+import top.echovoid.filestore.service.impl.AliCloudOssService;
 import top.echovoid.filestore.service.impl.FileSystemFileStoreService;
+import top.echovoid.filestore.service.impl.MinioOssService;
+import top.echovoid.filestore.service.impl.QiNiuYunOssService;
 import top.echovoid.security.core.SecurityConfigProvider;
 
 import java.util.Set;
@@ -25,7 +30,7 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 @MapperScan("top.echovoid.filestore.mapper")
 @Configuration
 @ComponentScan
-@EnableConfigurationProperties({FileStoreProperties.class, FileSystemFileStoreService.FileSystemProps.class})
+@EnableConfigurationProperties({FileStoreProperties.class, OssProps.class, FileSystemFileStoreService.FileSystemProps.class})
 public class FileStoreAutoConfig {
     @Bean
     public FileUploadHandler fileUploadHandler() {
@@ -41,6 +46,24 @@ public class FileStoreAutoConfig {
     @ConditionalOnMissingBean(FileStoreService.class)
     public FileStoreService fileSystemFileStoreService(FileSystemFileStoreService.FileSystemProps props) {
         return new FileSystemFileStoreService(props);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "echovoid.oss.type", havingValue = "minio")
+    public OssService minioOssService(OssProps props) {
+        return new MinioOssService(props);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "echovoid.oss.type", havingValue = "qiniu")
+    public OssService qiniuOssService(OssProps props) {
+        return new QiNiuYunOssService(props);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "echovoid.oss.type", havingValue = "ali")
+    public OssService aliCloudOssService(OssProps props) {
+        return new AliCloudOssService(props);
     }
 
     @Bean

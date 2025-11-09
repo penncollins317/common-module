@@ -3,7 +3,7 @@ package top.echovoid.filestore.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import top.echovoid.oss.enums.AclType;
+import top.echovoid.filestore.enums.AclType;
 
 import java.io.InputStream;
 

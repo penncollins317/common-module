@@ -1,4 +1,4 @@
-package top.echovoid.oss.dto;
+package top.echovoid.filestore.dto;
 
 import lombok.Builder;
 import lombok.Data;

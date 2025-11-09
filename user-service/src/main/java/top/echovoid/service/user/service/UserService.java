@@ -6,6 +6,7 @@ import top.echovoid.common.params.PageExtendParam;
 import top.echovoid.service.user.dto.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Penn Collins
@@ -47,6 +48,14 @@ public interface UserService {
      * @return 用户基础信息DTO列表
      */
     List<UserinfoDTO> getUserinfo(List<Long> userIds);
+    /**
+     * 批量获取用户基础信息
+     *
+     * @param userIds 用户ID列表
+     * @return 用户基础信息DTO列表
+     */
+
+    List<UserinfoDTO> getUserinfo(Set<Long> userIds);
 
     /**
      * 用户搜索
