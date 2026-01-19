@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: dev
   servlet:
     multipart:
       max-file-size: 100MB
@@ -8,11 +6,20 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    url: jdbc:postgresql://localhost:5432/common_module
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  data:
+    redis:
+      host: localhost
+      port: 6379
   mail:
     host: smtp.qq.com
     port: 465
-    username: example@qq.com
-    password: 32........32
+    username: <email_address>
+    password: <email_password>
     default-encoding: UTF-8
     properties:
       company:
@@ -22,35 +29,31 @@ spring:
           ssl:
             enable: true
           auth: true
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
 
 echovoid:
   alipay:
-    appid: 90.......9
+    appid: <alipay_appid>
     gateway-url: https://openapi-sandbox.dl.alipaydev.com/gateway.do
     alipay-public-key: classpath:/alipay/alipay_public_key.txt
     app-private-key-path: classpath:/alipay/alipay_app_private_key.txt
   jwt:
     expire: 2592000
-    issuer: http://echovoid.top
+    issuer: https://example.com
     secret: ed8f07de-b628-49d5-a423-062d20e19907
   security:
     wechat:
       biz:
-        appid: wx9.......43
-        app-secret: f6.............a
-        token: 38...................BD3
-        aes-key: WtrRx..................h0G
+        appid: <wechat_biz_appid>
+        app-secret: <wechat_biz_secret>
+        token: <wechat_biz_token>
+        aes-key: <wechat_biz_aes_key>
   oss:
     type: qiniu
-    access-key: oa..................F6it
-    secret-key: PyI........................h3
-    endpoint: qiniu.talkiestar.cn
+    access-key: <oss_access_key>
+    secret-key: <oss_access_secret>
+    endpoint: <oss_endpoint>
     secret: false
-    bucket-name: ta....ar
+    bucket-name: <odd_bucket_name>
 
 management:
   endpoints:
