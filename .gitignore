@@ -40,3 +40,6 @@ bin/
 json.json
 temp/
 logs/
+application-dev.yml
+application-prod.yml
+alipay/

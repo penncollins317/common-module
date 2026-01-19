@@ -24,7 +24,7 @@ public class StartApplication {
         return new SecurityConfigProvider() {
             @Override
             public Set<String> ignoreUrls() {
-                return Set.of("/actuator/**");
+                return Set.of("/actuator/**", "/ip");
             }
         };
     }

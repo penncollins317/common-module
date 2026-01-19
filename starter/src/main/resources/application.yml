@@ -11,12 +11,12 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    username: qingfeng1222@qq.com
-    password: umecwglltuufbaeb
+    username: example@qq.com
+    password: 32........32
     default-encoding: UTF-8
     properties:
       company:
-        name: 趣语星伴
+        name: EchoVoid
       mail:
         smtp:
           ssl:
@@ -29,7 +29,7 @@ spring:
 
 echovoid:
   alipay:
-    appid: 9021000123615029
+    appid: 90.......9
     gateway-url: https://openapi-sandbox.dl.alipaydev.com/gateway.do
     alipay-public-key: classpath:/alipay/alipay_public_key.txt
     app-private-key-path: classpath:/alipay/alipay_app_private_key.txt
@@ -40,21 +40,17 @@ echovoid:
   security:
     wechat:
       biz:
-        appid: wx9cc9c76a79009543
-        app-secret: f6b3f10f638004cb24eb23cadf60011a
-        token: 381746E471C444E089B19FE12027BBD3
-        aes-key: WtrRxen3j5Cyovu8Ed5hENDNLcDju6zUlohrpVI3h0G
+        appid: wx9.......43
+        app-secret: f6.............a
+        token: 38...................BD3
+        aes-key: WtrRx..................h0G
   oss:
     type: qiniu
-    access-key: oavSaZ7G1q4ZOxacfhby7R2ZgHym5JlbwPsRF6it
-    secret-key: PyISYsr4ywAdP9vmtZANSqdjNM_6FFQX5fBwTlh3
+    access-key: oa..................F6it
+    secret-key: PyI........................h3
     endpoint: qiniu.talkiestar.cn
     secret: false
-    bucket-name: talkiestar
-
-#logging:
-#  level:
-#    org.springframework.security: DEBUG
+    bucket-name: ta....ar
 
 management:
   endpoints:
