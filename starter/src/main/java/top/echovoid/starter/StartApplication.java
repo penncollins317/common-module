@@ -24,7 +24,7 @@ public class StartApplication {
         return new SecurityConfigProvider() {
             @Override
             public Set<String> ignoreUrls() {
-                return Set.of("/actuator/**", "/ip");
+                return Set.of("/actuator/**", "/ip", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**");
             }
         };
     }

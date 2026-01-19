@@ -68,6 +68,8 @@ project("common") {
         implementation 'jakarta.servlet:jakarta.servlet-api'
         implementation 'com.google.zxing:core:3.5.2'
         implementation 'com.google.zxing:javase:3.5.2'
+        api libraries.'nimbus-jose-jwt'
+        api libraries.'springdoc-openapi-starter-webmvc-ui'
         api libraries.'mybatis-plus'
         api libraries.'mybatis-spring'
         api 'com.baomidou:mybatis-plus-annotation'

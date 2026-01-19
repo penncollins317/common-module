@@ -2,7 +2,7 @@ ext.versions = [
         springBoot        : '3.4.4',
         springCloud       : '2024.0.1',
         springCloudAlibaba: '2022.0.0.0',
-        springDoc         : '2.2.0',
+        springDoc         : '2.7.0',
         springAi          : '1.0.0',
         springBootAdmin   : '3.1.8',
         springData        : '3.4.2',
@@ -40,6 +40,7 @@ ext.versions = [
         dashscope         : "2.20.6",
         openai            : "2.9.0",
         prometheus        : "1.15.4",
+        nimbusJose        : "10.7",
 ]
 
 ext.libraries = [
@@ -50,12 +51,14 @@ ext.libraries = [
         'spring-ai-bom'                              : "org.springframework.ai:spring-ai-bom:${versions.springAi}",
         'spring-boot-admin-starter-server'           : "de.codecentric:spring-boot-admin-starter-server:${versions.springBootAdmin}",
         'spring-boot-admin-starter-client'           : "de.codecentric:spring-boot-admin-starter-client:${versions.springBootAdmin}",
+        'springdoc-openapi-starter-webmvc-ui'        : "org.springdoc:springdoc-openapi-starter-webmvc-ui:${versions.springDoc}",
         'servlet-api'                                : "jakarta.servlet:jakarta.servlet-api:${versions.servlet}",
         'nacos-client'                               : "com.alibaba.nacos:nacos-client:${versions.nacos}",
         'jjwt'                                       : "io.jsonwebtoken:jjwt:${versions.jjwt}",
         'jjwt-api'                                   : "io.jsonwebtoken:jjwt-api:${versions.jjwt}",
         'jjwt-impl'                                  : "io.jsonwebtoken:jjwt-impl:${versions.jjwt}",
         'jjwt-jackson'                               : "io.jsonwebtoken:jjwt-jackson:${versions.jjwt}",
+        'nimbus-jose-jwt'                            : "com.nimbusds:nimbus-jose-jwt:${versions.nimbusJose}",
         'qiniu-java-sdk'                             : "com.qiniu:qiniu-java-sdk:${versions.qiniu}",
         'aliyun-sdk-oss'                             : "com.aliyun.oss:aliyun-sdk-oss:${versions.aliyunOss}",
         'java-sms-sdk'                               : "com.cloopen:java-sms-sdk:${versions.sms}",
