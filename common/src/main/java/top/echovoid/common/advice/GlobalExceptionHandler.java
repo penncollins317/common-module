@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
         return RestData.error("method not Support.", HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
 
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
                                                                   HttpServletRequest request) {
@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
         );
 
         return ApiErrorResponse.builder()
-                .code(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .code(HttpStatus.UNPROCESSABLE_CONTENT.value())
                 .message("请求体格式错误")
                 .errors(errors)
                 .path(request.getRequestURI())
@@ -113,7 +113,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理 @Valid 参数校验失败异常
      */
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e,
                                                                   HttpServletRequest request) {
@@ -145,7 +145,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
 
         return ApiErrorResponse.builder()
-                .code(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .code(HttpStatus.UNPROCESSABLE_CONTENT.value())
                 .message("参数验证失败")
                 .errors(errors)
                 .path(request.getRequestURI())
@@ -153,7 +153,7 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     @ExceptionHandler(MissingRequestValueException.class)
     public ApiErrorResponse handleMissingRequestValueException(MissingRequestValueException e,
                                                                HttpServletRequest request) {
@@ -180,7 +180,7 @@ public class GlobalExceptionHandler {
         );
 
         return ApiErrorResponse.builder()
-                .code(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .code(HttpStatus.UNPROCESSABLE_CONTENT.value())
                 .message("请求缺少必要的参数/头部/Cookie")
                 .errors(errors)
                 .path(request.getRequestURI())

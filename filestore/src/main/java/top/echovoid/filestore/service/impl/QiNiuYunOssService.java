@@ -29,7 +29,7 @@ public class QiNiuYunOssService implements OssService {
 
     public QiNiuYunOssService(OssProps props) {
         AUTH = Auth.create(props.getAccessKey(), props.getSecretKey());
-        Configuration CFG = new Configuration(Region.huanan());
+        Configuration CFG = Configuration.create();
         CFG.resumableUploadAPIVersion = Configuration.ResumableUploadAPIVersion.V2;
         UPLOAD_MANAGER = new UploadManager(CFG);
         BUCKET_MANAGER = new BucketManager(AUTH, CFG);

@@ -1,9 +1,10 @@
 package top.echovoid.common;
 
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,8 +14,16 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ext.javatime.deser.LocalDateTimeDeserializer;
+import tools.jackson.databind.ext.javatime.ser.LocalDateTimeSerializer;
+import tools.jackson.databind.json.JsonMapper;
 import top.echovoid.common.filter.RequestTraceFilter;
+
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +37,6 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 @Configuration
-@EnableAsync
 @ComponentScan
 public class CommonAutoConfig {
 
@@ -39,15 +47,6 @@ public class CommonAutoConfig {
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registration;
     }
-
-
-
-    @Bean
-    @ConditionalOnMissingBean(ExecutorService.class)
-    public ExecutorService commonThreadPoll() {
-        return Executors.newSingleThreadExecutor();
-    }
-
 
     @Bean
     public CorsFilter corsFilter() {
@@ -62,21 +61,14 @@ public class CommonAutoConfig {
 
         source.registerCorsConfiguration("/**", config); // 对所有路径生效
 
-
         return new CorsFilter(source);
     }
 
     @Bean
     public FilterRegistrationBean<CorsFilter> filterFilterRegistrationBean() {
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(corsFilter());
-        bean.setOrder(Ordered.HIGHEST_PRECEDENCE); // 设置优先级为最高
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
 
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
-        return builder -> {
-            builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        };
-    }
 }

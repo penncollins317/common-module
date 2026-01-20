@@ -61,7 +61,7 @@ public class FileAccessController {
         }
         Optional<FileAccessDTO> fileAccessDTOOptional = fileStoreService.getInputStreamByKey(fileKey);
         if (fileAccessDTOOptional.isEmpty()) {
-            throw new NoResourceFoundException(HttpMethod.GET, fileKey);
+            throw new NoResourceFoundException(HttpMethod.GET, fileKey, path);
         }
         FileAccessDTO fileAccessDTO = fileAccessDTOOptional.get();
 
