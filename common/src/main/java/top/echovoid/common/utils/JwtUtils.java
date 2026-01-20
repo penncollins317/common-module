@@ -5,6 +5,8 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -61,28 +63,6 @@ public class JwtUtils {
         }
     }
 
-    public static String createToken(String subject, String audience, Map<String, Object> claims, String secret, long expirationSeconds) {
-        if (secret.getBytes(StandardCharsets.UTF_8).length < 32) {
-            throw new IllegalArgumentException("HS256 secret 必须至少 32 字节");
-        }
-        try {
-            JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder()
-                    .jwtID(UUID.randomUUID().toString())
-                    .subject(subject)
-                    .audience(audience)
-                    .issueTime(new Date())
-                    .expirationTime(Date.from(Instant.now().plusSeconds(expirationSeconds)));
-
-            if (claims != null && !claims.isEmpty()) {
-                claims.forEach(builder::claim);
-            }
-            return sign(builder.build(), secret);
-        } catch (JOSEException e) {
-            throw new RuntimeException("JWT 签名生成失败", e);
-        }
-    }
-
-
     public static JWTClaimsSet parseToken(String token, String secret) {
         if (secret.getBytes(StandardCharsets.UTF_8).length < 32) {
             throw new IllegalArgumentException("HS256 secret 必须至少 32 字节");
@@ -131,5 +111,21 @@ public class JwtUtils {
         JWSSigner signer = new MACSigner(secret.getBytes());
         signedJWT.sign(signer);
         return signedJWT.serialize();
+    }
+    private static final String ACCESS_TOKEN_PARAMETER_NAME = "access_token";
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String AUTHORIZATION_SCHEMA = "Bearer ";
+
+    public static String getToken(HttpServletRequest request) {
+        String token = request.getParameter(ACCESS_TOKEN_PARAMETER_NAME);
+        if (StringUtils.hasText(token)) {
+            return token.trim();
+        }
+
+        String authHeader = request.getHeader(AUTHORIZATION_HEADER_NAME);
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith(AUTHORIZATION_SCHEMA)) {
+            return authHeader.substring(AUTHORIZATION_SCHEMA.length()).trim();
+        }
+        return null;
     }
 }

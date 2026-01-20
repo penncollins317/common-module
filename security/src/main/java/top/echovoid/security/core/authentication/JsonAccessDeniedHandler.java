@@ -1,5 +1,6 @@
 package top.echovoid.security.core.authentication;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import top.echovoid.common.dto.RestData;
-import top.echovoid.common.utils.JsonUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,21 +20,16 @@ import java.nio.charset.StandardCharsets;
  */
 @AllArgsConstructor
 public class JsonAccessDeniedHandler implements AccessDeniedHandler {
-    private final AccessDeniedHandler defaultAccessDeniedHandler;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.startsWith(MediaType.APPLICATION_JSON_VALUE)) {
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            try (PrintWriter writer = response.getWriter()) {
-                writer.print(JsonUtils.stringify(RestData.error("FORBIDDEN", (HttpServletResponse.SC_FORBIDDEN))));
-            }
-        } else {
-            this.defaultAccessDeniedHandler.handle(request, response, accessDeniedException);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        try (PrintWriter writer = response.getWriter()) {
+            writer.print(objectMapper.writeValueAsString(RestData.error("FORBIDDEN", (HttpServletResponse.SC_FORBIDDEN))));
         }
     }
 }

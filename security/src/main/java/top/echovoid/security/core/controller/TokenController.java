@@ -10,7 +10,7 @@ import top.echovoid.common.dto.RestData;
 import top.echovoid.security.core.dto.LoginRequestBody;
 import top.echovoid.security.core.dto.RefreshTokenDTO;
 import top.echovoid.security.core.service.LoginService;
-import top.echovoid.security.jwt.dto.TokenDTO;
+import top.echovoid.security.core.dto.TokenDTO;
 
 /**
  * 登录接口
@@ -41,7 +41,7 @@ public class TokenController {
      * @param args 账号信息
      * @return jwt
      */
-    @RequestMapping("/create/form")
+    @PostMapping("/create/form")
     public RestData<TokenDTO> createTokenByFormApi(
             @Valid LoginRequestBody args
     ) {

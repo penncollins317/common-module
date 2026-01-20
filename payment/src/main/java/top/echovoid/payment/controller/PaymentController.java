@@ -34,7 +34,7 @@ public class PaymentController {
      *
      * @param requestId 支付请求ID
      */
-    @RequestMapping("/payment/query/{requestId:\\d+}")
+    @GetMapping("/payment/query/{requestId:\\d+}")
     public RestData<PaymentDTO> queryPaymentApi(@PathVariable Long requestId) {
         return RestData.ok(paymentService.query(requestId));
     }

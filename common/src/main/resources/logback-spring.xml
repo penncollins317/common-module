@@ -33,7 +33,6 @@
 
     <!-- 错误日志单独输出 -->
     <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--        <file>${LOG_PATH}/${APP_NAME}-error.log</file>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/${APP_NAME}_error_%d{yyyy_MM_dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
@@ -53,10 +52,4 @@
         <appender-ref ref="fileAppender"/>
         <appender-ref ref="errorAppender"/>
     </root>
-
-    <!-- 单独为 Spring 和其他包设置日志级别（可选） -->
-    <!--    <logger name="org.springframework" level="WARN"/>-->
-    <!--    <logger name="org.hibernate" level="WARN"/>-->
-    <!--    <logger name="com.zaxxer.hikari" level="WARN"/>-->
-
 </configuration>

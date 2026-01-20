@@ -10,7 +10,7 @@ import top.echovoid.common.dto.RestData;
 import top.echovoid.common.exceptions.ServiceException;
 import top.echovoid.security.core.dto.LoginRequestBody;
 import top.echovoid.security.core.service.LoginService;
-import top.echovoid.security.jwt.dto.TokenDTO;
+import top.echovoid.security.core.dto.TokenDTO;
 
 /**
  * @author Penn Collins

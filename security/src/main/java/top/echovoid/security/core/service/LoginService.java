@@ -1,7 +1,7 @@
 package top.echovoid.security.core.service;
 
 import top.echovoid.security.core.dto.LoginRequestBody;
-import top.echovoid.security.jwt.dto.TokenDTO;
+import top.echovoid.security.core.dto.TokenDTO;
 
 /**
  * 登录业务

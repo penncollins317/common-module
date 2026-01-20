@@ -38,7 +38,7 @@ public class UserinfoController {
      * 获取用户详细信息
      */
     @AuthenticatedRequired
-    @RequestMapping("/api/userinfo/details")
+    @GetMapping("/api/userinfo/details")
     public RestData<UserDetailInfoDTO> userDetailInfoApi(Principal principal) {
         return RestData.success(this.userService.getUserDetailInfo(Long.valueOf(principal.getName())));
     }

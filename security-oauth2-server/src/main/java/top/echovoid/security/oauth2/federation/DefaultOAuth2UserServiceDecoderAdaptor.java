@@ -1,6 +1,7 @@
 package top.echovoid.security.oauth2.federation;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -11,7 +12,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import top.echovoid.common.utils.JsonUtils;
-import top.echovoid.common.utils.RandomUsernameGenerator;
 import top.echovoid.security.oauth2.entity.OAuth2UserRelated;
 import top.echovoid.security.oauth2.mapper.OAuth2UserRelatedMapper;
 import top.echovoid.service.user.entity.User;
@@ -107,7 +107,7 @@ public class DefaultOAuth2UserServiceDecoderAdaptor extends DefaultOAuth2UserSer
         OAuth2UserRelated related = this.oAuth2UserRelatedMapper.selectOne(new QueryWrapper<OAuth2UserRelated>().eq("provider", provider).eq("out_uid", uid));
         if (related == null) {
             User user = new User();
-            user.setUsername(RandomUsernameGenerator.generateRandomUsername(10));
+            user.setUsername("u_" + IdWorker.getId());
             user.setNickname(user.getUsername());
             this.userMapper.insert(user);
 

@@ -1,25 +1,21 @@
 package top.echovoid.security.core.service.impl;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
+import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import top.echovoid.common.exceptions.ServiceException;
+import top.echovoid.common.utils.JwtUtils;
+import top.echovoid.security.core.JwtProps;
 import top.echovoid.security.core.dto.LoginRequestBody;
+import top.echovoid.security.core.dto.TokenDTO;
 import top.echovoid.security.core.service.LoginService;
-import top.echovoid.security.jwt.JwtProps;
-import top.echovoid.security.jwt.dto.TokenDTO;
-import top.echovoid.security.jwt.service.TokenService;
 
-import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author Penn Collins
@@ -28,19 +24,16 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class LoginServiceImpl implements LoginService {
-    private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
     private final JwtProps jwtProps;
-    private static final char ACCESS_FLAG = 'a';
-    private static final char REFRESH_FLAG = 'f';
 
     @Override
     public TokenDTO loginByUsername(LoginRequestBody args) {
         try {
             Authentication authenticate = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(args.getUsername(), args.getPassword()));
             return this.createToken(authenticate.getName());
-        } catch (UsernameNotFoundException e) {
-            throw new BadCredentialsException("账号或密码错误");
+        } catch (AuthenticationException e) {
+            throw new ServiceException("账号或密码错误");
         }
     }
 
@@ -50,36 +43,39 @@ public class LoginServiceImpl implements LoginService {
     }
 
     private TokenDTO createToken(String subject) {
-        return tokenService.createFullToken(subject);
+        String accessToken = JwtUtils.createToken(subject, Map.of("token_type", "access"), jwtProps.getSecret(), jwtProps.getExpire());
+        String refreshToken = JwtUtils.createToken(subject, Map.of("token_type", "refresh"), jwtProps.getSecret(), jwtProps.getRefreshExpire());
+        return TokenDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .expireIn(jwtProps.getExpire())
+                .refreshExpireIn(jwtProps.getRefreshExpire())
+                .build();
     }
 
     @Override
-    public TokenDTO refresh(String token) {
+    public TokenDTO refresh(String refreshToken) {
         try {
-            Jws<Claims> claimsJws = tokenService.parseToken(token);
-            String type = (String) claimsJws.getPayload().get("type");
-            if (!"refresh".equalsIgnoreCase(type)) {
+            JWTClaimsSet jwtClaimsSet = JwtUtils.parseToken(refreshToken, jwtProps.getSecret(), "auth");
+            String tokenType = (String) jwtClaimsSet.getClaim("token_type");
+            if (!"refresh".equalsIgnoreCase(tokenType)) {
                 throw new ServiceException("refresh token type error.");
             }
-
-            String subject = claimsJws.getPayload().getSubject();
-
-            long time = claimsJws.getPayload().getExpiration().getTime();
+            String subject = jwtClaimsSet.getSubject();
+            long time = jwtClaimsSet.getExpirationTime().getTime();
             // refresh token有效期小于access token时，返回新的refresh token
             if (System.currentTimeMillis() + jwtProps.getExpire() * 1000 > time) {
                 return this.createToken(subject);
             }
 
-            String accessToken = tokenService.createToken(UUID.randomUUID().toString(), subject, jwtProps.getExpire(), Map.of("type", "access"));
             return TokenDTO.builder()
-                    .accessToken(accessToken)
-                    .expire(jwtProps.getExpire())
-                    .expireTime(new Date(System.currentTimeMillis() + jwtProps.getExpire() * 1000))
-                    .refreshToken(token)
-                    .refreshExpireTime(claimsJws.getPayload().getExpiration())
-                    .refreshExpireIn((time - System.currentTimeMillis()) / 1000)
+                    .accessToken(JwtUtils.createToken(subject, Map.of("type_type", "access"), jwtProps.getSecret(), jwtProps.getExpire()))
+                    .refreshToken(refreshToken)
+                    .expireIn(jwtProps.getExpire())
+                    .refreshExpireIn(jwtProps.getRefreshExpire())
                     .build();
-        } catch (JwtException e) {
+
+        } catch (Exception e) {
             throw new ServiceException("Refresh token error.");
         }
     }

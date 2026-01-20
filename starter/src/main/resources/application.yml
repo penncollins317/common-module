@@ -11,36 +11,17 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
-  data:
-    redis:
-      host: localhost
-      port: 6379
-  mail:
-    host: smtp.qq.com
-    port: 465
-    username: <email_address>
-    password: <email_password>
-    default-encoding: UTF-8
-    properties:
-      company:
-        name: EchoVoid
-      mail:
-        smtp:
-          ssl:
-            enable: true
-          auth: true
-
 echovoid:
   alipay:
     appid: <alipay_appid>
     gateway-url: https://openapi-sandbox.dl.alipaydev.com/gateway.do
     alipay-public-key: classpath:/alipay/alipay_public_key.txt
     app-private-key-path: classpath:/alipay/alipay_app_private_key.txt
-  jwt:
-    expire: 2592000
-    issuer: https://example.com
-    secret: ed8f07de-b628-49d5-a423-062d20e19907
   security:
+    jwt:
+      expire: 2592000
+      issuer: https://example.com
+      secret: ed8f07de-b628-49d5-a423-062d20e19907
     wechat:
       biz:
         appid: <wechat_biz_appid>

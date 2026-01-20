@@ -65,7 +65,7 @@ public class IpUtil {
      * 兼容 Nginx 反向代理 (X-Forwarded-Proto, X-Forwarded-Host, X-Forwarded-Port)
      *
      * @param request HttpServletRequest
-     * @return 例如 https://example.com 或 https://example.com:8080
+     * @return 例如 <a href="https://example.com">...</a> 或 <a href="https://example.com:8080">...</a>
      */
     public static String getAccessHost(HttpServletRequest request) {
         if (request == null) {
@@ -162,7 +162,6 @@ public class IpUtil {
      * 判断IP是否是内网IP
      *
      * @param ipAddress IPv4
-     * @return
      */
     public static boolean isPrivateIPAddress(String ipAddress) {
 
@@ -177,13 +176,9 @@ public class IpUtil {
         int firstByte = Integer.parseInt(parts[0]);
         int secondByte = Integer.parseInt(parts[1]);
 
-        if (firstByte == 10 ||
+        return firstByte == 10 ||
                 (firstByte == 172 && secondByte >= 16 && secondByte <= 31) ||
                 (firstByte == 192 && secondByte == 168) ||
-                firstByte == 127) {
-            return true;
-        }
-
-        return false;
+                firstByte == 127;
     }
 }

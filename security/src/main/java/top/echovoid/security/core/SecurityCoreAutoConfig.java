@@ -1,7 +1,9 @@
 package top.echovoid.security.core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +19,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import top.echovoid.security.core.authentication.JsonAccessDeniedHandler;
 import top.echovoid.security.core.authentication.JsonAuthenticationEntryPoint;
 import top.echovoid.security.core.filter.JwtAuthenticationFilter;
-import top.echovoid.security.jwt.service.TokenService;
 
 import java.util.List;
 
@@ -32,19 +31,17 @@ import java.util.List;
 @EnableWebSecurity
 @Configuration
 @ComponentScan
+@EnableConfigurationProperties(JwtProps.class)
 public class SecurityCoreAutoConfig {
-    private static final String DEFAULT_LOGIN_URl = "/login";
-
     @Bean
     public SecurityConfigAggregator securityConfigAggregator(@Autowired List<SecurityConfigProvider> securityConfigProviders) {
         return new SecurityConfigAggregator(securityConfigProviders);
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, TokenService tokenService,
-                                                   SecurityConfigAggregator aggregator) throws Exception {
-        JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(DEFAULT_LOGIN_URl), true);
-        JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(new AccessDeniedHandlerImpl());
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProps jwtProps, SecurityConfigAggregator aggregator, ObjectMapper objectMapper) throws Exception {
+        JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(objectMapper);
+        JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(objectMapper);
         http.authorizeHttpRequests(authorize -> {
                     if (!aggregator.getRoleBasedUrls().isEmpty()) {
                         aggregator.getRoleBasedUrls().forEach(((role, urls) -> authorize.requestMatchers(urls.toArray(new String[0])).hasRole(role)));
@@ -57,7 +54,7 @@ public class SecurityCoreAutoConfig {
                     handler.accessDeniedHandler(accessDeniedHandler);
                     handler.authenticationEntryPoint(authenticationEntryPoint);
                 })
-                .addFilterAt(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new JwtAuthenticationFilter(jwtProps), UsernamePasswordAuthenticationFilter.class)
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .requestCache(AbstractHttpConfigurer::disable)
@@ -74,8 +71,7 @@ public class SecurityCoreAutoConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(List.of(daoAuthenticationProvider));
     }

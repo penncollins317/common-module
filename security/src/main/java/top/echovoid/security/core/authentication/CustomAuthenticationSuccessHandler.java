@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Component;
 import top.echovoid.common.dto.RestData;
 import top.echovoid.common.utils.JsonUtils;
-import top.echovoid.security.jwt.dto.TokenDTO;
+import top.echovoid.security.core.dto.TokenDTO;
 import top.echovoid.security.core.service.LoginService;
 
 import java.io.IOException;

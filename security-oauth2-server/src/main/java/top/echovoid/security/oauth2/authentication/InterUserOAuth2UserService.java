@@ -1,6 +1,7 @@
 package top.echovoid.security.oauth2.authentication;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -10,7 +11,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import top.echovoid.common.utils.RandomUsernameGenerator;
 import top.echovoid.service.user.dto.UserinfoDTO;
 import top.echovoid.service.user.entity.User;
 import top.echovoid.service.user.mapper.UserMapper;
@@ -77,7 +77,7 @@ public class InterUserOAuth2UserService implements OAuth2UserService<OAuth2UserR
         // 创建系统用户并绑定第三方用户
         String username;
         do {
-            username = RandomUsernameGenerator.generateRandomUsername(8);
+            username = "u_" + IdWorker.getId();
         } while (this.userMapper.exists(new QueryWrapper<User>().eq("username", username)));
 
         User newUser = new User();

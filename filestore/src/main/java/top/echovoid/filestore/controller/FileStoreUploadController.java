@@ -32,9 +32,7 @@ public class FileStoreUploadController {
     private static final long MAX_SIMPLE_UPLOAD_SIZE = 10 * 1024 * 1024; // 10MB
     private static final Path UPLOAD_DIR = Paths.get("/upload-dir");
 
-    // 保存文件上传状态（可换成 Redis）
     private final Map<String, Set<Integer>> uploadedChunks = new ConcurrentHashMap<>();
-
 
     public FileStoreUploadController(OssService ossService) throws IOException {
         this.ossService = ossService;
@@ -48,6 +46,9 @@ public class FileStoreUploadController {
     public RestData<OssUploadResult> uploadSimple(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.getSize() > MAX_SIMPLE_UPLOAD_SIZE) {
             throw new ServiceException("File too large for simple upload.");
+        }
+        if (file.getOriginalFilename() == null) {
+            throw new ServiceException("File name is null.");
         }
         int i = file.getOriginalFilename().lastIndexOf(".");
         String extendName = null;

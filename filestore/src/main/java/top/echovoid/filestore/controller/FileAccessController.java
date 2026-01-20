@@ -7,10 +7,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import top.echovoid.common.dto.RestData;
+import top.echovoid.common.exceptions.ServiceException;
 import top.echovoid.filestore.dto.FileAccessDTO;
 import top.echovoid.filestore.service.FileStoreService;
 import top.echovoid.filestore.service.OssService;
@@ -54,7 +57,7 @@ public class FileAccessController {
         String fileKey = path.substring(1);
         boolean canAccess = fileStoreService.checkAccessible(fileKey, principal != null ? Long.valueOf(principal.getName()) : null, token);
         if (!canAccess) {
-            throw new AccessDeniedException("Access Denied");
+            throw new ServiceException("Access Denied");
         }
         Optional<FileAccessDTO> fileAccessDTOOptional = fileStoreService.getInputStreamByKey(fileKey);
         if (fileAccessDTOOptional.isEmpty()) {

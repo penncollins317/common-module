@@ -4,7 +4,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.echovoid.payment.alipay.service.AlipayService;
 import top.echovoid.payment.dto.PaymentDTO;
@@ -27,7 +28,7 @@ public class AlipayController {
      *
      */
     @ResponseBody
-    @RequestMapping("/alipay/notify")
+    @PostMapping("/alipay/notify")
     public String alipayNotifyApi(Map<String, String> map, HttpServletResponse response) {
         boolean isSuccess = alipayService.verify(map);
         if (isSuccess) {
@@ -38,7 +39,7 @@ public class AlipayController {
         }
     }
 
-    @RequestMapping("/alipay/return")
+    @GetMapping("/alipay/return")
     public String alipayReturnPage(Map<String, String> map, Model model) {
         boolean isSuccess = alipayService.verify(map);
         PaymentDTO paymentDTO = paymentService.query(1L);

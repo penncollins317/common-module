@@ -1,8 +1,6 @@
 package top.echovoid.security.core.filter;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
+import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import top.echovoid.security.core.utils.JwtUtil;
-import top.echovoid.security.jwt.service.TokenService;
+import top.echovoid.common.utils.JwtUtils;
+import top.echovoid.security.core.JwtProps;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -26,21 +24,21 @@ import java.util.Collections;
 @Slf4j
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final TokenService tokenService;
+    private final JwtProps jwtProps;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = JwtUtil.getToken(request);
+        String token = JwtUtils.getToken(request);
         if (StringUtils.hasLength(token)) {
             try {
-                Jws<Claims> claimsJws = tokenService.parseToken(token);
-                String tokenType = claimsJws.getPayload().get("type", String.class);
+                JWTClaimsSet jwtClaimsSet = JwtUtils.parseToken(token, jwtProps.getSecret());
+                String tokenType = jwtClaimsSet.getClaimAsString("token_type");
                 if ("access".equalsIgnoreCase(tokenType)) {
-                    Long userId = Long.valueOf(claimsJws.getPayload().getSubject());
+                    Long userId = Long.valueOf(jwtClaimsSet.getSubject());
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
-            } catch (JwtException e) {
+            } catch (Exception e) {
                 log.debug(e.getMessage());
             }
         }
