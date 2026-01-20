@@ -153,10 +153,10 @@ project("payment") {
     }
 }
 
-project("payment-alipay") {
+project("payment:payment-alipay") {
     dependencies {
+        api project(":payment")
         implementation project(":common")
-        implementation project(":payment")
         implementation project(":security")
         implementation libraries.'alipay-sdk-java'
         implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -182,8 +182,7 @@ project("starter") {
         implementation project(":product-service")
         implementation project(":order-service")
         implementation project(":filestore")
-        implementation project(":payment")
-        implementation project(":payment-alipay")
+        implementation project(":payment:payment-alipay")
         implementation libraries.'micrometer-registry-prometheus'
         implementation libraries.'springdoc-openapi-starter-webmvc-ui'
         implementation 'org.postgresql:postgresql'
