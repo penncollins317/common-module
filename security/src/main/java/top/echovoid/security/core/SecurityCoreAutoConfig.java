@@ -41,18 +41,16 @@ public class SecurityCoreAutoConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,  TokenService tokenService,
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, TokenService tokenService,
                                                    SecurityConfigAggregator aggregator) throws Exception {
         JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(DEFAULT_LOGIN_URl), true);
         JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(new AccessDeniedHandlerImpl());
         http.authorizeHttpRequests(authorize -> {
                     if (!aggregator.getRoleBasedUrls().isEmpty()) {
-                        aggregator.getRoleBasedUrls().forEach(((role, urls) -> {
-                            authorize.requestMatchers(urls.toArray(new String[0])).hasRole(role);
-                        }));
+                        aggregator.getRoleBasedUrls().forEach(((role, urls) -> authorize.requestMatchers(urls.toArray(new String[0])).hasRole(role)));
                     }
                     authorize.requestMatchers(aggregator.getIgnoreUrls().toArray(new String[0])).permitAll();
-                    authorize.requestMatchers("/token/**", "/error", "/favicon.ico").permitAll();
+                    authorize.requestMatchers("/token/**", "/error", "/favicon.ico", "/auth/login", "/public/register").permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .exceptionHandling(handler -> {
@@ -61,9 +59,7 @@ public class SecurityCoreAutoConfig {
                 })
                 .addFilterAt(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
                 .logout(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> {
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .requestCache(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable);

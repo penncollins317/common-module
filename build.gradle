@@ -101,6 +101,7 @@ project('security-jwt') {
 project("security") {
     dependencies {
         api project(":common")
+        implementation project(":user-service")
         api project(":security-jwt")
         api 'org.springframework.boot:spring-boot-starter-security'
         api 'org.springframework.boot:spring-boot-starter-web'
@@ -203,12 +204,12 @@ project("starter") {
     dependencies {
         implementation project(":common")
         implementation project(":security")
-        implementation project(":security-wechat-qrcode-login")
-        implementation project(":product-service")
-        implementation project(":order-service")
-        implementation project(":filestore")
-        implementation project(":payment")
-        implementation project(":payment-alipay")
+//        implementation project(":security-wechat-qrcode-login")
+//        implementation project(":product-service")
+//        implementation project(":order-service")
+//        implementation project(":filestore")
+//        implementation project(":payment")
+//        implementation project(":payment-alipay")
         implementation 'org.postgresql:postgresql'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-actuator'

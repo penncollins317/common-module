@@ -18,7 +18,7 @@ public class RestData<T> {
     private String message;
     private T data;
     private int code;
-    private String requestId;
+    private String traceId;
 
 
     public static <T> RestData<T> ok(T data) {
@@ -45,7 +45,7 @@ public class RestData<T> {
         restData.setData(data);
         restData.setMessage("success");
         restData.setCode(DEFAULT_SUCCESS_CODE);
-        restData.setRequestId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
+        restData.setTraceId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
         return restData;
     }
 
@@ -54,7 +54,7 @@ public class RestData<T> {
         restData.setData(data);
         restData.setMessage(message);
         restData.setCode(DEFAULT_SUCCESS_CODE);
-        restData.setRequestId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
+        restData.setTraceId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
         return restData;
     }
 
@@ -66,7 +66,7 @@ public class RestData<T> {
         RestData<T> restData = new RestData<>();
         restData.setMessage(errMsg);
         restData.setCode(errorCode);
-        restData.setRequestId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
+        restData.setTraceId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
         return restData;
     }
 
@@ -74,7 +74,7 @@ public class RestData<T> {
         RestData<T> restData = new RestData<>();
         restData.setMessage(exception.getMessage());
         restData.setCode(exception.getCode());
-        restData.setRequestId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
+        restData.setTraceId(MDC.get(RequestTraceFilter.TRACE_ID_KEY));
         return restData;
     }
 }
