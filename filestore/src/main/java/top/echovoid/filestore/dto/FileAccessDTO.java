@@ -2,7 +2,6 @@ package top.echovoid.filestore.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 import java.io.InputStream;

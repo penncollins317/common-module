@@ -2,6 +2,7 @@ package top.echovoid.security.oauth2.authentication;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -22,10 +23,10 @@ import java.util.Map;
  * @author Penn Collins
  * @since 2025/3/19
  */
+@AllArgsConstructor
 public class InterUserOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private static final String INTERNAL_USER_ID_KEY = "_internal_user_id";
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

@@ -3,9 +3,6 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  jackson:
-    time-zone: GMT+8
-    date-format: yyyy-MM-dd HH:mm:ss
   datasource:
     url: jdbc:postgresql://localhost:5432/common_module
     driver-class-name: org.postgresql.Driver

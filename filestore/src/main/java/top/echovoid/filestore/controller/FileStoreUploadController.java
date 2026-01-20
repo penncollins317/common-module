@@ -1,5 +1,8 @@
 package top.echovoid.filestore.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Penn Collins
  * @since 2025/5/5
  */
+@Tag(name = "文件上传接口", description = "提供小文件直传、大文件分片上传及断点续传支持")
 @RestController
 @RequestMapping("/upload")
 public class FileStoreUploadController {
@@ -42,8 +46,10 @@ public class FileStoreUploadController {
     /**
      * 小文件直传
      */
+    @Operation(summary = "小文件直传", description = "上传 10MB 以内的小文件，返回 OSS 上传结果")
     @PostMapping("/direct")
-    public RestData<OssUploadResult> uploadSimple(@RequestParam("file") MultipartFile file) throws IOException {
+    public RestData<OssUploadResult> uploadSimple(
+            @Parameter(description = "上传的文件") @RequestParam("file") MultipartFile file) throws IOException {
         if (file.getSize() > MAX_SIMPLE_UPLOAD_SIZE) {
             throw new ServiceException("File too large for simple upload.");
         }
@@ -60,19 +66,21 @@ public class FileStoreUploadController {
 
         String filename = LocalDateTime.now().format(DATE_TIME_FORMATTER) + "/"
                 + UUID.randomUUID().toString().replaceAll("-", "") + extendName;
-        OssUploadResult result = ossService.upload(file.getInputStream(), filename, file.getContentType(), file.getSize());
+        OssUploadResult result = ossService.upload(file.getInputStream(), filename, file.getContentType(),
+                file.getSize());
         return RestData.ok(result);
     }
 
     /**
      * 上传分片
      */
+    @Operation(summary = "上传分片", description = "大文件分片上传接口，每个分片需对应唯一的 fileId 和 chunkIndex")
     @PostMapping("/chunk")
     public ResponseEntity<String> uploadChunk(
-            @RequestParam("fileId") String fileId,
-            @RequestParam("chunkIndex") int chunkIndex,
-            @RequestParam("totalChunks") int totalChunks,
-            @RequestParam("file") MultipartFile chunkFile) throws IOException {
+            @Parameter(description = "唯一文件标识，用于标识同一次上传的所有分片") @RequestParam("fileId") String fileId,
+            @Parameter(description = "当前分片的索引") @RequestParam("chunkIndex") int chunkIndex,
+            @Parameter(description = "全部分片总数") @RequestParam("totalChunks") int totalChunks,
+            @Parameter(description = "当前分片文件数据") @RequestParam("file") MultipartFile chunkFile) throws IOException {
 
         Path chunkDir = UPLOAD_DIR.resolve(fileId);
         Files.createDirectories(chunkDir);
@@ -89,19 +97,22 @@ public class FileStoreUploadController {
     /**
      * 查询已上传的分片（断点续传支持）
      */
+    @Operation(summary = "查询已上传分片", description = "根据 fileId 查询当前服务器已接收的分片索引列表，用于断点续传")
     @GetMapping("/uploaded-chunks")
-    public ResponseEntity<Set<Integer>> getUploadedChunks(@RequestParam("fileId") String fileId) {
+    public ResponseEntity<Set<Integer>> getUploadedChunks(
+            @Parameter(description = "唯一文件标识") @RequestParam("fileId") String fileId) {
         return ResponseEntity.ok(uploadedChunks.getOrDefault(fileId, Collections.emptySet()));
     }
 
     /**
      * 合并所有分片
      */
+    @Operation(summary = "合并分片", description = "所有分片上传完成后调用此接口，将服务器暂存的分片合并为完整文件")
     @PostMapping("/merge")
     public ResponseEntity<String> mergeChunks(
-            @RequestParam("fileId") String fileId,
-            @RequestParam("filename") String originalFilename,
-            @RequestParam("totalChunks") int totalChunks) throws IOException {
+            @Parameter(description = "唯一文件标识") @RequestParam("fileId") String fileId,
+            @Parameter(description = "原始文件名") @RequestParam("filename") String originalFilename,
+            @Parameter(description = "全部分片总数") @RequestParam("totalChunks") int totalChunks) throws IOException {
 
         Path chunkDir = UPLOAD_DIR.resolve(fileId);
         if (!Files.exists(chunkDir)) {

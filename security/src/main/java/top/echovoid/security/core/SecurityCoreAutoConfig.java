@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -39,10 +40,12 @@ public class SecurityCoreAutoConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProps jwtProps, SecurityConfigAggregator aggregator, ObjectMapper objectMapper) throws Exception {
+    @Order(10)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http, JwtProps jwtProps, SecurityConfigAggregator aggregator, ObjectMapper objectMapper) throws Exception {
         JsonAuthenticationEntryPoint authenticationEntryPoint = new JsonAuthenticationEntryPoint(objectMapper);
         JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(objectMapper);
-        http.authorizeHttpRequests(authorize -> {
+        http.securityMatcher("/**")
+                .authorizeHttpRequests(authorize -> {
                     if (!aggregator.getRoleBasedUrls().isEmpty()) {
                         aggregator.getRoleBasedUrls().forEach(((role, urls) -> authorize.requestMatchers(urls.toArray(new String[0])).hasRole(role)));
                     }

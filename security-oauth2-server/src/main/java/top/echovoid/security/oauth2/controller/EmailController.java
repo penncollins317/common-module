@@ -1,5 +1,8 @@
 package top.echovoid.security.oauth2.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -12,6 +15,7 @@ import top.echovoid.security.oauth2.service.EmailService;
 
 import java.util.Random;
 
+@Tag(name = "邮件接口", description = "提供发送验证码邮件等功能")
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -22,8 +26,9 @@ public class EmailController {
      * 发送验证码邮件测试接口
      * URL 示例：/send?to=example@example.com
      */
+    @Operation(summary = "发送验证码邮件", description = "向指定的电子邮箱发送 6 位数字验证码")
     @GetMapping("/send")
-    public RestData<String> sendEmail(@RequestParam @Valid @Email String to) {
+    public RestData<String> sendEmail(@Parameter(description = "收件人邮箱地址") @RequestParam @Valid @Email String to) {
         // 生成6位验证码
         String code = generateSixDigitCode();
         log.debug("Email code:{}", code);

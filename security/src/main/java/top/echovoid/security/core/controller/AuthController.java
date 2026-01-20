@@ -1,5 +1,7 @@
 package top.echovoid.security.core.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
@@ -17,16 +19,17 @@ import top.echovoid.security.core.dto.TokenDTO;
  * @email penncollins317@gmail.com
  * @since 2026/1/20
  */
+@Tag(name = "认证接口", description = "提供用户登录、鉴权、令牌获取等功能")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
     private final LoginService loginService;
 
+    @Operation(summary = "用户登录", description = "根据用户名和密码获取访问令牌")
     @PostMapping("/login")
     public RestData<TokenDTO> loginApi(
-            @Valid LoginRequestBody loginRequestBody
-    ) {
+            @Valid LoginRequestBody loginRequestBody) {
         try {
             TokenDTO tokenDTO = loginService.loginByUsername(loginRequestBody);
             return RestData.ok(tokenDTO);
@@ -35,6 +38,3 @@ public class AuthController {
         }
     }
 }
-
-
-

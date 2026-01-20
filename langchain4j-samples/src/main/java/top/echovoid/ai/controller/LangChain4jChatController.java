@@ -6,6 +6,9 @@ import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.TokenStream;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -33,6 +36,7 @@ import java.util.concurrent.TimeUnit;
  * @author Penn Collins
  * @since 2025/5/7
  */
+@Tag(name = "AI 聊天服务", description = "基于 LangChain4j 的 AI 对话接口，支持流式响应 (SSE)")
 @AuthenticatedRequired
 @AllArgsConstructor
 @RequestMapping("/langchain4j")
@@ -65,13 +69,13 @@ public class LangChain4jChatController {
     /**
      * 文字对话
      */
+    @Operation(summary = "文字对话", description = "发起 AI 文字对话，通过 Server-Sent Events (SSE) 返回流式响应")
     @RequestMapping("/chat")
     public SseEmitter streamChatApi(
-            @RequestParam(value = "content") String content,
-            @RequestParam(value = "chat_conversation_id") String conversationId,
-            @RequestParam(value = "model", required = false) String modelName,
-            Principal principal
-    ) {
+            @Parameter(description = "对话内容") @RequestParam(value = "content") String content,
+            @Parameter(description = "会话ID") @RequestParam(value = "chat_conversation_id") String conversationId,
+            @Parameter(description = "模型名称", required = false) @RequestParam(value = "model", required = false) String modelName,
+            @Parameter(hidden = true) Principal principal) {
         SseEmitter emitter = new SseEmitter();
         AiChatConversation conversation = conversationService.getById(conversationId);
         if (conversation == null || !conversation.getUserId().equals(Long.valueOf(principal.getName()))) {
@@ -99,7 +103,8 @@ public class LangChain4jChatController {
 
         if (!StringUtils.hasLength(conversation.getTitle())) {
             future = executorService.submit(() -> {
-                String titleResult = openAiChatModel(openAiChatOptions.getModel()).chat("根据以下对话生成不超过20字的标题，优先突出用户意图，标题要求：简明扼要，不要引号，内容如下：" + content);
+                String titleResult = openAiChatModel(openAiChatOptions.getModel())
+                        .chat("根据以下对话生成不超过20字的标题，优先突出用户意图，标题要求：简明扼要，不要引号，内容如下：" + content);
                 log.info("titleResult:{}", titleResult);
                 return titleResult;
             });
@@ -128,7 +133,8 @@ public class LangChain4jChatController {
                                 .name("title"); // 事件名称
                         emitter.send(event);
                         conversation.setTitle(titleResult);
-                        conversationService.changeConversationTitle(conversationId, Long.valueOf(principal.getName()), titleResult);
+                        conversationService.changeConversationTitle(conversationId, Long.valueOf(principal.getName()),
+                                titleResult);
                     } catch (Exception e) {
                         log.error(e.getMessage());
                     }
@@ -155,6 +161,5 @@ public class LangChain4jChatController {
         });
         return emitter;
     }
-
 
 }
