@@ -90,9 +90,9 @@ common-module/
 ## 🚀 快速上手
 
 ### 环境准备
-- **JDK 25** (建议使用 Oracle JDK 或 OpenJDK)
-- **Gradle 8.x**
-- **Docker** (推荐运行 PostgreSQL & Redis)
+- **JDK 25**
+- **Gradle 9.x**
+- **Docker**
 
 ### 克隆与编译
 ```bash
